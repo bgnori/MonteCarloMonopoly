@@ -2,9 +2,7 @@
 
 
 
-
-
-places = [
+PLACES = [
   "Go",
   "Mediterranean Avenue",
   "Community Chest",
@@ -48,52 +46,69 @@ places = [
 ]
 
 
+CHANCES = set([i for i in range(40) if PLACES[i] == "Chance"])
+CHESTS = set([i for i in range(40) if PLACES[i] == "Community Chest"])
+GO = 0
+GOTOJAIL = 30
+INCOMETAX = 4
+LUXURYTAX = 38
+
 class Eventlog:
   def __init__(self):
     self.log = []
   def report(self, message):
     self.log.append(message)
 
+from command import *
 
 class Board:
   def __init__(self):
     self.ownerof = [-1 for i in range(40)]
+    self.queue = []
+    self.players = []
+
+  def add(self, player):
+    self.players.append(player)
+
+  def remove(self, player):
+    i = self.players.index(player)
+    self.players = self.players[:i] + self.players[i+1:]
+
+  def send(self, player, cmd):
+    self.queue.append((player, cmd))
 
   def getCommand(self, n):
-    if places[n] == "Go to Jail":
+    if n == GOTOJAIL:
       return GoToJail()
+    if n == INCOMETAX:
+      return PayTax(200)
+    if n == LUXURYTAX:
+      return PayTax(75)
+
     return None
 
   def is_sold(self, n):
     return self.ownerof[n] != -1
 
+  def ready(self):
+    p = self.players[0]
+    self.send(p, StartTurn())
 
-from player import *
-
-def experiment(n):
-  b = Board()
-  s = AlwaysOutStrategy()
-  #s = AlwaysStayStrategy()
-  ps = [Player(b, s) for i in range(n)]
-
-  i = 0
-  while 1:
-    for p in ps:
-      p.turn()
-    yield sum([p.money for p in ps])
+  def nextplayer(self, player):
+    n = len(self.players)
+    i = self.players.index(player)
+    return self.players[(i + 1) % n]
 
 
-def kmean(n):
-  total = [0 for i in range(40)]
-  for i in range(n):
-    for i, s in enumerate(experiment(4)):
-      if i >= 40:
-        break
-      total[i] += s
-  return [1.0*t/n for t in total]
-
-print kmean(100)
-
+  def progress(self):
+    if len(self.players) < 2:
+      return False
+    p, c = self.queue.pop(0)
+    print p, c
+    c.action(p)
+    if not self.queue:
+      self.send(self.nextplayer(p), StartTurn())
+    return True
 
 
 

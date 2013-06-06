@@ -1,71 +1,51 @@
 #!/usr/bin/env python
 from command import *
 from random import randint
+from landing import PLACES
+
+
+NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
 def dice():
   return randint(1, 6), randint(1, 6)
 
 
 class Player:
-  def __init__(self, board, strategy, pos=None):
+  def __init__(self, board, strategy, name, pos=None):
     if pos is None:
       pos = 0
     self.pos = pos
     self.board = board
-    self.queue = []
+    board.add(self)
     self.money = 1500
     self.is_free = True
     self.jail_count = 0
     self.strategy = strategy
     self.owns = []
+    self.name = name
 
   def push(self, cmd):
-    self.queue.append(cmd)
+    self.board.send(self, cmd)
 
   def roll(self):
     return dice()
+
+  def __str__(self):
+    return "<Player %s %d %s>"%(self.name, self.money, PLACES[self.pos])
 
   def move(self, n):
     d, self.pos = divmod(self.pos + n, 40)
     if d == 1:
       self.push(GetSallary())
-    return self.board.getCommand(self.pos)
+    cmd = self.board.getCommand(self.pos)
+    if cmd:
+      self.push(cmd)
 
-  def pop(self):
-    return self.queue.pop(0)
-
-  def hasCommand(self):
-    return bool(self.queue)
-
-
-  def preCommand(self):
-    pass
-
-  def postCommand(self):
-    pass
-
-  def turn(self):
-    if not self.is_free:
-      self.strategy.jail_action(self)
-
-    if self.is_free:
-      self.push(RollAndMove())
-    else:
-      self.push(StayInJail())
-
-    while self.hasCommand():
-      self.preCommand()
-      cmd = self.pop()
-      cmd = cmd.action(self)
-      self.postCommand()
-      if cmd:
-        self.push(cmd)
 
 class Strategy:
   '''not yet'''
   def jail_action(self, player):
     raise
-
 
 class AlwaysOutStrategy(Strategy):
   def jail_action(self, player):
@@ -74,6 +54,5 @@ class AlwaysOutStrategy(Strategy):
 class AlwaysStayStrategy(Strategy):
   def jail_action(self, player):
     pass
-
 
 

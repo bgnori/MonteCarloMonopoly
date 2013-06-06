@@ -3,29 +3,32 @@
 from landing import Board
 from player import *
 
+
+
+
 def experiment(n):
   b = Board()
   s = AlwaysOutStrategy()
   #s = AlwaysStayStrategy()
-  ps = [Player(b, s) for i in range(n)]
+  ps = [Player(b, s, NAMES[i]) for i in range(n)]
 
-  i = 0
-  while 1:
-    for p in ps:
-      p.turn()
+  b.ready()
+  while b.progress():
     yield sum([p.money for p in ps])
 
 
+COUNT = 300
+
 def kmean(n):
-  total = [0 for i in range(40)]
+  total = [0 for i in range(COUNT)]
   for i in range(n):
     for i, s in enumerate(experiment(4)):
-      if i >= 40:
+      if i >= COUNT:
         break
       total[i] += s
   return [1.0*t/n for t in total]
 
-print kmean(100)
+print kmean(1)
 
 
 

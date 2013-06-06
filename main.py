@@ -17,7 +17,7 @@ def experiment(n):
     yield sum([p.money for p in ps])
 
 
-COUNT = 300
+COUNT = 400
 
 def kmean(n):
   total = [0 for i in range(COUNT)]
@@ -28,12 +28,7 @@ def kmean(n):
       total[i] += s
   return [1.0*t/n for t in total]
 
-print kmean(1)
-
-
-
-
-
+kmean(1)
 
 
 

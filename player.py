@@ -41,6 +41,9 @@ class Player:
     if cmd:
       self.push(cmd)
 
+  def zapCommand(self):
+    self.board.zapCommand()
+
 
 class Strategy:
   '''not yet'''

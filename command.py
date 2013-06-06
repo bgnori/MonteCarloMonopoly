@@ -11,7 +11,10 @@ class StartTurn(Command):
   def action(self, player):
     if not player.is_free:
       player.strategy.jail_action(player)
+    player.push(AfterJailDecision())
 
+class AfterJailDecision(Command):
+  def action(self, player):
     if player.is_free:
       player.push(RollAndMove())
     else:
@@ -50,6 +53,7 @@ class GoToJail(Command):
     player.pos = 10
     player.is_free = False
     player.jail_count = 0
+    player.zapCommand()
 
 class GetSallary(Command):
   def action(self, player):

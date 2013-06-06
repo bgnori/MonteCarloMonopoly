@@ -86,6 +86,9 @@ class Board:
       return PayTax(75)
 
     return None
+  
+  def zapCommand(self):
+    self.queue = []
 
   def is_sold(self, n):
     return self.ownerof[n] != -1

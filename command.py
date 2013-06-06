@@ -3,9 +3,14 @@
 
 class Command:
   def action(self, player):
-    pass
+    raise
   def __str__(self):
     return "<Command %s>"%(self.__class__.__name__,)
+
+
+class NullCommand(Command):
+  def action(self, player):
+    pass
 
 class StartTurn(Command):
   def action(self, player):
@@ -19,6 +24,10 @@ class AfterJailDecision(Command):
       player.push(RollAndMove())
     else:
       player.push(StayInJail())
+
+class WrapUpTurn(Command):
+  def action(self, player):
+    pass
 
 class RollAndMove(Command):
   def __init__(self, count=None):
@@ -45,7 +54,7 @@ class StayInJail(Command):
     else:
       player.jail_count += 1
       if player.jail_count > 2:
-        player.money -= 50 #forced
+        player.money -= 50 #forced, but there is an option for Jail Free Card
         player.move(n+m)
 
 class GoToJail(Command):
@@ -59,7 +68,6 @@ class GetSallary(Command):
   def action(self, player):
     player.money += 200
 
-
 class PayTax(Command):
   def __init__(self, amount):
     self.amount = amount
@@ -71,26 +79,34 @@ class PayAndOut(Command):
     player.money -= 50
     player.is_free = True
 
+class Chance(Command):
+  def __init__(self, pos):
+    self.pos = pos
+  def action(self, player):
+    pass
+
+class CommunityChest(Command):
+  def __init__(self, pos):
+    self.pos = pos
+  def action(self, player):
+    pass
 
 class PayRent(Command):
-  def __init__(self, src, dst):
-    pass
-  def action(self, player):
-    player.money -= 50
-    player.is_free = True
-
-
-class DrainMoney(Command):
-  def __init__(self, amount, src, dst):
+  def __init__(self, owner, amount):
+    self.owner = owner
     self.amount = amount
-    self.src = src
-    self.dst = dst
-
   def action(self, player):
-    pass
+    player.money -= self.amount
+    self.owner.money += self.amount
 
-class TapMoney(Command):
+class BuyProperty(Command):
+  def __init__(self, place, price):
+    self.place = place
+    self.price = price
   def action(self, player):
-    pass
+    player.money -= self.price
+    player.add_property(self.place)
+
+
 
 

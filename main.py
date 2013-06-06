@@ -6,29 +6,36 @@ from player import *
 
 
 
-def experiment(n):
-  b = Board()
-  s = AlwaysOutStrategy()
-  #s = AlwaysStayStrategy()
-  ps = [Player(b, s, NAMES[i]) for i in range(n)]
+class Experiment:
+  def __init__(self, count, *args):
+    self.board = Board()
+    self.count = count
+    ps = [Player(self.board, arg, NAMES[i]) for i, arg in enumerate(args)]
 
-  b.ready()
-  while b.progress():
-    yield sum([p.money for p in ps])
+    self.setUp()
+  def setUp(self):
+    pass
 
+  def run(self):
+    self.board.ready()
+    for i in range(self.count):
+      self.board.progress()
+      self.hooks()
 
-COUNT = 400
-
-def kmean(n):
-  total = [0 for i in range(COUNT)]
-  for i in range(n):
-    for i, s in enumerate(experiment(4)):
-      if i >= COUNT:
-        break
-      total[i] += s
-  return [1.0*t/n for t in total]
-
-kmean(1)
+  def hooks(self):
+    self.hook_moneycount()
 
 
+class MoneyCount(Experiment):
+  def setUp(self):
+    self.log = []
 
+  def hook_moneycount(self):
+    self.log.append(sum([p.money for p in self.board.players]))
+
+ao = AlwaysOutStrategy()
+ex = MoneyCount(400, ao, ao, ao, ao)
+
+ex.run()
+
+print ex.log

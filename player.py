@@ -37,12 +37,16 @@ class Player:
     d, self.pos = divmod(self.pos + n, 40)
     if d == 1:
       self.push(GetSallary())
-    cmd = self.board.getCommand(self.pos)
+    cmd = self.board.getCommand(self, self.pos)
     if cmd:
       self.push(cmd)
 
   def zapCommand(self):
     self.board.zapCommand()
+
+  def add_property(self, property):
+    self.owns.append(property)
+    self.board.ownerof[property] = self
 
 
 class Strategy:

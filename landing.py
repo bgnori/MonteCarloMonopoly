@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from player import *
 
 
 
@@ -69,6 +68,7 @@ class Board:
     return self.ownerof[n] != -1
 
 
+from player import *
 
 def experiment(n):
   b = Board()

@@ -190,7 +190,7 @@ class Board:
         if count == 1:
           return 42 #FIXME
         elif count == 2:
-          return 70#FIXME
+          return 70 #FIXME
         else:
           assert False
       else:

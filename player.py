@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from command import *
 from random import randint
-from landing import PLACES
+from board import PLACES
 
 
 NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
@@ -22,11 +22,15 @@ class Player:
     self.jail_count = 0
     self.strategy = strategy
     self.owns = []
+    self.houses = {}
+    self.hotels = {}
     self.name = name
 
   def asset(self):
-    return 0
-
+    total = 0
+    for prop in self.owns:
+      total += prop.facevalue
+    return total
 
   def push(self, cmd):
     self.board.send(self, cmd)

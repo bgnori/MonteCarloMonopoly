@@ -9,11 +9,13 @@
  * major data on properties
  * Minimum Jail Strategy
  * multiple NPC
+ * roll dependent Utilities Rent
 
 ## not yet
- * roll dependent Utilities Rent
  * Chance and Community Chest Cards
+ * interactive exec
  * logging / replay
+ * dump state/load state
  * building houses, hotels
  * simple "greedy" strategy
  * trade

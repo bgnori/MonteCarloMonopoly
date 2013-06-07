@@ -3,6 +3,8 @@
 from landing import Board
 from player import *
 
+from card import CommunityChest
+from card import Chance
 
 
 
@@ -31,6 +33,7 @@ class MoneyCount(Experiment):
     self.log = []
 
   def hook_moneycount(self):
+    self.log.append(sum([p.asset() for p in self.board.players]))
     self.log.append(sum([p.money for p in self.board.players]))
 
 ao = AlwaysOutStrategy()
@@ -38,4 +41,7 @@ ex = MoneyCount(400, ao, ao, ao, ao)
 
 ex.run()
 
-print ex.log
+#print ex.log
+
+
+

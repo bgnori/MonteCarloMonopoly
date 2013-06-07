@@ -37,7 +37,7 @@ class Player:
     d, self.pos = divmod(self.pos + n, 40)
     if d == 1:
       self.push(GetSallary())
-    cmd = self.board.getCommand(self, self.pos)
+    cmd = self.board.getCommand(self, self.pos, n)
     if cmd:
       self.push(cmd)
 

@@ -121,7 +121,7 @@ class Board:
   def send(self, player, cmd):
     self.queue.append((player, cmd))
 
-  def getCommand(self, player, n):
+  def getCommand(self, player, n, rolled):
     if n in NOACTIONS:
       return NullCommand()
     if n == GOTOJAIL:
@@ -140,7 +140,7 @@ class Board:
       if self.ownerof[n] == player:
         return None
       else:
-        return PayRent(self.ownerof[n], self.calcRent(n))
+        return PayRent(self.ownerof[n], self.calcRent(n, rolled))
     else:
       """ replace this for bidding Strategy """
       return BuyProperty(PLACES[n])
@@ -164,7 +164,7 @@ class Board:
   def getColorGroups(self, color):
     return [p for p in PLACES if getattr(p, "colorgroups", '') == color]
 
-  def calcRent(self, n):
+  def calcRent(self, n, rolled):
     property = PLACES[n]
     housing = property.cost 
     color = property.colorgroups
@@ -188,9 +188,9 @@ class Board:
         return property.rent[count]
       elif property.colorgroups == "Utilities":
         if count == 1:
-          return 42 #FIXME
+          return rolled * 4
         elif count == 2:
-          return 70 #FIXME
+          return rolled * 4 
         else:
           assert False
       else:

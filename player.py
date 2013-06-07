@@ -31,7 +31,7 @@ class Player:
     return dice()
 
   def __str__(self):
-    return "<Player %s %d %s>"%(self.name, self.money, PLACES[self.pos])
+    return "<Player %s %d %s>"%(self.name, self.money, PLACES[self.pos].name)
 
   def move(self, n):
     d, self.pos = divmod(self.pos + n, 40)
@@ -46,7 +46,7 @@ class Player:
 
   def add_property(self, property):
     self.owns.append(property)
-    self.board.ownerof[property] = self
+    self.board.ownerof[property.pos] = self
 
 
 class Strategy:

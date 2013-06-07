@@ -100,13 +100,12 @@ class PayRent(Command):
     self.owner.money += self.amount
 
 class BuyProperty(Command):
-  def __init__(self, place, price):
-    self.place = place
-    self.price = price
-  def action(self, player):
-    player.money -= self.price
-    player.add_property(self.place)
+  def __init__(self, property):
+    self.property = property
 
+  def action(self, player):
+    player.money -= self.property.facevalue
+    player.add_property(self.property)
 
 
 

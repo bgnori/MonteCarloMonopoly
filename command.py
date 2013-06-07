@@ -98,6 +98,7 @@ class PayRent(Command):
   def action(self, player):
     player.money -= self.amount
     self.owner.money += self.amount
+    print player.name, '==(', self.amount, ')=>', self.owner.name
 
 class BuyProperty(Command):
   def __init__(self, property):
@@ -106,6 +107,5 @@ class BuyProperty(Command):
   def action(self, player):
     player.money -= self.property.facevalue
     player.add_property(self.property)
-
 
 

@@ -19,70 +19,70 @@ class Property(Place):
 PLACES = [
   Place("Go"),
   Property("Mediterranean Avenue", facevalue=60, 
-    rent=[2, 10, 30, 90, 160, 250], colorgrous="DarkPurple", cost=50),
+    rent=[2, 10, 30, 90, 160, 250], colorgroups="DarkPurple", cost=50),
   Place("Community Chest"),
   Property("Baltic Avenue", facevalue=60, 
-    rent=[4, 20, 60, 180, 320, 450], colorgrous="DarkPurple", cost=50),
+    rent=[4, 20, 60, 180, 320, 450], colorgroups="DarkPurple", cost=50),
   Place("Income TAX"),
   Property("RR1", facevalue=200,
-    rent=[25, 50, 100, 200], colorgrous="RailRoad", cost=None),
+    rent=[0, 25, 50, 100, 200], colorgroups="RailRoad", cost=None),
   Property("Oriental Avenue", facevalue=100,
-    rent=[6, 30, 90, 270, 400, 550], colorgrous="LightBlue", cost=50),
+    rent=[6, 30, 90, 270, 400, 550], colorgroups="LightBlue", cost=50),
   Place("Chance"),
   Property("Vermont Avenue", facevalue=100,
-    rent=[6, 30, 90, 270, 400, 550], colorgrous="LightBlue", cost=50),
+    rent=[6, 30, 90, 270, 400, 550], colorgroups="LightBlue", cost=50),
   Property("Connecticut Avenue", facevalue=120,
-    rent=[8, 40, 100, 300, 450, 600], colorgrous="LightBlue", cost=50),
+    rent=[8, 40, 100, 300, 450, 600], colorgroups="LightBlue", cost=50),
   Place("Jail/Just visiting"),
   Property("St. Charles Place", facevalue=140,
-    rent=[10, 50, 150, 450, 625, 750], colorgrous="LightPurple", cost=100),
-  Property("Electric Company", facevalue=150, colorgrous="Utilities"),
+    rent=[10, 50, 150, 450, 625, 750], colorgroups="LightPurple", cost=100),
+  Property("Electric Company", facevalue=150, colorgroups="Utilities", cost=None),
   Property("States Avenue", facevalue=140,
-    rent=[10, 50, 150, 450, 625, 750], colorgrous="LightPurple", cost=100),
+    rent=[10, 50, 150, 450, 625, 750], colorgroups="LightPurple", cost=100),
   Property("Virginia Avenue", facevalue=160,
-    rent=[12, 60, 180, 500, 700, 900], colorgrous="LightPurple", cost=100),
+    rent=[12, 60, 180, 500, 700, 900], colorgroups="LightPurple", cost=100),
   Property("RR2", facevalue=200,
-    rent=[25, 50, 100, 200], colorgrous="RailRoad", cost=None),
+    rent=[0, 25, 50, 100, 200], colorgroups="RailRoad", cost=None),
   Property("St. James Place", facevalue=180,
-    rent=[14, 70, 200, 500, 750, 950], colorgrous="Orange", cost=100),
+    rent=[14, 70, 200, 500, 750, 950], colorgroups="Orange", cost=100),
   Place("Community Chest"),
   Property("Tennessee Avenue", facevalue=180,
-    rent=[14, 70, 200, 500, 750, 950], colorgrous="Orange", cost=100),
+    rent=[14, 70, 200, 500, 750, 950], colorgroups="Orange", cost=100),
   Property("New York Avenue", facevalue=200,
-    rent=[16, 80, 220, 550, 800, 1000], colorgrous="Orange", cost=100),
+    rent=[16, 80, 220, 550, 800, 1000], colorgroups="Orange", cost=100),
   Place("Free Park"),
   Property("Kentucky Avenue", facevalue=220,
-    rent=[18, 90, 250, 700, 875, 1050], colorgrous="Red", cost=150),
+    rent=[18, 90, 250, 700, 875, 1050], colorgroups="Red", cost=150),
   Place("Chance"),
   Property("Indiana Avenue", facevalue=220,
-    rent=[18, 90, 250, 700, 875, 1050], colorgrous="Red", cost=150),
+    rent=[18, 90, 250, 700, 875, 1050], colorgroups="Red", cost=150),
   Property("Illinois Avenue", facevalue=240,
-    rent=[20, 100, 300, 750, 925, 1100], colorgrous="Red", cost=150),
+    rent=[20, 100, 300, 750, 925, 1100], colorgroups="Red", cost=150),
   Property("RR3", facevalue=200,
-    rent=[25, 50, 100, 200], colorgrous="RailRoad", cost=None),
+    rent=[0, 25, 50, 100, 200], colorgroups="RailRoad", cost=None),
   Property("Atlantic Avenue", facevalue=260,
-    rent=[22, 110, 330, 800, 975, 1150], colorgrous="Yellow", cost=150),
+    rent=[22, 110, 330, 800, 975, 1150], colorgroups="Yellow", cost=150),
   Property("Ventnor Avenue", facevalue=260,
-    rent=[22, 110, 330, 800, 975, 1150], colorgrous="Yellow", cost=150),
-  Property("Water Works", facevalue=150, colorgrous="Utilities"),
+    rent=[22, 110, 330, 800, 975, 1150], colorgroups="Yellow", cost=150),
+  Property("Water Works", facevalue=150, colorgroups="Utilities", cost=None),
   Property("Marvin Gardens", facevalue=280,
-    rent=[24, 120, 360, 850, 1025, 1200], colorgrous="Yellow", cost=150),
+    rent=[24, 120, 360, 850, 1025, 1200], colorgroups="Yellow", cost=150),
   Place("Go to Jail"),
   Property("South Carolina Avenue", facevalue=300,
-    rent=[26, 130, 390, 900, 1100, 1275], colorgrous="Green", cost=200),
+    rent=[26, 130, 390, 900, 1100, 1275], colorgroups="Green", cost=200),
   Property("North Carolina Avenue", facevalue=300,
-    rent=[26, 130, 390, 900, 1100, 1275], colorgrous="Green", cost=200),
+    rent=[26, 130, 390, 900, 1100, 1275], colorgroups="Green", cost=200),
   Place("Community Chest"),
   Property("Pennsylvania Avenue", facevalue=320,
-    rent=[28, 150, 450, 1000, 1200, 1400], colorgrous="Green", cost=200),
+    rent=[28, 150, 450, 1000, 1200, 1400], colorgroups="Green", cost=200),
   Property("RR4", facevalue=200,
-    rent=[25, 50, 100, 200], colorgrous="RailRoad", cost=None),
+    rent=[0, 25, 50, 100, 200], colorgroups="RailRoad", cost=None),
   Place("Chance"),
   Property("Park Place", facevalue=350,
-    rent=[35, 175, 500, 1100, 1300, 1500], colorgrous="DarkBlue", cost=200),
+    rent=[35, 175, 500, 1100, 1300, 1500], colorgroups="DarkBlue", cost=200),
   Place("Luxury Tax"),
   Property("Boardwalk", facevalue=400,
-    rent=[50, 200, 600, 1400, 1700, 2000], colorgrous="DarkBlue", cost=200),
+    rent=[50, 200, 600, 1400, 1700, 2000], colorgroups="DarkBlue", cost=200),
 ]
 
 for i, p in enumerate(PLACES):
@@ -140,7 +140,7 @@ class Board:
       if self.ownerof[n] == player:
         return None
       else:
-        return PayRent(self.ownerof[n], n)
+        return PayRent(self.ownerof[n], self.calcRent(n))
     else:
       """ replace this for bidding Strategy """
       return BuyProperty(PLACES[n])
@@ -161,6 +161,40 @@ class Board:
     i = self.players.index(player)
     return self.players[(i + 1) % n]
 
+  def getColorGroups(self, color):
+    return [p for p in PLACES if getattr(p, "colorgroups", '') == color]
+
+  def calcRent(self, n):
+    property = PLACES[n]
+    housing = property.cost 
+    color = property.colorgroups
+    owner = self.ownerof[n]
+    if housing:
+      """ usual color group """
+      if all([ p in owner.owns for p in self.getColorGroups(color)]):
+        ''' monopoly '''
+        return property.rent[0] * 2
+      else:
+        return property.rent[0]
+    else:
+      """RailRoad or Utilities"""
+      count = 0
+      for p in self.getColorGroups(color):
+        if p in owner.owns:
+          count+=1
+      if property.colorgroups == "RailRoad":
+        assert count < 5
+        assert count > 0
+        return property.rent[count]
+      elif property.colorgroups == "Utilities":
+        if count == 1:
+          return 42 #FIXME
+        elif count == 2:
+          return 70#FIXME
+        else:
+          assert False
+      else:
+        assert False
 
   def progress(self):
     if len(self.players) < 2:

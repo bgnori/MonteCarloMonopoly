@@ -127,9 +127,9 @@ class Board:
     if n == GOTOJAIL:
       return GoToJail()
     if n == INCOMETAX:
-      return PayTax(200)
+      return PayToBank(200)
     if n == LUXURYTAX:
-      return PayTax(75)
+      return PayToBank(75)
     if n in CHESTS:
       return CommunityChest(n)
     if n in CHANCES:

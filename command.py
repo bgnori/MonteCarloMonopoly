@@ -68,7 +68,7 @@ class GetSallary(Command):
   def action(self, player):
     player.money += 200
 
-class PayTax(Command):
+class PayToBank(Command):
   def __init__(self, amount):
     self.amount = amount
   def action(self, player):
@@ -78,18 +78,6 @@ class PayAndOut(Command):
   def action(self, player):
     player.money -= 50
     player.is_free = True
-
-class Chance(Command):
-  def __init__(self, pos):
-    self.pos = pos
-  def action(self, player):
-    pass
-
-class CommunityChest(Command):
-  def __init__(self, pos):
-    self.pos = pos
-  def action(self, player):
-    pass
 
 class PayRent(Command):
   def __init__(self, owner, amount):

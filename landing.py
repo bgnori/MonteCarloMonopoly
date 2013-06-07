@@ -190,7 +190,7 @@ class Board:
         if count == 1:
           return rolled * 4
         elif count == 2:
-          return rolled * 4 
+          return rolled * 10
         else:
           assert False
       else:

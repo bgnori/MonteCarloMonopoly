@@ -24,6 +24,10 @@ class Player:
     self.owns = []
     self.name = name
 
+  def asset(self):
+    return 0
+
+
   def push(self, cmd):
     self.board.send(self, cmd)
 

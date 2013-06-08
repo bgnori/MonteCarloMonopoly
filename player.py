@@ -1,22 +1,20 @@
 #!/usr/bin/env python
 from command import *
 from random import randint
-from board import PLACES
 
 
-NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
 def dice():
   return randint(1, 6), randint(1, 6)
 
 
 class Player:
-  def __init__(self, board, strategy, name, pos=None):
+  def __init__(self, game, strategy, name, pos=None):
     if pos is None:
       pos = 0
     self.pos = pos
-    self.board = board
-    board.add(self)
+    self.game = game 
+    game.add(self)
     self.money = 1500
     self.is_free = True
     self.jail_count = 0
@@ -33,28 +31,20 @@ class Player:
     return total
 
   def push(self, cmd):
-    self.board.send(self, cmd)
+    self.game.send(self, cmd)
 
   def roll(self):
     return dice()
 
   def __str__(self):
-    return "<Player %s %d %s>"%(self.name, self.money, PLACES[self.pos].name)
-
-  def move(self, n):
-    d, self.pos = divmod(self.pos + n, 40)
-    if d == 1:
-      self.push(GetSallary())
-    cmd = self.board.getCommand(self, self.pos, n)
-    if cmd:
-      self.push(cmd)
+    return "<Player %s %d %s>"%(self.name, self.money, game.board.resolve(self.pos))
 
   def zapCommand(self):
-    self.board.zapCommand()
+    self.game.zapCommand()
 
   def add_property(self, property):
     self.owns.append(property)
-    self.board.ownerof[property.pos] = self
+    self.game.ownerof[property.pos] = self
 
 
 class Strategy:

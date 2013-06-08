@@ -1,43 +1,24 @@
 #!/usr/bin/env python
 
-from board import Board
-from player import *
 
-from card import CommunityChest
-from card import Chance
-
+import game
+import player
 
 
 class Experiment:
   def __init__(self, count, *args):
-    self.board = Board()
+    self.game = game.Game(args)
     self.count = count
-    ps = [Player(self.board, arg, NAMES[i]) for i, arg in enumerate(args)]
 
-    self.setUp()
-  def setUp(self):
-    pass
 
   def run(self):
-    self.board.ready()
+    self.game.ready()
     for i in range(self.count):
-      self.board.progress()
-      self.hooks()
-
-  def hooks(self):
-    self.hook_moneycount()
+      self.game.progress()
 
 
-class MoneyCount(Experiment):
-  def setUp(self):
-    self.log = []
-
-  def hook_moneycount(self):
-    self.log.append(sum([p.asset() for p in self.board.players]))
-    self.log.append(sum([p.money for p in self.board.players]))
-
-ao = AlwaysOutStrategy()
-ex = MoneyCount(400, ao, ao, ao, ao)
+ao = player.AlwaysOutStrategy()
+ex = Experiment(400, ao, ao, ao, ao)
 
 ex.run()
 

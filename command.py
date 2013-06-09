@@ -28,6 +28,9 @@ class Executor:
   def zapCommand(self):
     self.queue = []
 
+  def hasCommand(self):
+    return bool(self.queue)
+
   def action(self):
     c = self.queue.pop(0)
     print c
@@ -189,7 +192,6 @@ class AdvanceToNearestRailroad(Command):
 
 class AdvanceToNearestUtility(Command):
   pass
-
 
 
 

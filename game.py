@@ -32,7 +32,9 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
     i = self.players.index(player)
     self.players = self.players[:i] + self.players[i+1:]
 
-  def nextplayer(self, player):
+  def nextplayer(self, player=None):
+    if player is None:
+      return self.players[0]
     n = len(self.players)
     i = self.players.index(player)
     return self.players[(i + 1) % n]
@@ -44,9 +46,9 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
   def progress(self):
     if len(self.players) < 2:
       return False
-    done = self.action()
-    if done:
-      self.send(self.nextplayer(p), command.StartTurn())
+    if not self.hasCommand():
+      self.send(self.nextplayer(), command.StartTurn())
+    self.action()
     return True
 
   def move(self, player, n):

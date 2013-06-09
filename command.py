@@ -22,7 +22,7 @@ class Executor:
     self.queue = []
 
   def send(self, p, cmd):
-    cmd.player = p
+    cmd.player = p #FIXME support for old style
     self.queue.append(cmd)
 
   def zapCommand(self):
@@ -30,11 +30,13 @@ class Executor:
 
   def action(self):
     c = self.queue.pop(0)
+    print c
     name = "handle_" + c.__class__.__name__
     h = getattr(self, name, None)
     if h:
       h(c)
     else:
+      #FIXME support for old style
       c.action(self, c.player)
 
     """WrapUpTurn().action(self, p)"""
@@ -46,6 +48,13 @@ class AdvanceTo(Command):
   def action(self, executor, player):
     to_go = self.destination - player.pos 
 
+class Chance(Command):
+  def handle_Chance(executor, cmd):
+    print 'evoked', cmd
+
+class CommunityChest(Command):
+  def handle_CommunityChest(executor, cmd):
+    print 'evoked', cmd
 
 class Retreat(Command):
   def __init__(self, amount):
@@ -88,7 +97,7 @@ class RollAndMove(Command):
         player.send(player,GoToJail())
       else:
         game.move(player, n+m)
-        player.send(player,RollAndMove(self.count+1))
+        player.send(player, RollAndMove(self.count+1))
     else:
       game.move(player, n+m)
 

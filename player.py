@@ -37,14 +37,14 @@ class Player:
     return dice()
 
   def __str__(self):
-    return "<Player %s %d %s>"%(self.name, self.money, game.board.resolve(self.pos))
+    return "<Player %s %d %s>"%(self.name, self.money, self.game.board[self.pos].name)
 
   def zapCommand(self):
     self.game.zapCommand()
 
   def add_property(self, property):
     self.owns.append(property)
-    self.game.ownerof[property.pos] = self
+    self.game.board.ownerof[property.pos] = self #FIXME
 
 
 class Strategy:

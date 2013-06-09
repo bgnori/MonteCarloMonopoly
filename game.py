@@ -14,7 +14,7 @@ import Atlantic2008
 DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
 
-class Game(command.Executor):
+class Game(command.Executor, command.Chance, command.CommunityChest):
   def __init__(self, args):
     command.Executor.__init__(self)
     self.chance = card.Pile(*Atlantic2008.CHANCE_CARDS)
@@ -50,11 +50,11 @@ class Game(command.Executor):
     return True
 
   def move(self, player, n):
+    print player, 'moving', n
     d, player.pos = divmod(player.pos + n, 40)
     if d == 1:
       self.send(player, GetFromBank(200))
     cmd = self.board.getCommand(player, player.pos, n)
     if cmd:
       self.send(player, cmd)
-
 

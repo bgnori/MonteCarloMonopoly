@@ -1,21 +1,23 @@
 #!/usr/bin/env python
 
+class Place(object):
+  def __init__(self, name, pos):
+    self.name = name
+    self.pos = pos
+  def __str__(self):
+    return "<" + self.name + ">"
 
+class Property(Place):
+  def __init__(self, name, pos, **kw):
+    Place.__init__(self, name, pos)
+    for k, v in kw.items():
+      assert k not in ('name', 'pos')
+      setattr(self, k, v)
 
 class Places:
-  class Place:
-    def __init__(self, name):
-      self.name = name
-
-  class Property(Place):
-    def __init__(self, name, **kw):
-      Places.Place.__init__(self, name)
-      for k, v in kw.items():
-        setattr(self, k, v)
-
-
   def __init__(self):
     self.xs = []
+    self.count = 0
 
   def __len__(self):
     return len(self.xs)
@@ -30,10 +32,12 @@ class Places:
     return -1, None
 
   def addPlace(self, name):
-    self.xs.append(self.Place(name))
+    self.xs.append(Place(name, self.count))
+    self.count += 1
 
   def addProperty(self, name, **kw):
-    self.xs.append(self.Property(name, **kw))
+    self.xs.append(Property(name, self.count, **kw))
+    self.count += 1
 
   @property
   def chances(self):
@@ -65,11 +69,30 @@ class Board:
     self.ownerof = [None for i in range(c)]
     self.chests = places.chests
     self.chances = places.chances
+    print self.chances
     self.noactions = places.noactions
+    print self.noactions
+
+  def __getitem__(self, n):
+    return self.places[n]
 
   def getCommand(self, player, n, rolled):
-    if isinstance(self.places[n], Places.Place):
-      if n in self.noactions:
+    p = self.places[n]
+    print n, p
+    if isinstance(p, Property):
+      """ Property is SubClass of Place, must be this order """
+      """ pay or buy """
+      if self.is_sold(n):
+        if self.ownerof[n] == player:
+          print 'you have it :)'
+          return None
+        else:
+          return PayRent(self.ownerof[n], self.calcRent(n, rolled))
+      else:
+        """ replace this for bidding Strategy """
+        return BuyProperty(p)
+    elif isinstance(p, Place):
+      if p in self.noactions:
         return NullCommand()
       if n == GOTOJAIL:
         return GoToJail()
@@ -77,21 +100,11 @@ class Board:
         return PayToBank(200)
       if n == LUXURYTAX:
         return PayToBank(75)
-      if n in self.chests:
-        return CommunityChest(n)
-      if n in self.chances:
-        return Chance(n)
-
-    elif isinstance(self.places[n], Places.Property):
-      """ pay or buy """
-      if self.is_sold(n):
-        if self.ownerof[n] == player:
-          return None
-        else:
-          return PayRent(self.ownerof[n], self.calcRent(n, rolled))
-      else:
-        """ replace this for bidding Strategy """
-        return BuyProperty(PLACES[n])
+      if p in self.chests:
+        return CommunityChest(at=n)
+      if p in self.chances:
+        return Chance(at=n)
+      assert False
     else:
       assert False
     return None

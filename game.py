@@ -13,6 +13,7 @@ import Atlantic2008
 
 DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
+
 class Game(command.Executor):
   def __init__(self, args):
     command.Executor.__init__(self)

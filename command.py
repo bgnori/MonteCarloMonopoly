@@ -18,6 +18,10 @@ class Executor:
   def zapCommand(self):
     self.queue = []
 
+  #def action(self):
+
+
+
   def action(self):
     p, c = self.queue.pop(0)
     c.action(self, p)
@@ -52,14 +56,14 @@ class StartTurn(Command):
   def action(self, executor, player):
     if not player.is_free:
       player.strategy.jail_action(player)
-    player.push(AfterJailDecision())
+    player.send(player,AfterJailDecision())
 
 class AfterJailDecision(Command):
   def action(self, executor, player):
     if player.is_free:
-      player.push(RollAndMove())
+      player.send(player,RollAndMove())
     else:
-      player.push(StayInJail())
+      player.send(player,StayInJail())
 
 class WrapUpTurn(Command):
   def action(self, executor, player):
@@ -76,10 +80,10 @@ class RollAndMove(Command):
     n, m = player.roll()
     if n == m:
       if self.count == 2:
-        player.push(GoToJail())
+        player.send(player,GoToJail())
       else:
         game.move(player, n+m)
-        player.push(RollAndMove(self.count+1))
+        player.send(player,RollAndMove(self.count+1))
     else:
       game.move(player, n+m)
 

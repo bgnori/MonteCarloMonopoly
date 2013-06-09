@@ -30,8 +30,8 @@ class Player:
       total += prop.facevalue
     return total
 
-  def push(self, cmd):
-    self.game.send(self, cmd)
+  def send(self, p, cmd):
+    self.game.send(p, cmd)
 
   def roll(self):
     return dice()
@@ -54,7 +54,7 @@ class Strategy:
 
 class AlwaysOutStrategy(Strategy):
   def jail_action(self, player):
-    player.push(PayAndOut())
+    player.send(self, PayAndOut())
 
 class AlwaysStayStrategy(Strategy):
   def jail_action(self, player):

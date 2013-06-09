@@ -1,45 +1,50 @@
 #!/usr/bin/env python
 
-
 class Command:
+  def __init__(self, **kwargs):
+    
+    for k, v in kwargs.iteritems():
+      self.__dict__[k] = v
+
   def action(self, executor, player):
     raise
+
   def __str__(self):
     return "<Command %s>"%(self.__class__.__name__,)
+
+
+class NullCommand(Command):
+  pass
 
 
 class Executor:
   def __init__(self):
     self.queue = []
 
-  def send(self, player, cmd):
-    self.queue.append((player, cmd))
+  def send(self, p, cmd):
+    cmd.player = p
+    self.queue.append(cmd)
 
   def zapCommand(self):
     self.queue = []
 
-  #def action(self):
-
-
-
   def action(self):
-    p, c = self.queue.pop(0)
-    c.action(self, p)
-    if not self.queue:
-      WrapUpTurn().action(self, p)
+    c = self.queue.pop(0)
+    name = "handle_" + c.__class__.__name__
+    h = getattr(self, name, None)
+    if h:
+      h(c)
+    else:
+      c.action(self, c.player)
 
-
-class NullCommand(Command):
-  def action(self, executor, player):
+    """WrapUpTurn().action(self, p)"""
+  def handle_NullCommand(self, cmd):
     pass
 
 
 class AdvanceTo(Command):
-  def __init__(self, dst):
-    self.dst = dst 
-
   def action(self, executor, player):
-    to_go = self.dst - player.pos 
+    to_go = self.destination - player.pos 
 
 
 class Retreat(Command):
@@ -132,15 +137,12 @@ class Repair(Command):
     pass
 
 
-class GetSallary(Command):
-  def action(self, executor, player):
-    player.money += 200
-
 class PayToBank(Command):
   def __init__(self, amount):
     self.amount = amount
   def action(self, executor, player):
     player.money -= self.amount
+
 
 class PayToAll(Command):
   def __init__(self, amount):
@@ -153,6 +155,7 @@ class PayAndOut(Command):
   def action(self, executor, player):
     player.money -= 50
     player.is_free = True
+
 
 class PayRent(Command):
   def __init__(self, owner, amount):
@@ -177,7 +180,6 @@ class AdvanceToNearestRailroad(Command):
 
 class AdvanceToNearestUtility(Command):
   pass
-
 
 
 

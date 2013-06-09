@@ -52,7 +52,7 @@ class Game(command.Executor):
   def move(self, player, n):
     d, player.pos = divmod(player.pos + n, 40)
     if d == 1:
-      self.send(player, GetSallary())
+      self.send(player, GetFromBank(200))
     cmd = self.board.getCommand(player, player.pos, n)
     if cmd:
       self.send(player, cmd)

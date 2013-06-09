@@ -92,7 +92,7 @@ Difference in the UK standard edition should appear in [square brackets]
 """
 
 COMMUNITY_CHEST_CARDS = [
-  Card(AdvanceTo(myPlace.resolve('GO')),
+  Card(AdvanceTo(destination=myPlace.resolve('GO')),
     "Advance to Go (Collect $200) ",
     "Mr. M strides in 7-league boots"),
   Card(GetFromBank(200),
@@ -173,14 +173,14 @@ Differences in the UK standard edition should appear in [square brackets].
 
 
 CHANCE_CARDS = [
-  Card(AdvanceTo(myPlace.resolve('GO')),
+  Card(AdvanceTo(destionation=myPlace.resolve('GO')),
     "Advance to Go (Collect $200)",
     "Mr. M hops on both feet."),
-  Card(AdvanceTo(myPlace.resolve("Illinois Avenue")),
+  Card(AdvanceTo(destination=myPlace.resolve("Illinois Avenue")),
     "Advance to Illinois Ave. - If you pass Go, collect $200", # {Second sentence omitted.}
     """Mr. M has tied a cloth bundle onto his cane to make a bindle, 
     carried over his right shoulder, and is smoking a cigar"""),
-  Card(AdvanceTo(myPlace.resolve("St. Charles Place")),
+  Card(AdvanceTo(destination=myPlace.resolve("St. Charles Place")),
     "Advance to St. Charles Place - If you pass Go, collect $200",
     "Mr. M hurries along, hauling a little boy by the hand"),
   Card(AdvanceToNearestUtility(),
@@ -225,10 +225,10 @@ CHANCE_CARDS = [
     "His trouser pockets pulled out to show them empty, Mr. M spreads his hands"
     #(The video game version replaces this with Speeding fine $15, reportedly also in the UK version.)
     ),
-  Card(AdvanceTo(myPlace.resolve('RR1')),
+  Card(AdvanceTo(destination=myPlace.resolve('RR1')),
     """Take a trip to Reading Railroad {Take a ride on the Reading} - If you pass Go, collect $200""",
     "Mr. M rides astride the TOOTing engine of a train"),
-  Card(AdvanceTo(myPlace.resolve("Boardwalk")),
+  Card(AdvanceTo(destination=myPlace.resolve("Boardwalk")),
     """Take a walk on the Boardwalk - Advance token to Boardwalk""", # {Board Walk in both sentences} 
     """Mr. M, a smallish dog hung over one arm, with the other pushes a squalling baby in a small pram;
     behind them, birds fly in the sky above a low fence"""),

@@ -61,7 +61,7 @@ LUXURYTAX = 38
 
 import model
 
-from command import *
+import command
 
 class Board:
   def __init__(self, places):
@@ -88,23 +88,23 @@ class Board:
           print 'you have it :)'
           return None
         else:
-          return PayRent(self.ownerof[n], self.calcRent(n, rolled))
+          return command.PayRent(self.ownerof[n], self.calcRent(n, rolled))
       else:
         """ replace this for bidding Strategy """
-        return BuyProperty(p)
+        return command.BuyProperty(p)
     elif isinstance(p, Place):
       if p in self.noactions:
         return model.NullCommand()
       if n == GOTOJAIL:
-        return GoToJail()
+        return command.GoToJail()
       if n == INCOMETAX:
-        return PayToBank(200)
+        return command.PayToBank(200)
       if n == LUXURYTAX:
-        return PayToBank(75)
+        return command.PayToBank(75)
       if p in self.chests:
-        return CommunityChest(at=n)
+        return command.CommunityChest(at=n)
       if p in self.chances:
-        return Chance(at=n)
+        return command.Chance(at=n)
       assert False
     else:
       assert False

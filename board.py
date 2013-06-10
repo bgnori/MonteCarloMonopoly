@@ -114,31 +114,31 @@ class Board:
     return self.ownerof[n] is not None
 
   def getColorGroups(self, color):
-    return [p for p in PLACES if getattr(p, "colorgroups", '') == color]
+    return [p for p in self.places if getattr(p, "colorgroups", '') == color]
 
   def calcRent(self, n, rolled):
-    property = PLACES[n]
-    housing = property.cost 
-    color = property.colorgroups
+    theproperty = self.places[n]
+    housing = theproperty.cost 
+    color = theproperty.colorgroups
     owner = self.ownerof[n]
     if housing:
       """ usual color group """
       if all([ p in owner.owns for p in self.getColorGroups(color)]):
         ''' monopoly '''
-        return property.rent[0] * 2
+        return theproperty.rent[0] * 2
       else:
-        return property.rent[0]
+        return theproperty.rent[0]
     else:
       """RailRoad or Utilities"""
       count = 0
       for p in self.getColorGroups(color):
         if p in owner.owns:
           count+=1
-      if property.colorgroups == "RailRoad":
+      if theproperty.colorgroups == "RailRoad":
         assert count < 5
         assert count > 0
-        return property.rent[count]
-      elif property.colorgroups == "Utilities":
+        return theproperty.rent[count]
+      elif theproperty.colorgroups == "Utilities":
         if count == 1:
           return rolled * 4
         elif count == 2:

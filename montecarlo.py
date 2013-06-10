@@ -11,12 +11,12 @@ class Experiment:
 
   def run(self):
     self.game.ready()
-    for i in range(self.count):
+    for i in xrange(self.count):
       self.game.progress()
 
 
 ao = game.AlwaysOutStrategy()
-ex = Experiment(20, ao, ao, ao, ao)
+ex = Experiment(1000, ao, ao, ao, ao)
 
 ex.run()
 

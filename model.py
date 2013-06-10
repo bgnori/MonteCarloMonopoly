@@ -84,12 +84,17 @@ class Player:
     self.houses = {}
     self.hotels = {}
     self.name = name
+    self.dead = False
 
   def asset(self):
     total = 0
     for prop in self.owns:
       total += prop.facevalue
-    return total
+    return total + self.money
+
+  def is_dying(self):
+    pass
+
 
   def send(self, p, cmd):
     assert not hasattr(cmd, 'player')

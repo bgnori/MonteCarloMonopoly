@@ -39,18 +39,17 @@ class Game(model.Executor, command.Chance, command.CommunityChest):
   def add(self, p):
     self.players.append(p)
 
-  def remove(self, p):
-    i = self.players.index(p)
-    self.players = self.players[:i] + self.players[i+1:]
-
   def nextplayer(self, prev=None):
     if prev is None:
-      return self.players[0]
-    n = len(self.players)
-    i = self.players.index(prev)
-    n = self.players[(i + 1) % n]
-    assert isinstance(n, model.Player)
-    return n
+      i = 0
+    else:
+      i = self.players.index(prev)
+
+    i = (i + 1) % len(self.players)
+    if self.players[i].dead:
+      return self.nextplayer(self.players[i])
+    else:
+      return self.players[i]
 
   def ready(self):
     self.push(self.players[0], model.GameLoop(commandclass=command.StartTurn))

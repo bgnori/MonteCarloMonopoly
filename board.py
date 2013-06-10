@@ -79,7 +79,7 @@ class Board:
 
   def getCommand(self, player, n, rolled):
     p = self.places[n]
-    print n, p
+    print 'getCommand', n, p
     if isinstance(p, Property):
       """ Property is SubClass of Place, must be this order """
       """ pay or buy """

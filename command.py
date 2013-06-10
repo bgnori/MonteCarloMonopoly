@@ -26,6 +26,7 @@ class Retreat(model.Command):
 
 class StartTurn(model.Command):
   def action(self, executor, player):
+    player.turns += 1
     if not player.is_free:
       player.strategy.jail_action(player)
     player.send(player, AfterJailDecision())

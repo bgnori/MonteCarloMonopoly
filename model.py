@@ -85,6 +85,8 @@ class Player:
     self.hotels = {}
     self.name = name
     self.dead = False
+    self.turns = 0
+    self.go_count = 0
 
   def asset(self):
     total = 0

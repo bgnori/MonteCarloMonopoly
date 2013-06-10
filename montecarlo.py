@@ -11,7 +11,10 @@ class Experiment:
   def report(self):
     for p in self.game.players:
       print '='*20
-      print p.name, "has", p.asset()
+      print p.name
+      print "played", p.turns
+      print "passed go", p.go_count, 'time(s)'
+      print "has", p.asset()
       for i, prop in enumerate(p.owns):
         print i, prop
       print
@@ -24,7 +27,7 @@ class Experiment:
 
 
 ao = game.AlwaysOutStrategy()
-ex = Experiment(1000, ao, ao, ao, ao)
+ex = Experiment(800, ao, ao, ao, ao)
 
 ex.run()
 

@@ -22,6 +22,7 @@ class Executor:
     self.queue = []
 
   def send(self, p, cmd):
+    assert not hasattr(cmd, 'player')
     cmd.player = p #FIXME support for old style
     self.queue.append(cmd)
 
@@ -73,14 +74,14 @@ class StartTurn(Command):
   def action(self, executor, player):
     if not player.is_free:
       player.strategy.jail_action(player)
-    player.send(player,AfterJailDecision())
+    player.send(player, AfterJailDecision())
 
 class AfterJailDecision(Command):
   def action(self, executor, player):
     if player.is_free:
-      player.send(player,RollAndMove())
+      player.send(player, RollAndMove())
     else:
-      player.send(player,StayInJail())
+      player.send(player, StayInJail())
 
 class WrapUpTurn(Command):
   def action(self, executor, player):

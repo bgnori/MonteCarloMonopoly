@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from command import *
+import command
 from random import randint
 
 
@@ -14,7 +14,6 @@ class Player:
       pos = 0
     self.pos = pos
     self.game = game 
-    game.add(self)
     self.money = 1500
     self.is_free = True
     self.jail_count = 0
@@ -31,6 +30,9 @@ class Player:
     return total
 
   def send(self, p, cmd):
+    assert not hasattr(cmd, 'player')
+    assert isinstance(p, Player)
+    assert isinstance(cmd, command.Command)
     self.game.send(p, cmd)
 
   def roll(self):
@@ -54,7 +56,8 @@ class Strategy:
 
 class AlwaysOutStrategy(Strategy):
   def jail_action(self, player):
-    player.send(self, PayAndOut())
+    assert isinstance(player, Player)
+    player.send(self, command.PayAndOut())
 
 class AlwaysStayStrategy(Strategy):
   def jail_action(self, player):

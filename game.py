@@ -13,7 +13,6 @@ import Atlantic2008
 
 DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
-
 class Game(command.Executor, command.Chance, command.CommunityChest):
   def __init__(self, args):
     command.Executor.__init__(self)
@@ -23,21 +22,24 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
     self.chest.shuffle()
     self.board = board.Board(Atlantic2008.myPlace)
     self.players = []
-    [player.Player(self, arg, DEFAULT_NAMES[i]) for i, arg in enumerate(args)]
+    for i, arg in enumerate(args):
+        self.add(player.Player(self, arg, DEFAULT_NAMES[i]))
 
-  def add(self, player):
-    self.players.append(player)
+  def add(self, p):
+    self.players.append(p)
 
-  def remove(self, player):
-    i = self.players.index(player)
+  def remove(self, p):
+    i = self.players.index(p)
     self.players = self.players[:i] + self.players[i+1:]
 
-  def nextplayer(self, player=None):
-    if player is None:
+  def nextplayer(self, prev=None):
+    if prev is None:
       return self.players[0]
     n = len(self.players)
-    i = self.players.index(player)
-    return self.players[(i + 1) % n]
+    i = self.players.index(prev)
+    n = self.players[(i + 1) % n]
+    assert isinstance(n, player.Player)
+    return n
 
   def ready(self):
     p = self.players[0]
@@ -48,15 +50,20 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
       return False
     if not self.hasCommand():
       self.send(self.nextplayer(), command.StartTurn())
+    if not isinstance(getattr(self.queue[0], "player", None), (player.Player,)):
+        print self.queue[0]
+        print dir(self.queue[0])
+        assert False
+
     self.action()
     return True
 
-  def move(self, player, n):
-    print player, 'moving', n
-    d, player.pos = divmod(player.pos + n, 40)
+  def move(self, p, n):
+    print p, 'moving', n
+    d, p.pos = divmod(p.pos + n, 40)
     if d == 1:
-      self.send(player, GetFromBank(200))
-    cmd = self.board.getCommand(player, player.pos, n)
+      self.send(p, command.GetFromBank(200))
+    cmd = self.board.getCommand(p, p.pos, n)
     if cmd:
-      self.send(player, cmd)
+      self.send(p, cmd)
 

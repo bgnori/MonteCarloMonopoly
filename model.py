@@ -25,21 +25,24 @@ class NullCommand(Command):
 
 class Executor:
   def __init__(self):
-    self.queue = []
+    self.stack= []
 
-  def send(self, p, cmd):
+  def push(self, p, cmd):
     assert not hasattr(cmd, 'player')
     cmd.player = p #FIXME support for old style
-    self.queue.append(cmd)
+    self.stack.append(cmd)
+
+  def pop(self):
+    return self.stack.pop(-1)
 
   def zapCommand(self):
-    self.queue = []
+    self.stack = []
 
   def hasCommand(self):
-    return bool(self.queue)
+    return bool(self.stack)
 
   def action(self):
-    c = self.queue.pop(0)
+    c = self.pop()
     print c
     name = "handle_" + c.__class__.__name__
     h = getattr(self, name, None)
@@ -51,7 +54,7 @@ class Executor:
 
     """WrapUpTurn().action(self, p)"""
   def handle_NullCommand(self, cmd):
-    pass
+    print 'method handle_NullCommand'
 
 
 
@@ -80,7 +83,7 @@ class Player:
     assert not hasattr(cmd, 'player')
     assert isinstance(p, Player)
     assert isinstance(cmd, Command)
-    self.game.send(p, cmd)
+    self.game.push(p, cmd)
 
   def roll(self):
     return dice()

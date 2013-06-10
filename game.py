@@ -54,17 +54,13 @@ class Game(model.Executor, command.Chance, command.CommunityChest):
 
   def ready(self):
     p = self.players[0]
-    self.send(p, command.StartTurn())
+    self.push(p, command.StartTurn())
 
   def progress(self):
     if len(self.players) < 2:
       return False
     if not self.hasCommand():
-      self.send(self.nextplayer(), command.StartTurn())
-    if not isinstance(getattr(self.queue[0], "player", None), (model.Player,)):
-        print self.queue[0]
-        print dir(self.queue[0])
-        assert False
+      self.push(self.nextplayer(), command.StartTurn())
 
     self.action()
     return True
@@ -73,8 +69,8 @@ class Game(model.Executor, command.Chance, command.CommunityChest):
     print p, 'moving', n
     d, p.pos = divmod(p.pos + n, 40)
     if d == 1:
-      self.send(p, command.GetFromBank(200))
+      self.push(p, command.GetFromBank(200))
     cmd = self.board.getCommand(p, p.pos, n)
     if cmd:
-      self.send(p, cmd)
+      self.push(p, cmd)
 

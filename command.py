@@ -63,12 +63,12 @@ class StayInJail(Command):
   def action(self, executor, player):
     n, m = player.roll()
     if n == m:
-      game.move(player, n+m)
+      executor.move(player, n+m) #FIXME
     else:
       player.jail_count += 1
       if player.jail_count > 2:
         player.money -= 50 #forced, but there is an option for Jail Free Card
-        game.move(player, n+m)
+        executor.move(player, n+m) #FIXME
 
 
 class GoToJail(Command):

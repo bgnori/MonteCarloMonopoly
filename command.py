@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
-from model import Command
+import model
 
-class AdvanceTo(Command):
+class AdvanceTo(model.Command):
   def action(self, executor, player):
     to_go = self.destination - player.pos 
 
-class Chance(Command):
+class Chance(model.Command):
   def handle_Chance(executor, cmd):
     print 'evoked', cmd
 
-class CommunityChest(Command):
+class CommunityChest(model.Command):
   def handle_CommunityChest(executor, cmd):
     print 'evoked', cmd
 
-class Retreat(Command):
+class Retreat(model.Command):
   def __init__(self, amount):
     self.amount = amount
 
@@ -24,24 +24,25 @@ class Retreat(Command):
 
 
 
-class StartTurn(Command):
+class StartTurn(model.Command):
   def action(self, executor, player):
     if not player.is_free:
       player.strategy.jail_action(player)
     player.send(player, AfterJailDecision())
 
-class AfterJailDecision(Command):
+
+class AfterJailDecision(model.Command):
   def action(self, executor, player):
     if player.is_free:
       player.send(player, RollAndMove())
     else:
       player.send(player, StayInJail())
 
-class WrapUpTurn(Command):
+class WrapUpTurn(model.Command):
   def action(self, executor, player):
     pass
 
-class RollAndMove(Command):
+class RollAndMove(model.Command):
   def __init__(self, count=None):
     if count is None:
       count = 0
@@ -59,7 +60,7 @@ class RollAndMove(Command):
     else:
       game.move(player, n+m)
 
-class StayInJail(Command):
+class StayInJail(model.Command):
   def action(self, executor, player):
     n, m = player.roll()
     if n == m:
@@ -71,32 +72,32 @@ class StayInJail(Command):
         executor.move(player, n+m) #FIXME
 
 
-class GoToJail(Command):
+class GoToJail(model.Command):
   def action(self, executor, player):
     player.pos = 10
     player.is_free = False
     player.jail_count = 0
-    player.zapCommand()
+    executor.push(player, model.YieldTurn());
 
-class GetFromBank(Command):
+class GetFromBank(model.Command):
   def __init__(self, amount):
     self.amount = amount
   def action(self, executor, player):
     player.money += self.amount
 
-class GetJailFree(Command):
+class GetJailFree(model.Command):
   def __init__(self, is_chance=None):
     pass
   def action(self, executor, player):
     pass
 
-class CollectFromAll(Command):
+class CollectFromAll(model.Command):
   def __init__(self, amount):
     self.amount = amount
   def action(self, executor, player):
     player.money += self.amount
 
-class Repair(Command):
+class Repair(model.Command):
   def __init__(self, house, hotel):
     self.house = house
     self.hotel = hotel
@@ -104,27 +105,27 @@ class Repair(Command):
     pass
 
 
-class PayToBank(Command):
+class PayToBank(model.Command):
   def __init__(self, amount):
     self.amount = amount
   def action(self, executor, player):
     player.money -= self.amount
 
 
-class PayToAll(Command):
+class PayToAll(model.Command):
   def __init__(self, amount):
     self.amount = amount
   def action(self, executor, player):
     player.money -= self.amount
 
 
-class PayAndOut(Command):
+class PayAndOut(model.Command):
   def action(self, executor, player):
     player.money -= 50
     player.is_free = True
 
 
-class PayRent(Command):
+class PayRent(model.Command):
   def __init__(self, owner, amount):
     self.owner = owner
     self.amount = amount
@@ -133,7 +134,7 @@ class PayRent(Command):
     self.owner.money += self.amount
     print player.name, '==(', self.amount, ')=>', self.owner.name
 
-class BuyProperty(Command):
+class BuyProperty(model.Command):
   def __init__(self, property):
     self.property = property
 
@@ -142,12 +143,11 @@ class BuyProperty(Command):
     player.add_property(self.property)
 
 
-class AdvanceToNearestRailroad(Command):
+class AdvanceToNearestRailroad(model.Command):
   pass
 
-class AdvanceToNearestUtility(Command):
+class AdvanceToNearestUtility(model.Command):
   pass
-
 
 
 

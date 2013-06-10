@@ -16,9 +16,8 @@ class Experiment:
 
 
 ao = game.AlwaysOutStrategy()
-ex = Experiment(400, ao, ao, ao, ao)
+ex = Experiment(20, ao, ao, ao, ao)
 
 ex.run()
 
-print ex.log
 

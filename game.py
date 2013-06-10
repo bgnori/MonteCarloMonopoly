@@ -53,15 +53,11 @@ class Game(model.Executor, command.Chance, command.CommunityChest):
     return n
 
   def ready(self):
-    p = self.players[0]
-    self.push(p, command.StartTurn())
+    self.push(self.players[0], model.GameLoop(commandclass=command.StartTurn))
 
   def progress(self):
     if len(self.players) < 2:
       return False
-    if not self.hasCommand():
-      self.push(self.nextplayer(), command.StartTurn())
-
     self.action()
     return True
 

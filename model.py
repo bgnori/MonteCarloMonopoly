@@ -35,8 +35,12 @@ class Executor:
   def pop(self):
     return self.stack.pop(-1)
 
-  def zapCommand(self):
-    self.stack = []
+  def peek(self):
+    return self.stack[-1]
+
+  def zapCommandUpTo(self, klass):
+    while not isinstance(self.peek(), klass):
+      self.pop()
 
   def hasCommand(self):
     return bool(self.stack)
@@ -56,7 +60,15 @@ class Executor:
   def handle_NullCommand(self, cmd):
     print 'method handle_NullCommand'
 
+class YieldTurn(Command):
+  def action(self, executor, player):
+    executor.zapCommandUpTo(GameLoop)
 
+class GameLoop(Command):
+  def action(self, executor, player):
+    assert not executor.hasCommand()
+    executor.push(executor.nextplayer(player), GameLoop(commandclass=self.commandclass)) #loop
+    executor.push(player, self.commandclass())
 
 class Player:
   def __init__(self, game, strategy, name, pos=None):

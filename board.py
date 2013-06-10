@@ -59,6 +59,7 @@ GOTOJAIL = 30
 INCOMETAX = 4
 LUXURYTAX = 38
 
+import model
 
 from command import *
 
@@ -93,7 +94,7 @@ class Board:
         return BuyProperty(p)
     elif isinstance(p, Place):
       if p in self.noactions:
-        return NullCommand()
+        return model.NullCommand()
       if n == GOTOJAIL:
         return GoToJail()
       if n == INCOMETAX:

@@ -2,8 +2,6 @@
 
 
 import game
-import player
-
 
 class Experiment:
   def __init__(self, count, *args):
@@ -17,7 +15,7 @@ class Experiment:
       self.game.progress()
 
 
-ao = player.AlwaysOutStrategy()
+ao = game.AlwaysOutStrategy()
 ex = Experiment(400, ao, ao, ao, ao)
 
 ex.run()

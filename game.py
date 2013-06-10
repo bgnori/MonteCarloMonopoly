@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
 
-#modeling 
+import model
 import command
-import player
 
 import board
 import card
@@ -11,11 +10,23 @@ import card
 # set of subclass and data
 import Atlantic2008
 
+
+
+class AlwaysOutStrategy(model.Strategy):
+  def jail_action(self, player):
+    assert isinstance(player, model.Player)
+    player.send(player, command.PayAndOut())
+
+class AlwaysStayStrategy(model.Strategy):
+  def jail_action(self, player):
+    pass
+
+
 DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
-class Game(command.Executor, command.Chance, command.CommunityChest):
+class Game(model.Executor, command.Chance, command.CommunityChest):
   def __init__(self, args):
-    command.Executor.__init__(self)
+    model.Executor.__init__(self)
     self.chance = card.Pile(*Atlantic2008.CHANCE_CARDS)
     self.chance.shuffle()
     self.chest = card.Pile(*Atlantic2008.COMMUNITY_CHEST_CARDS)
@@ -23,7 +34,7 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
     self.board = board.Board(Atlantic2008.myPlace)
     self.players = []
     for i, arg in enumerate(args):
-        self.add(player.Player(self, arg, DEFAULT_NAMES[i]))
+        self.add(model.Player(self, arg, DEFAULT_NAMES[i]))
 
   def add(self, p):
     self.players.append(p)
@@ -38,7 +49,7 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
     n = len(self.players)
     i = self.players.index(prev)
     n = self.players[(i + 1) % n]
-    assert isinstance(n, player.Player)
+    assert isinstance(n, model.Player)
     return n
 
   def ready(self):
@@ -50,7 +61,7 @@ class Game(command.Executor, command.Chance, command.CommunityChest):
       return False
     if not self.hasCommand():
       self.send(self.nextplayer(), command.StartTurn())
-    if not isinstance(getattr(self.queue[0], "player", None), (player.Player,)):
+    if not isinstance(getattr(self.queue[0], "player", None), (model.Player,)):
         print self.queue[0]
         print dir(self.queue[0])
         assert False

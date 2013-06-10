@@ -1,52 +1,6 @@
 #!/usr/bin/env python
 
-class Command:
-  def __init__(self, **kwargs):
-    
-    for k, v in kwargs.iteritems():
-      self.__dict__[k] = v
-
-  def action(self, executor, player):
-    raise
-
-  def __str__(self):
-    return "<Command %s>"%(self.__class__.__name__,)
-
-
-class NullCommand(Command):
-  pass
-
-
-class Executor:
-  def __init__(self):
-    self.queue = []
-
-  def send(self, p, cmd):
-    assert not hasattr(cmd, 'player')
-    cmd.player = p #FIXME support for old style
-    self.queue.append(cmd)
-
-  def zapCommand(self):
-    self.queue = []
-
-  def hasCommand(self):
-    return bool(self.queue)
-
-  def action(self):
-    c = self.queue.pop(0)
-    print c
-    name = "handle_" + c.__class__.__name__
-    h = getattr(self, name, None)
-    if h:
-      h(c)
-    else:
-      #FIXME support for old style
-      c.action(self, c.player)
-
-    """WrapUpTurn().action(self, p)"""
-  def handle_NullCommand(self, cmd):
-    pass
-
+from model import Command
 
 class AdvanceTo(Command):
   def action(self, executor, player):

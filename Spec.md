@@ -12,6 +12,11 @@
  * roll dependent Utilities Rent
 
 ## not yet
+ * stat
+   * income/expense
+   * duration for sold-out
+   * ave chance of landing in color groups and/or properties
+   * chance of self contained monopoly
  * Chance and Community Chest Cards
  * interactive exec
  * logging / replay

@@ -5,7 +5,7 @@ import game
 
 class Experiment:
   def __init__(self, count, *args):
-    self.game = game.Game(args)
+    self.game = game.Game(*args)
     self.count = count
 
   def report(self):
@@ -22,6 +22,7 @@ class Experiment:
 
   def run(self):
     self.game.ready()
+    self.game.players[2].dead = True
     for i in xrange(self.count):
       self.game.progress()
 

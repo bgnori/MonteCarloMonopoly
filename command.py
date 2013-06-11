@@ -22,15 +22,16 @@ class Retreat(model.Command):
     pass
     to_go = self.dst - player.pos 
 
-
-
 class StartTurn(model.Command):
   def action(self, executor, player):
+    if player.dead:
+      player.send(player, model.EndTurn())
+      return
+
     player.turns += 1
     if not player.is_free:
       player.strategy.jail_action(player)
     player.send(player, AfterJailDecision())
-
 
 class AfterJailDecision(model.Command):
   def action(self, executor, player):
@@ -78,7 +79,7 @@ class GoToJail(model.Command):
     player.pos = 10
     player.is_free = False
     player.jail_count = 0
-    executor.push(player, model.YieldTurn());
+    executor.push(player, model.EndTurn());
 
 class GetFromBank(model.Command):
   def __init__(self, amount):

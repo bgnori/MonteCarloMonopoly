@@ -23,9 +23,16 @@ class NullCommand(Command):
   pass
 
 
+
+DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
+
+
 class Executor:
-  def __init__(self):
+  def __init__(self, *args):
     self.stack= []
+    self.players = []
+    for i, arg in enumerate(args):
+        self.add(Player(self, arg, DEFAULT_NAMES[i]))
 
   def push(self, p, cmd):
     assert not hasattr(cmd, 'player')
@@ -57,10 +64,22 @@ class Executor:
       c.action(self, c.player)
 
     """WrapUpTurn().action(self, p)"""
+
+  def add(self, p):
+    self.players.append(p)
+
+  def nextplayer(self, prev=None):
+    if prev is None:
+      i = 0
+    else:
+      i = self.players.index(prev)
+    return self.players[(i + 1) % len(self.players)]
+
   def handle_NullCommand(self, cmd):
     print 'method handle_NullCommand'
 
-class YieldTurn(Command):
+
+class EndTurn(Command):
   def action(self, executor, player):
     executor.zapCommandUpTo(GameLoop)
 
@@ -69,6 +88,14 @@ class GameLoop(Command):
     assert not executor.hasCommand()
     executor.push(executor.nextplayer(player), GameLoop(commandclass=self.commandclass)) #loop
     executor.push(player, self.commandclass())
+
+class StartTurn(Command):
+  def action(self, executor, player):
+    player.turns += 1
+    if not player.is_free:
+      player.strategy.jail_action(player)
+    player.send(player, AfterJailDecision())
+
 
 class Player:
   def __init__(self, game, strategy, name, pos=None):

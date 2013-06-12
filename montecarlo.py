@@ -14,7 +14,13 @@ class Experiment:
       print p.name
       print "played", p.turns
       print "passed go", p.go_count, 'time(s)'
-      print "has", p.asset()
+      plus = sum(p.profit)
+      minus = sum(p.loss)
+      print "P/L:", plus, minus, plus - minus
+      print 'cash:', p.money
+      print 'asset', p.asset()
+      print "has ", sum([o.facevalue for o in p.owns]),
+      print " as property"
       for i, prop in enumerate(p.owns):
         print i, prop
       print

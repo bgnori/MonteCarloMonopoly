@@ -91,13 +91,13 @@ class GameLoop(Command):
 
 
 
-class Player:
+class Player(object):
   def __init__(self, game, strategy, name, pos=None):
     if pos is None:
       pos = 0
     self.pos = pos
     self.game = game 
-    self.money = 1500
+    self._money = 1500
     self.is_free = True
     self.jail_count = 0
     self.strategy = strategy
@@ -108,6 +108,23 @@ class Player:
     self.dead = False
     self.turns = 0
     self.go_count = 0
+
+    self.profit = []
+    self.loss = []
+
+  @property
+  def money(self):
+    return self._money
+
+  @money.setter
+  def money(self, v):
+    chg = v - self._money
+    print 'set_money', chg
+    if chg > 0:
+      self.profit.append(chg)
+    if chg < 0:
+      self.loss.append(-chg)
+    self._money = v
 
   def asset(self):
     total = 0

@@ -17,6 +17,7 @@
    * duration for sold-out
    * ave chance of landing in color groups and/or properties
    * chance of self contained monopoly
+ * P/L, cash flow, asset tracking
  * Chance and Community Chest Cards
  * interactive exec
  * logging / replay

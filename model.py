@@ -101,7 +101,7 @@ class Player:
     self.is_free = True
     self.jail_count = 0
     self.strategy = strategy
-    self.owns = []
+    self.owns = set([])
     self.houses = {}
     self.hotels = {}
     self.name = name
@@ -135,7 +135,11 @@ class Player:
     self.game.zapCommand()
 
   def add_property(self, prop):
-    self.owns.append(prop)
+    self.owns.add(prop)
+
+  def remove(self, prop):
+    self.owns.remove(prop)
+
 
 
 class Strategy:

@@ -40,13 +40,3 @@ class Game(model.Executor, command.Chance, command.CommunityChest):
     self.action()
     return True
 
-  def move(self, p, n):
-    print p, 'moving', n
-    d, p.pos = divmod(p.pos + n, 40)
-    if d == 1:
-      p.go_count += 1
-      self.push(p, command.GetFromBank(200))
-    cmd = self.board.getCommand(p, p.pos, n)
-    if cmd:
-      self.push(p, cmd)
-

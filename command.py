@@ -57,21 +57,33 @@ class RollAndMove(model.Command):
       if self.count == 2:
         player.send(player,GoToJail())
       else:
-        game.move(player, n+m)
         player.send(player, RollAndMove(self.count+1))
+        executor.push(player, MoveN(player=player, n=n+m))
     else:
-      game.move(player, n+m)
+      executor.push(player, MoveN(player=player, n=n+m))
+
+class MoveN(model.Command):
+  def action(self, executor, player):
+    print self.player, 'moving', self.n
+    d, self.player.pos = divmod(self.player.pos + self.n, 40)
+    if d == 1:
+      self.player.go_count += 1
+      executor.push(self.player, GetFromBank(200))
+    cmd = executor.board.getCommand(self.player, self.player.pos, self.n)
+    if cmd:
+      executor.push(self.player, cmd)
+
 
 class StayInJail(model.Command):
   def action(self, executor, player):
     n, m = player.roll()
     if n == m:
-      executor.move(player, n+m) #FIXME
+      executor.push(player, MoveN(player=player, n=n+m))
     else:
       player.jail_count += 1
       if player.jail_count > 2:
         player.money -= 50 #forced, but there is an option for Jail Free Card
-        executor.move(player, n+m) #FIXME
+        executor.push(player, MoveN(player=player, n=n+m))
 
 
 class GoToJail(model.Command):

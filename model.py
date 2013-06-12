@@ -35,7 +35,7 @@ class Executor:
         self.add(Player(self, arg, DEFAULT_NAMES[i]))
 
   def push(self, p, cmd):
-    assert not hasattr(cmd, 'player')
+    #assert not hasattr(cmd, 'player')
     cmd.player = p #FIXME support for old style
     self.stack.append(cmd)
 

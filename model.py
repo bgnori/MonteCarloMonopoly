@@ -134,9 +134,8 @@ class Player:
   def zapCommand(self):
     self.game.zapCommand()
 
-  def add_property(self, property):
-    self.owns.append(property)
-    self.game.board.ownerof[property.pos] = self #FIXME
+  def add_property(self, prop):
+    self.owns.append(prop)
 
 
 class Strategy:

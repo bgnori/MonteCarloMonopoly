@@ -137,12 +137,14 @@ class PayRent(model.Command):
     print player.name, '==(', self.amount, ')=>', self.owner.name
 
 class BuyProperty(model.Command):
-  def __init__(self, property):
-    self.property = property
+  def __init__(self, prop):
+    self.prop = prop 
 
   def action(self, executor, player):
-    player.money -= self.property.facevalue
-    player.add_property(self.property)
+    prop = self.prop
+    player.money -= prop.facevalue
+    player.add_property(prop)
+    executor.board.ownerof[prop.pos] = player
 
 
 class AdvanceToNearestRailroad(model.Command):

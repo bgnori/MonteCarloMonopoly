@@ -86,15 +86,9 @@ class EndTurn(Command):
 class GameLoop(Command):
   def action(self, executor, player):
     assert not executor.hasCommand()
-    executor.push(executor.nextplayer(player), GameLoop(commandclass=self.commandclass)) #loop
-    executor.push(player, self.commandclass())
+    executor.push(executor.nextplayer(player), GameLoop(start=self.start)) #loop
+    executor.push(player, self.start())
 
-class StartTurn(Command):
-  def action(self, executor, player):
-    player.turns += 1
-    if not player.is_free:
-      player.strategy.jail_action(player)
-    player.send(player, AfterJailDecision())
 
 
 class Player:

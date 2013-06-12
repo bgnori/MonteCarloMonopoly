@@ -22,7 +22,7 @@ class Experiment:
 
   def run(self):
     self.game.ready()
-    self.game.players[2].dead = True
+    #self.game.players[2].dead = True
     for i in xrange(self.count):
       self.game.progress()
 

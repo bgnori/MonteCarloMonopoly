@@ -32,7 +32,7 @@ class Game(model.Executor, command.Chance, command.CommunityChest):
     self.board = board.Board(Atlantic2008.myPlace)
 
   def ready(self):
-    self.push(self.nextplayer(), model.GameLoop(commandclass=command.StartTurn))
+    self.push(self.nextplayer(), model.GameLoop(start=command.StartTurn))
 
   def progress(self):
     if len(self.players) < 2:

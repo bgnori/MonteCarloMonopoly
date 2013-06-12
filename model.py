@@ -7,11 +7,14 @@ from random import randint
 def dice():
   return randint(1, 6), randint(1, 6)
 
-class Command:
+class Command(object):
   def __init__(self, **kwargs):
-    
+    self.param = {}
     for k, v in kwargs.iteritems():
-      self.__dict__[k] = v
+      self.param[k] = v
+
+  def __getattr__(self, k):
+    return self.__dict__["param"][k]
 
   def action(self, executor, player):
     raise
@@ -27,7 +30,7 @@ class NullCommand(Command):
 DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
 
-class Executor:
+class Executor(object):
   def __init__(self, *args):
     self.stack= []
     self.players = []

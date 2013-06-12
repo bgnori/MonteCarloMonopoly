@@ -22,7 +22,7 @@ class AlwaysStayStrategy(model.Strategy):
     pass
 
 
-class Game(model.Executor, command.Chance, command.CommunityChest):
+class Game(model.Executor):
   def __init__(self, *args):
     model.Executor.__init__(self, *args)
     self.chance = card.Pile(*Atlantic2008.CHANCE_CARDS)

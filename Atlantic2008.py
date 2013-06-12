@@ -95,13 +95,13 @@ COMMUNITY_CHEST_CARDS = [
   Card(AdvanceTo(destination=myPlace.resolve('GO')),
     "Advance to Go (Collect $200) ",
     "Mr. M strides in 7-league boots"),
-  Card(GetFromBank(200),
+  Card(GetFromBank(amount=200),
     "Bank error in your favor - Collect $200",
     "Mr. M falls back in astonishment as an arm presents a sheaf of cash out of a bank teller's window,"),
-  Card(PayToBank(50),
+  Card(PayToBank(amount=50),
     "Doctor's fees {fee} - Pay $50",
     "Mr. M angrily brandishes crutches as he stomps with a leg cast"),
-  Card(GetFromBank(50), 
+  Card(GetFromBank(amount=50), 
     "From sale of stock you get $50", #{$45} 
     "Mr. M, happily entangled in the tape of a stock ticker, waves cash (with no $ sign this time)"),
   Card(GetJailFree(),
@@ -112,42 +112,42 @@ COMMUNITY_CHEST_CARDS = [
     "Go to Jail - Go directly to jail - Do not pass Go - Do not collect $200",
     "A truncheon-wielding policeman in a light-colored uniform lifts a surprised Mr M by the collar"),
 
-  Card(CollectFromAll(50),
+  Card(CollectFromAll(amount=50),
     """Grand Opera Night {Opening}
     - Collect $50 from every player for opening night seats""",
     """A wall sign near steps reads "Opera Tonite - 8 PM Sharp";
     Mr. M leans against it checking his pocket watch in annoyance"""),
-  Card(GetFromBank(100),
+  Card(GetFromBank(amount=100),
     "Holiday {Xmas} Fund matures - Receive {Collect} $100",
     "Mr. M carries along a giant Xmas sock containing a sheaf of cash"),
-  Card(GetFromBank(20),
+  Card(GetFromBank(amount=20),
     "Income tax refund - Collect $20",
     "Mr M faints back against a man displaying the Refund paper"),
-  Card(CollectFromAll(10),
+  Card(CollectFromAll(amount=10),
     "It is your birthday - Collect $10 from each player", #{Not in the deck}
     ""),
-  Card(GetFromBank(100), 
+  Card(GetFromBank(amount=100), 
     "Life insurance matures - Collect $100",
     "Below an I N S sign stands a bent Mr M, his long beard brushing the floor"),
-  Card(PayToBank(100),
+  Card(PayToBank(amount=100),
     "Pay hospital fees of $100", # {Pay hospital $100}
     """A bored nurse holds out her hand for payment
     while Mr. M holds 2 swaddled infants, one in each arm"""),
-  Card(PayToBank(150),
+  Card(PayToBank(amount=150),
     "Pay school fees {tax} of $150",
     "A bespectacled schoolboy unhappily receives a head pat and a dime ((Rockefeller style) from Mr. M."),
-  Card(GetFromBank(25),
+  Card(GetFromBank(amount=25),
     "Receive $25 consultancy fee", #{Receive for services $25} 
     """As Justice of the Peace, a stern Mr. M holds out his hand
     for fee from an embarrassed groom whose bride hold a bouquet behind him"""),
-  Card(Repair(40, 115),
+  Card(Repair(house=40, hotel=115),
     """You are assessed for street repairs - $40 per house - $115 per hotel""",
     """Mr. M., supported by his near-ubiquitous cane in his left hand, 
     holds a pick and shovel over his right shoulder"""),
-  Card(GetFromBank(10),
+  Card(GetFromBank(amount=10),
     """You have won second prize in a beauty contest - Collect $10""",
     """Mr. M preens with a sash and large bouquet"""),
-  Card(GetFromBank(100),
+  Card(GetFromBank(amount=100),
     """You inherit $100""",
     """Mr M. holds his head as unseen people's hands offer brochures titled
     "Buy Yacht", "World Tour", and "Rolls Royce""")
@@ -199,7 +199,7 @@ CHANCE_CARDS = [
     If Railroad is unowned, you may buy it from the Bank.""", # (There are two of these.) 
     """At lower left, Mr. M carries a large flatiron token with two hands;
     at upper right a railroad crossing is seen"""),
-  Card(GetFromBank(50),
+  Card(GetFromBank(amount=50),
     "Bank pays you dividend of $50",
     """With his feet up on a telephone-bearing desk, 
     Mr. M leans back in an overstuffed chair, blowing cigar smoke rings"""),
@@ -216,11 +216,11 @@ CHANCE_CARDS = [
   Card(GoToJail(),
     "Go to Jail - Go directly to Jail - Do not pass Go, do not collect $200",
     "A truncheon-carrying policeman in a dark-colored uniform hauls a surprised Mr M along by the feet"),
-  Card(Repair(25, 100),
+  Card(Repair(house=25, hotel=100),
     """Make general repairs on all your property - For each house pay $25 - For each hotel $100 """,
     """Consulting a "How to Fix It" brochure, a hammer-wielding Mr. M 
     sits astride a house not much larger than he is; it buckles under his weight"""),
-  Card(PayToBank(15),
+  Card(PayToBank(amount=15),
     "Pay poor tax of $15",
     "His trouser pockets pulled out to show them empty, Mr. M spreads his hands"
     #(The video game version replaces this with Speeding fine $15, reportedly also in the UK version.)
@@ -232,13 +232,13 @@ CHANCE_CARDS = [
     """Take a walk on the Boardwalk - Advance token to Boardwalk""", # {Board Walk in both sentences} 
     """Mr. M, a smallish dog hung over one arm, with the other pushes a squalling baby in a small pram;
     behind them, birds fly in the sky above a low fence"""),
-  Card(PayToAll(50),
+  Card(PayToAll(amount=50),
     """You have been elected Chairman of the Board - Pay each player $50""",
     """A newsboy shouts an Extra with Mr. M's headshot on its front page"""),
-  Card(GetFromBank(150),
+  Card(GetFromBank(amount=150),
     """Your building {and} loan matures - Collect $150""", # {Up until the 1980s a "building and loan" was a financial institution.} 
     """Mr. M joyfully embraces an apparent wife"""),
-  Card(GetFromBank(100),
+  Card(GetFromBank(amount=100),
     """You have won a crossword competition - Collect $100""", #{Not in the deck} 
     ""),
   ]

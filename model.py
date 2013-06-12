@@ -10,23 +10,28 @@ def dice():
   return randint(1, 6), randint(1, 6)
 
 class Command(object):
+  defaults = {}
   def __init__(self, **kwargs):
-    self.param = {}
+    self.param = dict(**self.defaults)
     for k, v in kwargs.iteritems():
       self.param[k] = v
 
   def __getattr__(self, k):
     return self.__dict__["param"][k]
 
-  def action(self, executor, player):
+  def __call__(self, game):
+    ''' 
+      param == self.param,  for shorthand
+    '''
     raise
 
   def __str__(self):
-    return "<Command %s>"%(self.__class__.__name__,)
+    return "<Command %s %s>"%(self.__class__.__name__, self.param)
 
 
 class NullCommand(Command):
-  pass
+  def __call__(self, game):
+    pass
 
 
 class Card:
@@ -65,17 +70,17 @@ class Game(object):
     self.start_command = start_command
 
   def ready(self):
-    self.push(self.nextplayer(), GameLoop(start_command=self.start_command))
+    self.push(GameLoop(start_command=self.start_command, player=self.nextplayer()))
 
   def progress(self):
     if len(self.players) < 2:
       return False
-    self.action()
+    c = self.pop()
+    print c
+    c(self)
     return True
 
-  def push(self, p, cmd):
-    #assert not hasattr(cmd, 'player')
-    cmd.player = p #FIXME support for old style
+  def push(self, cmd):
     self.stack.append(cmd)
 
   def pop(self):
@@ -91,19 +96,6 @@ class Game(object):
   def hasCommand(self):
     return bool(self.stack)
 
-  def action(self):
-    c = self.pop()
-    print c
-    name = "handle_" + c.__class__.__name__
-    h = getattr(self, name, None)
-    if h:
-      h(c)
-    else:
-      #FIXME support for old style
-      c.action(self, c.player)
-
-    """WrapUpTurn().action(self, p)"""
-
   def add(self, p):
     self.players.append(p)
 
@@ -114,20 +106,24 @@ class Game(object):
       i = self.players.index(prev)
     return self.players[(i + 1) % len(self.players)]
 
-  def handle_NullCommand(self, cmd):
-    print 'method handle_NullCommand'
+  def land(self, player, by):
+    cmd = self.board.getCommand(player, player.pos, by)
+    if cmd:
+      self.push(cmd)
+
+
 
 
 class EndTurn(Command):
-  def action(self, executor, player):
-    executor.zapCommandUpTo(GameLoop)
+  def __call__(self, game):
+    game.zapCommandUpTo(GameLoop)
+
 
 class GameLoop(Command):
-  def action(self, executor, player):
-    assert not executor.hasCommand()
-    executor.push(executor.nextplayer(player), GameLoop(start_command=self.start_command)) #loop
-    executor.push(player, self.start_command())
-
+  def __call__(self, game):
+    assert not game.hasCommand()
+    game.push(GameLoop(start_command=self.start_command, player=game.nextplayer(self.player))) #loop
+    game.push(self.start_command(player=self.player))
 
 
 class Player(object):
@@ -174,12 +170,8 @@ class Player(object):
   def is_dying(self):
     pass
 
-
   def send(self, p, cmd):
-    assert not hasattr(cmd, 'player')
-    assert isinstance(p, Player)
-    assert isinstance(cmd, Command)
-    self.game.push(p, cmd)
+    raise
 
   def roll(self):
     return dice()
@@ -198,9 +190,10 @@ class Player(object):
 
 
 
+
 class Strategy:
   '''not yet'''
-  def jail_action(self, player):
+  def jail_action(self, game, player):
     raise
 
 

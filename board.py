@@ -88,23 +88,23 @@ class Board:
           print 'you have it :)'
           return None
         else:
-          return command.PayRent(self.ownerof[n], self.calcRent(n, rolled))
+          return command.PayRent(player=player, owner=self.ownerof[n], amount=self.calcRent(n, rolled))
       else:
         """ replace this for bidding Strategy """
-        return command.BuyProperty(p)
+        return command.BuyProperty(prop=p, player=player)
     elif isinstance(p, Place):
       if p in self.noactions:
         return model.NullCommand()
       if n == GOTOJAIL:
-        return command.GoToJail()
+        return command.GoToJail(player=player)
       if n == INCOMETAX:
-        return command.PayToBank(200)
+        return command.PayToBank(player=player, amount=200)
       if n == LUXURYTAX:
-        return command.PayToBank(75)
+        return command.PayToBank(player=player, amount=75)
       if p in self.chests:
-        return command.CommunityChest(at=n)
+        return command.CommunityChest(player=player, at=n)
       if p in self.chances:
-        return command.Chance(at=n)
+        return command.Chance(player=player, at=n)
       assert False
     else:
       assert False

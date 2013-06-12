@@ -7,12 +7,12 @@ import board
 import Atlantic2008
 
 class AlwaysOutStrategy(model.Strategy):
-  def jail_action(self, player):
+  def jail_action(self, game, player):
     assert isinstance(player, model.Player)
-    player.send(player, command.PayAndOut())
+    game.push(command.PayAndOut(player=player))
 
 class AlwaysStayStrategy(model.Strategy):
-  def jail_action(self, player):
+  def jail_action(self, game, player):
     pass
 
 

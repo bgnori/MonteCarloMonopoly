@@ -2,7 +2,7 @@
 
 
 from board import Places
-from card import Card
+from model import Card
 from command import *
 
 

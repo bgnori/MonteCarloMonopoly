@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 from random import randint
+from random import shuffle
 
 
+DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
 
 def dice():
   return randint(1, 6), randint(1, 6)
@@ -22,20 +24,54 @@ class Command(object):
   def __str__(self):
     return "<Command %s>"%(self.__class__.__name__,)
 
+
 class NullCommand(Command):
   pass
 
 
+class Card:
+  def __init__(self, command, instruction, art):
+    self.instruction = instruction
+    self.art = art
+    self.command = command
 
-DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "Hill"]
+class Pile:
+  def __init__(self, *cards):
+    self.cards = cards
+    self.pile = list(self.cards)
+
+  def shuffle(self):
+    shuffle(self.pile)
+
+  def draw(self):
+    self.pop(0)
+
+  def under(self, card):
+    self.pile.append(card)
 
 
-class Executor(object):
-  def __init__(self, *args):
+class Game(object):
+  def __init__(self, start_command, board, chance, chest, strategies):
     self.stack= []
     self.players = []
-    for i, arg in enumerate(args):
+    self.chance = Pile(*chance)
+    self.chance.shuffle()
+    self.chest = Pile(*chest)
+    self.chest.shuffle()
+    self.board = board
+
+    for i, arg in enumerate(strategies):
         self.add(Player(self, arg, DEFAULT_NAMES[i]))
+    self.start_command = start_command
+
+  def ready(self):
+    self.push(self.nextplayer(), GameLoop(start_command=self.start_command))
+
+  def progress(self):
+    if len(self.players) < 2:
+      return False
+    self.action()
+    return True
 
   def push(self, p, cmd):
     #assert not hasattr(cmd, 'player')
@@ -89,8 +125,8 @@ class EndTurn(Command):
 class GameLoop(Command):
   def action(self, executor, player):
     assert not executor.hasCommand()
-    executor.push(executor.nextplayer(player), GameLoop(start=self.start)) #loop
-    executor.push(player, self.start())
+    executor.push(executor.nextplayer(player), GameLoop(start_command=self.start_command)) #loop
+    executor.push(player, self.start_command())
 
 
 

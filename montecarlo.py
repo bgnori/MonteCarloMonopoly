@@ -1,11 +1,30 @@
 #!/usr/bin/env python
 
+import model
+import command
+import board
 
-import game
+import Atlantic2008
+
+class AlwaysOutStrategy(model.Strategy):
+  def jail_action(self, player):
+    assert isinstance(player, model.Player)
+    player.send(player, command.PayAndOut())
+
+class AlwaysStayStrategy(model.Strategy):
+  def jail_action(self, player):
+    pass
+
+
 
 class Experiment:
-  def __init__(self, count, *args):
-    self.game = game.Game(*args)
+  def __init__(self, count, strategies):
+    self.game = model.Game(
+        start_command=command.StartTurn,
+        board=board.Board(Atlantic2008.myPlace),
+        chance=Atlantic2008.CHANCE_CARDS,
+        chest=Atlantic2008.COMMUNITY_CHEST_CARDS,
+        strategies=strategies)
     self.count = count
 
   def report(self):
@@ -33,8 +52,8 @@ class Experiment:
       self.game.progress()
 
 
-ao = game.AlwaysOutStrategy()
-ex = Experiment(800, ao, ao, ao, ao)
+ao = AlwaysOutStrategy()
+ex = Experiment(800, [ao, ao, ao, ao])
 
 ex.run()
 

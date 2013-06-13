@@ -71,7 +71,15 @@ class MoveN(model.Command):
     if d == 1:
       p.go_count += 1
       game.push(GetFromBank(player=p, amount=200)) #FIXME order!!
-    game.land(p, self.n)
+    game.push(LandOn(player=p, at=self.n))
+
+
+class LandOn(model.Command):
+  def __call__(self, game):
+    p = self.player
+    game.land(p, self.at)
+
+
 
 
 class StayInJail(model.Command):

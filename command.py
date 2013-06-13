@@ -71,14 +71,48 @@ class MoveN(model.Command):
     if d == 1:
       p.go_count += 1
       game.push(GetFromBank(player=p, amount=200)) #FIXME order!!
-    game.push(LandOn(player=p, at=self.n))
+    game.push(LandOn(player=p, rolled=self.n))
 
+GOTOJAIL = 30
+INCOMETAX = 4
+LUXURYTAX = 38
 
 class LandOn(model.Command):
   def __call__(self, game):
-    p = self.player
-    game.land(p, self.at)
-
+    theBoard = game.board
+    player = self.player
+    rolled = self.rolled
+    n = player.pos
+    p = theBoard.places[n]
+    if isinstance(p, model.Property):
+      """ Property is SubClass of Place, must be this order """
+      """ pay or buy """
+      if theBoard.is_sold(n):
+        if theBoard.ownerof[n] == player:
+          print 'you have it :)'
+          return None
+        else:
+          return game.push(PayRent(player=player, owner=theBoard.ownerof[n], amount=theBoard.calcRent(n, rolled)))
+      else:
+        """ replace this for bidding Strategy """
+        return game.push(BuyProperty(prop=p, player=player))
+    elif isinstance(p, model.Place):
+      if p in theBoard.noactions:
+        return model.NullCommand()
+      if n == GOTOJAIL:
+        return game.push(GoToJail(player=player))
+      if n == INCOMETAX:
+        return game.push(PayToBank(player=player, amount=200))
+      if n == LUXURYTAX:
+        return game.push(PayToBank(player=player, amount=75))
+      if p in theBoard.chests:
+        return game.push(CommunityChest(player=player, at=n))
+      if p in theBoard.chances:
+        return game.push(Chance(player=player, at=n))
+      assert False
+    else:
+      assert False
+    return None
 
 
 

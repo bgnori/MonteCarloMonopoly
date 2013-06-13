@@ -106,12 +106,6 @@ class Game(object):
       i = self.players.index(prev)
     return self.players[(i + 1) % len(self.players)]
 
-  def land(self, player, by):
-    cmd = self.board.getCommand(player, player.pos, by)
-    if cmd:
-      self.push(cmd)
-
-
 
 
 class EndTurn(Command):
@@ -189,6 +183,20 @@ class Player(object):
     self.owns.remove(prop)
 
 
+class Place(object):
+  def __init__(self, name, pos):
+    self.name = name
+    self.pos = pos
+  def __str__(self):
+    return "<" + self.name + ">"
+
+
+class Property(Place):
+  def __init__(self, name, pos, **kw):
+    Place.__init__(self, name, pos)
+    for k, v in kw.items():
+      assert k not in ('name', 'pos')
+      setattr(self, k, v)
 
 
 class Strategy:

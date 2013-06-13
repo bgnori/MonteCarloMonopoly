@@ -171,6 +171,7 @@ editions is described in <angle brackets>.
 Differences in the UK standard edition should appear in [square brackets]. 
 """
 
+import model
 
 CHANCE_CARDS = [
   Card(AdvanceTo(destionation=myPlace.resolve('GO')),

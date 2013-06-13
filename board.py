@@ -1,18 +1,6 @@
 #!/usr/bin/env python
 
-class Place(object):
-  def __init__(self, name, pos):
-    self.name = name
-    self.pos = pos
-  def __str__(self):
-    return "<" + self.name + ">"
-
-class Property(Place):
-  def __init__(self, name, pos, **kw):
-    Place.__init__(self, name, pos)
-    for k, v in kw.items():
-      assert k not in ('name', 'pos')
-      setattr(self, k, v)
+import model
 
 class Places:
   def __init__(self):
@@ -32,11 +20,11 @@ class Places:
     return -1, None
 
   def addPlace(self, name):
-    self.xs.append(Place(name, self.count))
+    self.xs.append(model.Place(name, self.count))
     self.count += 1
 
   def addProperty(self, name, **kw):
-    self.xs.append(Property(name, self.count, **kw))
+    self.xs.append(model.Property(name, self.count, **kw))
     self.count += 1
 
   @property
@@ -55,13 +43,8 @@ class Places:
   def prefixactions(self):
     pass
     ("Go to Jail")
-GOTOJAIL = 30
-INCOMETAX = 4
-LUXURYTAX = 38
 
-import model
 
-import command
 
 class Board:
   def __init__(self, places):
@@ -76,39 +59,6 @@ class Board:
 
   def __getitem__(self, n):
     return self.places[n]
-
-  def getCommand(self, player, n, rolled):
-    p = self.places[n]
-    print 'getCommand', n, p
-    if isinstance(p, Property):
-      """ Property is SubClass of Place, must be this order """
-      """ pay or buy """
-      if self.is_sold(n):
-        if self.ownerof[n] == player:
-          print 'you have it :)'
-          return None
-        else:
-          return command.PayRent(player=player, owner=self.ownerof[n], amount=self.calcRent(n, rolled))
-      else:
-        """ replace this for bidding Strategy """
-        return command.BuyProperty(prop=p, player=player)
-    elif isinstance(p, Place):
-      if p in self.noactions:
-        return model.NullCommand()
-      if n == GOTOJAIL:
-        return command.GoToJail(player=player)
-      if n == INCOMETAX:
-        return command.PayToBank(player=player, amount=200)
-      if n == LUXURYTAX:
-        return command.PayToBank(player=player, amount=75)
-      if p in self.chests:
-        return command.CommunityChest(player=player, at=n)
-      if p in self.chances:
-        return command.Chance(player=player, at=n)
-      assert False
-    else:
-      assert False
-    return None
 
   def is_sold(self, n):
     return self.ownerof[n] is not None

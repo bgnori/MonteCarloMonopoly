@@ -4,7 +4,7 @@
 import re
 
 cpat = re.compile(r"^class (?P<name>.+)\((?:model\.)?Command\):")
-used = re.compile(r"[A-Z][a-z]+[A-Z][A-Za-z]+")
+used = re.compile(r"[A-Z][a-z]+[A-Z][A-Za-z]*")
 
 result = {}
 

@@ -1,41 +1,50 @@
 #!/usr/bin/env python
 
-
-import re
-
-cpat = re.compile(r"^class (?P<name>.+)\((?:model\.)?Command\):")
-used = re.compile(r"[A-Z][a-z]+[A-Z][A-Za-z]*")
-
-result = {}
-
-def foo(d, f):
-  found = ''
-  for line in f.readlines():
-    for found in cpat.findall(line):
-      v = d.get(found, None)
-      if v is None:
-        v = set()
-      d[found] = v
-    if found and line.startswith(' '*4):
-      for appear in used.findall(line):
-        d[found].add(appear)
-  return d
-
-with file('/home/nori/Desktop/work/SurveyOnMonopoly/command.py') as f:
-  result = foo(result, f)
-
-with file('/home/nori/Desktop/work/SurveyOnMonopoly/model.py') as f:
-  result = foo(result, f)
+import model
+import command
+import board
+import Atlantic2008
 
 
+class CallGraphMaker(object):
+  def __init__(self):
+    self.knowns = {}
+    self.scanned = []
 
-print "digraph evoke {"
-for k, v in result.iteritems():
-  for dst in v:
-    print k, '->', dst, ';'
-  if len(v) == 0:
-    print k, '-> none ;'
+  def scan_module(self, m):
+    self.scanned.append(m)
+    for k, v in m.__dict__.iteritems():
+      if isinstance(v, type) and issubclass(v, model.Command):
+        self.knowns[k] = (v, set())
 
-print "}"
+  def scan_object(self, xs):
+    v, ys = self.knowns['LandOn']
+    for x in xs:
+      ys.add(x.command_class.__name__)
+     
+  def build(self):
+    for m in self.scanned:
+      for k, (v, xs) in self.knowns.iteritems():
+        for name in v.__call__.__func__.func_code.co_names:
+          if name in self.knowns:
+            xs.add(name)
 
+  def report(self):
+    print "digraph evoke {"
+    for k, (v, xs) in self.knowns.iteritems():
+      for x in xs:
+        print k, '->', x
+    print "}"
+
+
+cgm = CallGraphMaker()
+
+cgm.scan_module(model)
+cgm.scan_module(command)
+cgm.scan_module(board)
+cgm.scan_module(Atlantic2008)
+cgm.scan_object(Atlantic2008.myPlace.xs)
+
+cgm.build()
+cgm.report()
 

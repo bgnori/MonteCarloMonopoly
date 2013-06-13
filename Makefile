@@ -1,4 +1,8 @@
 
+clean:
+	rm *pyc; rm evoke.png
+
+
 run:
 	python montecarlo.py > log
 

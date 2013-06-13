@@ -3,10 +3,10 @@
 import model
 
 class Places:
-  def __init__(self, landon_commnad):
+  def __init__(self, landon_command):
     self.xs = []
     self.count = 0
-    self.landon_commnad = landon_commnad
+    self.landon_command = landon_command
 
   def __len__(self):
     return len(self.xs)
@@ -20,12 +20,12 @@ class Places:
         return p
     return None
 
-  def addPlace(self, name, fn):
-    self.xs.append(model.Place(name, fn, self.count))
+  def addPlace(self, name, landon_command):
+    self.xs.append(model.Place(name, landon_command, self.count))
     self.count += 1
 
   def addProperty(self, name, **kw):
-    self.xs.append(model.Place(name, self.landon_commnad, self.count, **kw))
+    self.xs.append(model.Place(name, self.landon_command, self.count, **kw))
     self.count += 1
 
   @property
@@ -67,20 +67,22 @@ class Board:
   def getColorGroups(self, color):
     return [p for p in self.places if getattr(p, "colorgroups", '') == color]
 
-  def calcRent(self, n, rolled):
-    theproperty = self.places[n]
+  def calcRent(self, pos, n, by_dice):
+    theproperty = self.places[pos]
     housing = theproperty.cost 
     color = theproperty.colorgroups
-    owner = self.ownerof[n]
+    owner = self.ownerof[pos]
     if housing:
       """ usual color group """
       if all([ p in owner.owns for p in self.getColorGroups(color)]):
         ''' monopoly '''
+        ''' FIXME need to handle house/hotel '''
         return theproperty.rent[0] * 2
       else:
         return theproperty.rent[0]
     else:
       """RailRoad or Utilities"""
+      assert by_dice
       count = 0
       for p in self.getColorGroups(color):
         if p in owner.owns:
@@ -91,9 +93,9 @@ class Board:
         return theproperty.rent[count]
       elif theproperty.colorgroups == "Utilities":
         if count == 1:
-          return rolled * 4
+          return n * 4
         elif count == 2:
-          return rolled * 10
+          return n * 10
         else:
           assert False
       else:

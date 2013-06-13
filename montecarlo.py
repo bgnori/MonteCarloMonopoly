@@ -26,6 +26,7 @@ class Experiment:
         chest=Atlantic2008.COMMUNITY_CHEST_CARDS,
         strategies=strategies)
     self.count = count
+    assert Atlantic2008.myPlace[30].name == 'Go to Jail'
 
   def report(self):
     for p in self.game.players:

@@ -10,7 +10,7 @@ class AdvanceTo(model.Command):
       assert False
     to_go = (40 + self.destination.pos - self.player.pos) % 40
     assert to_go > 0
-    game.push(MoveN(player=self.player, n=to_go))
+    game.push(MoveN(player=self.player, n=to_go, by_dice=False))
 
 
 class DrawChance(model.Command):
@@ -72,6 +72,7 @@ class RollAndMove(model.Command):
 
 
 class MoveN(model.Command):
+  defaults = dict(n=0, by_dice=True)
   def __call__(self, game):
     p = self.player
     print p, 'moving', self.n
@@ -80,58 +81,55 @@ class MoveN(model.Command):
     if d == 1:
       p.go_count += 1
       game.push(GetFromBank(player=p, amount=200)) #FIXME order!!
-    game.push(LandOn(player=p, rolled=self.n))
+    game.push(LandOn(player=p, n=self.n, by_dice=self.by_dice))
 
 GOTOJAIL = 30
 INCOMETAX = 4
 LUXURYTAX = 38
 
 class LandOnProperty(model.Command):
+  defaults = dict(n=0, by_dice=True)
   def __call__(self, game):
     theBoard = game.board
     player = self.player
-    rolled = self.rolled
-    n = player.pos
-    p = theBoard.places[n]
-    if theBoard.is_sold(n):
-      if theBoard.ownerof[n] == player:
+    p = theBoard.places[player.pos]
+    if theBoard.is_sold(player.pos):
+      if theBoard.ownerof[player.pos] == player:
         print 'you have it :)'
-        return None
       else:
-        return game.push(PayRent(player=player, owner=theBoard.ownerof[n], amount=theBoard.calcRent(n, rolled)))
+        game.push(PayRent(
+          player=player, 
+          owner=theBoard.ownerof[player.pos], 
+          amount=theBoard.calcRent(player.pos, self.n, self.by_dice)))
     else:
       """ replace this for bidding Strategy """
-      return game.push(BuyProperty(prop=p, player=player))
+      assert self.player.pos != 30
+      game.push(BuyProperty(prop=p, player=player))
 
-
-class IncomeTax(model.Command):
+class OnCommunityChest(model.Command):
   def __call__(self, game):
-    return game.push(PayToBank(player=player, amount=200))
+    return game.push(DrawCommunityChest(player=self.player, pos=self.pos))
 
+class OnIncomeTax(model.Command):
+  def __call__(self, game):
+    return game.push(PayToBank(player=self.player, amount=200))
+
+class OnChance(model.Command):
+  def __call__(self, game):
+    return game.push(DrawChance(player=self.player, pos=self.pos))
+
+class OnGoToJail(model.Command):
+  def __call__(self, game):
+    return game.push(GoToJail(player=self.player))
 
 class LandOn(model.Command):
+  defaults = dict(n=0, by_dice=True, player=None)
   def __call__(self, game):
-    theBoard = game.board
-    player = self.player
-    rolled = self.rolled
-    n = player.pos
-    p = theBoard.places[n]
-
-    game.push(p.command_class(player=player, rolled=self.rolled, pos=player.pos))
-
-    """
-      if p.name == "Go to Jail":
-        return game.push(GoToJail(player=player))
-      if n == INCOMETAX:
-        return game.push(PayToBank(player=player, amount=200))
-      if n == LUXURYTAX:
-        return game.push(PayToBank(player=player, amount=75))
-      if p in theBoard.chests:
-        return game.push(CommunityChest(player=player, at=n))
-      if p in theBoard.chances:
-        return game.push(Chance(player=player, at=n))
-    """
-
+    p = game.board.places[self.player.pos]
+    assert self.player.pos == p.pos
+    assert self.player.pos != 30 or p.command_class == OnGoToJail
+    print "LandOn", p.command_class
+    game.push(p.command_class(player=self.player, n=self.n, pos=self.player.pos))
 
 
 class StayInJail(model.Command):
@@ -200,13 +198,13 @@ class PayRent(model.Command):
     print player.name, '==(', self.amount, ')=>', self.owner.name
 
 class BuyProperty(model.Command):
-  defaults = dict(prop=None)
+  defaults = dict(player=None, prop=None)
   def __call__(self, game):
-    prop = self.prop
-    player = self.player
-    player.money -= prop.facevalue
-    player.add_property(prop)
-    game.board.ownerof[prop.pos] = player
+    assert isinstance(self.prop, model.Place)
+    assert self.prop.pos != 30
+    self.player.money -= self.prop.facevalue
+    self.player.add_property(self.prop)
+    game.board.ownerof[self.prop.pos] = self.player
 
 
 class AdvanceToNearestRailroad(model.Command):

@@ -14,19 +14,11 @@ myPlace.addPlace("Go", NullCommand)
 myPlace.addProperty("Mediterranean Avenue", facevalue=60, 
     rent=[2, 10, 30, 90, 160, 250], colorgroups="DarkPurple", cost=50)
 
-class OnCommunityChest(model.Command):
-  def __call__(self, game):
-    return game.push(DrawCommunityChest(player=self.player, pos=self.pos))
-
 myPlace.addPlace("Community Chest", OnCommunityChest)
 
 myPlace.addProperty("Baltic Avenue", facevalue=60, 
     rent=[4, 20, 60, 180, 320, 450], colorgroups="DarkPurple", cost=50)
 
-
-class OnIncomeTax(model.Command):
-  def __call__(self, game):
-    return game.push(PayToBank(player=self.player, amount=200))
 myPlace.addPlace("Income TAX", OnIncomeTax)
 
 myPlace.addProperty("RR1", facevalue=200,
@@ -35,9 +27,6 @@ myPlace.addProperty("RR1", facevalue=200,
 myPlace.addProperty("Oriental Avenue", facevalue=100,
     rent=[6, 30, 90, 270, 400, 550], colorgroups="LightBlue", cost=50)
 
-class OnChance(model.Command):
-  def __call__(self, game):
-    return game.push(DrawChance(player=self.player, pos=self.pos))
 myPlace.addPlace("Chance", OnChance)
 
 
@@ -81,13 +70,7 @@ myPlace.addProperty("Ventnor Avenue", facevalue=260,
 myPlace.addProperty("Water Works", facevalue=150, colorgroups="Utilities", cost=None)
 myPlace.addProperty("Marvin Gardens", facevalue=280,
     rent=[24, 120, 360, 850, 1025, 1200], colorgroups="Yellow", cost=150)
-
-
-class OnGoToJail(model.Command):
-  def __call__(self, game):
-    return game.push(GoToJail(player=self.player))
 myPlace.addPlace("Go to Jail", OnGoToJail)
-
 myPlace.addProperty("South Carolina Avenue", facevalue=300,
     rent=[26, 130, 390, 900, 1100, 1275], colorgroups="Green", cost=200)
 myPlace.addProperty("North Carolina Avenue", facevalue=300,

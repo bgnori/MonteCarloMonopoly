@@ -19,7 +19,10 @@ class Command(object):
     return self
 
   def __getattr__(self, k):
-    return self.__dict__["param"][k]
+    try:
+      return self.__dict__["param"][k]
+    except:
+      raise AttributeError('no such atribute %s'%(k,))
 
   def __call__(self, game):
     ''' 
@@ -78,7 +81,7 @@ class Game(object):
     if len(self.players) < 2:
       return False
     c = self.pop()
-    print c
+    print c, getattr(c, 'player', 'N/A')
     c(self)
     return True
 
@@ -103,7 +106,7 @@ class Game(object):
 
   def nextplayer(self, prev=None):
     if prev is None:
-      i = 0
+      i = -1
     else:
       i = self.players.index(prev)
     return self.players[(i + 1) % len(self.players)]
@@ -195,8 +198,8 @@ class Place(object):
     self.name = name
     self.pos = pos
     self.command_class = commadclass
-    for k, v in kw.items():
-      assert k not in ('name', 'pos')
+    for k, v in kw.iteritems():
+      assert k not in ('name', 'pos', 'command_class')
       setattr(self, k, v)
   def __str__(self):
     return "<" + self.name + ">"

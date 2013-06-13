@@ -15,13 +15,13 @@ class Places:
     return self.xs[n]
 
   def resolve(self, name):
-    for i, p in enumerate(self.xs):
+    for p in self.xs:
       if p.name == name:
-        return i, p
-    return -1, None
+        return p
+    return None
 
-  def addPlace(self, name, commandclass):
-    self.xs.append(model.Place(name, commandclass, self.count))
+  def addPlace(self, name, fn):
+    self.xs.append(model.Place(name, fn, self.count))
     self.count += 1
 
   def addProperty(self, name, **kw):

@@ -3,18 +3,30 @@
 import model
 
 class AdvanceTo(model.Command):
+  defaults = {"destination":None}
   def __call__(self, game):
-    to_go = self.destination - self.player.pos 
+    if self.destination is None:
+      print self
+      assert False
+    to_go = (40 + self.destination.pos - self.player.pos) % 40
+    assert to_go > 0
+    game.push(MoveN(player=self.player, n=to_go))
 
 
 class DrawChance(model.Command):
   def __call__(self, game):
-    print 'evoked', self
+    card = game.drawChance()
+    cmd = card.fn(self.player, card)
+    print card, cmd
+    game.push(cmd)
 
 
 class DrawCommunityChest(model.Command):
   def __call__(self, game):
-    print 'evoked', self
+    card = game.drawCommunityChest()
+    cmd = card.fn(self.player, card)
+    print card.instruction, cmd
+    game.push(cmd)
 
 
 class Retreat(model.Command):
@@ -198,10 +210,12 @@ class BuyProperty(model.Command):
 
 
 class AdvanceToNearestRailroad(model.Command):
-  pass
+  def __call__(self, game):
+    pass
 
 class AdvanceToNearestUtility(model.Command):
-  pass
+  def __call__(self, game):
+    pass
 
 
 

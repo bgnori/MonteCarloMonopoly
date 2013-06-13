@@ -36,13 +36,13 @@ class NullCommand(Command):
     pass
 
 
-class Card:
-  def __init__(self, command, instruction, art):
+class Card(object):
+  def __init__(self, fn, instruction, art):
     self.instruction = instruction
     self.art = art
-    self.command = command
+    self.fn = fn # player => Command proc
 
-class Pile:
+class Pile(object):
   def __init__(self, *cards):
     self.cards = cards
     self.pile = list(self.cards)
@@ -51,7 +51,7 @@ class Pile:
     shuffle(self.pile)
 
   def draw(self):
-    self.pop(0)
+    return self.pile.pop(0)
 
   def under(self, card):
     self.pile.append(card)
@@ -108,6 +108,11 @@ class Game(object):
       i = self.players.index(prev)
     return self.players[(i + 1) % len(self.players)]
 
+  def drawChance(self):
+    return self.chance.draw()
+
+  def drawCommunityChest(self):
+    return self.chest.draw()
 
 
 class EndTurn(Command):
@@ -197,7 +202,7 @@ class Place(object):
     return "<" + self.name + ">"
 
 
-class Strategy:
+class Strategy(object):
   '''not yet'''
   def jail_action(self, game, player):
     raise

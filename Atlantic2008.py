@@ -125,62 +125,62 @@ Difference in the UK standard edition should appear in [square brackets]
 """
 
 COMMUNITY_CHEST_CARDS = [
-  Card(AdvanceTo(destination=myPlace.resolve('GO')),
+  Card(lambda player, card: AdvanceTo(player=player, card=card, destination=myPlace.resolve('Go')),
     "Advance to Go (Collect $200) ",
     "Mr. M strides in 7-league boots"),
-  Card(GetFromBank(amount=200),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=200),
     "Bank error in your favor - Collect $200",
     "Mr. M falls back in astonishment as an arm presents a sheaf of cash out of a bank teller's window,"),
-  Card(PayToBank(amount=50),
+  Card(lambda player, card: PayToBank(player=player, card=card, amount=50),
     "Doctor's fees {fee} - Pay $50",
     "Mr. M angrily brandishes crutches as he stomps with a leg cast"),
-  Card(GetFromBank(amount=50), 
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=50), 
     "From sale of stock you get $50", #{$45} 
     "Mr. M, happily entangled in the tape of a stock ticker, waves cash (with no $ sign this time)"),
-  Card(GetJailFree(),
+  Card(lambda player, card: GetJailFree(player=player, card=card),
     """Get Out of Jail Free {Get out of Jail, Free} 
     - This card may be kept until needed or sold""",
     "A winged Mr. M flutters out of a bird cage>"),
-  Card(GoToJail(),
+  Card(lambda player, card: GoToJail(player=player, card=card),
     "Go to Jail - Go directly to jail - Do not pass Go - Do not collect $200",
     "A truncheon-wielding policeman in a light-colored uniform lifts a surprised Mr M by the collar"),
 
-  Card(CollectFromAll(amount=50),
+  Card(lambda player, card: CollectFromAll(player=player, card=card, amount=50),
     """Grand Opera Night {Opening}
     - Collect $50 from every player for opening night seats""",
     """A wall sign near steps reads "Opera Tonite - 8 PM Sharp";
     Mr. M leans against it checking his pocket watch in annoyance"""),
-  Card(GetFromBank(amount=100),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=100),
     "Holiday {Xmas} Fund matures - Receive {Collect} $100",
     "Mr. M carries along a giant Xmas sock containing a sheaf of cash"),
-  Card(GetFromBank(amount=20),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=20),
     "Income tax refund - Collect $20",
     "Mr M faints back against a man displaying the Refund paper"),
-  Card(CollectFromAll(amount=10),
+  Card(lambda player, card: CollectFromAll(player=player, card=card, amount=10),
     "It is your birthday - Collect $10 from each player", #{Not in the deck}
     ""),
-  Card(GetFromBank(amount=100), 
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=100), 
     "Life insurance matures - Collect $100",
     "Below an I N S sign stands a bent Mr M, his long beard brushing the floor"),
-  Card(PayToBank(amount=100),
+  Card(lambda player, card: PayToBank(player=player, card=card, amount=100),
     "Pay hospital fees of $100", # {Pay hospital $100}
     """A bored nurse holds out her hand for payment
     while Mr. M holds 2 swaddled infants, one in each arm"""),
-  Card(PayToBank(amount=150),
+  Card(lambda player, card: PayToBank(player=player, card=card, amount=150),
     "Pay school fees {tax} of $150",
     "A bespectacled schoolboy unhappily receives a head pat and a dime ((Rockefeller style) from Mr. M."),
-  Card(GetFromBank(amount=25),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=25),
     "Receive $25 consultancy fee", #{Receive for services $25} 
     """As Justice of the Peace, a stern Mr. M holds out his hand
     for fee from an embarrassed groom whose bride hold a bouquet behind him"""),
-  Card(Repair(house=40, hotel=115),
+  Card(lambda player, card: Repair(player=player, card=card, house=40, hotel=115),
     """You are assessed for street repairs - $40 per house - $115 per hotel""",
     """Mr. M., supported by his near-ubiquitous cane in his left hand, 
     holds a pick and shovel over his right shoulder"""),
-  Card(GetFromBank(amount=10),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=10),
     """You have won second prize in a beauty contest - Collect $10""",
     """Mr. M preens with a sash and large bouquet"""),
-  Card(GetFromBank(amount=100),
+  Card(lambda player, card: GetFromBank(player=palyer, amount=100),
     """You inherit $100""",
     """Mr M. holds his head as unseen people's hands offer brochures titled
     "Buy Yacht", "World Tour", and "Rolls Royce""")
@@ -206,72 +206,72 @@ Differences in the UK standard edition should appear in [square brackets].
 
 
 CHANCE_CARDS = [
-  Card(AdvanceTo(destionation=myPlace.resolve('GO')),
+  Card(lambda player, card: AdvanceTo(player=player, card=card, destination=myPlace.resolve('Go')),
     "Advance to Go (Collect $200)",
     "Mr. M hops on both feet."),
-  Card(AdvanceTo(destination=myPlace.resolve("Illinois Avenue")),
+  Card(lambda player, card: AdvanceTo(player=player, card=card, destination=myPlace.resolve("Illinois Avenue")),
     "Advance to Illinois Ave. - If you pass Go, collect $200", # {Second sentence omitted.}
     """Mr. M has tied a cloth bundle onto his cane to make a bindle, 
     carried over his right shoulder, and is smoking a cigar"""),
-  Card(AdvanceTo(destination=myPlace.resolve("St. Charles Place")),
+  Card(lambda player, card: AdvanceTo(player=player, card=card, destination=myPlace.resolve("St. Charles Place")),
     "Advance to St. Charles Place - If you pass Go, collect $200",
     "Mr. M hurries along, hauling a little boy by the hand"),
-  Card(AdvanceToNearestUtility(),
+  Card(lambda player, card: AdvanceToNearestUtility(player=player, card=card),
     """Advance token to nearest Utility. If unowned, you may buy it from the Bank. 
     If owned, throw dice and pay owner a total ten times the amount thrown.""",
     "Mr. M trudges along with a huge battleship token on his back"),
-  Card(AdvanceToNearestRailroad(),
+  Card(lambda player, card: AdvanceToNearestRailroad(player=player, card=card),
     """Advance token to the nearest Railroad 
     and pay owner twice the rental to which he/she {he} is otherwise entitled. 
     If Railroad is unowned, you may buy it from the Bank.""", # (There are two of these.) 
     """At lower left, Mr. M carries a large flatiron token with two hands;
     at upper right a railroad crossing is seen"""),
-  Card(AdvanceToNearestRailroad(),
+  Card(lambda player, card: AdvanceToNearestRailroad(player=player, card=card),
     """Advance token to the nearest Railroad 
     and pay owner twice the rental to which he/she {he} is otherwise entitled. 
     If Railroad is unowned, you may buy it from the Bank.""", # (There are two of these.) 
     """At lower left, Mr. M carries a large flatiron token with two hands;
     at upper right a railroad crossing is seen"""),
-  Card(GetFromBank(amount=50),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=50),
     "Bank pays you dividend of $50",
     """With his feet up on a telephone-bearing desk, 
     Mr. M leans back in an overstuffed chair, blowing cigar smoke rings"""),
-  Card(GetJailFree(),
+  Card(lambda player, card: GetJailFree(player=player, card=card),
     """Get out of Jail Free - This card may be kept until needed, or traded/sold""",
     #{This card may be kept until needed or sold - Get Out of Jail Free} 
     #{The first sentence is much smaller than the second}
     "Mr. M, in close-fitting one-piece prison stripes, is literally kicked out"),
-  Card(Retreat(amount=3),
+  Card(lambda player, card: Retreat(player=player, card=card, amount=3),
     "Go back 3 spaces",
     "Mr. M is hauled back by a cane hooked around his neck"
     # {Presumably an allusion to amateur nights at theaters}
     ),
-  Card(GoToJail(),
+  Card(lambda player, card: GoToJail(player=player, card=card),
     "Go to Jail - Go directly to Jail - Do not pass Go, do not collect $200",
     "A truncheon-carrying policeman in a dark-colored uniform hauls a surprised Mr M along by the feet"),
-  Card(Repair(house=25, hotel=100),
+  Card(lambda player, card: Repair(player=player, card=card, house=25, hotel=100),
     """Make general repairs on all your property - For each house pay $25 - For each hotel $100 """,
     """Consulting a "How to Fix It" brochure, a hammer-wielding Mr. M 
     sits astride a house not much larger than he is; it buckles under his weight"""),
-  Card(PayToBank(amount=15),
+  Card(lambda player, card: PayToBank(player=player, card=card, amount=15),
     "Pay poor tax of $15",
     "His trouser pockets pulled out to show them empty, Mr. M spreads his hands"
     #(The video game version replaces this with Speeding fine $15, reportedly also in the UK version.)
     ),
-  Card(AdvanceTo(destination=myPlace.resolve('RR1')),
+  Card(lambda player, card: AdvanceTo(player=player, card=card, destination=myPlace.resolve('RR1')),
     """Take a trip to Reading Railroad {Take a ride on the Reading} - If you pass Go, collect $200""",
     "Mr. M rides astride the TOOTing engine of a train"),
-  Card(AdvanceTo(destination=myPlace.resolve("Boardwalk")),
+  Card(lambda player, card: AdvanceTo(player=player, card=card,destination=myPlace.resolve("Boardwalk")),
     """Take a walk on the Boardwalk - Advance token to Boardwalk""", # {Board Walk in both sentences} 
     """Mr. M, a smallish dog hung over one arm, with the other pushes a squalling baby in a small pram;
     behind them, birds fly in the sky above a low fence"""),
-  Card(PayToAll(amount=50),
+  Card(lambda player, card: PayToAll(player=player, card=card, amount=50),
     """You have been elected Chairman of the Board - Pay each player $50""",
     """A newsboy shouts an Extra with Mr. M's headshot on its front page"""),
-  Card(GetFromBank(amount=150),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=150),
     """Your building {and} loan matures - Collect $150""", # {Up until the 1980s a "building and loan" was a financial institution.} 
     """Mr. M joyfully embraces an apparent wife"""),
-  Card(GetFromBank(amount=100),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=100),
     """You have won a crossword competition - Collect $100""", #{Not in the deck} 
     ""),
   ]

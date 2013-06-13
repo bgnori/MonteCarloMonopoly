@@ -11,10 +11,12 @@ def dice():
 
 class Command(object):
   defaults = {}
-  def __init__(self, **kwargs):
-    self.param = dict(**self.defaults)
+  def __new__(klass, **kwargs): #def __init__(self, **kwargs):
+    self = super(Command, klass).__new__(klass)
+    self.param = dict(**klass.defaults)
     for k, v in kwargs.iteritems():
       self.param[k] = v
+    return self
 
   def __getattr__(self, k):
     return self.__dict__["param"][k]

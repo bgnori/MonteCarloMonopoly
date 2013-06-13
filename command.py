@@ -18,9 +18,6 @@ class CommunityChest(model.Command):
 
 
 class Retreat(model.Command):
-  def __init__(self, amount):
-    self.amount = amount
-
   def __call__(self, game):
     pass #to_go = self.dst - player.pos 
 
@@ -148,8 +145,6 @@ class GetJailFree(model.Command):
     pass
 
 class CollectFromAll(model.Command):
-  def __init__(self, amount):
-    self.amount = amount
   def __call__(self, game):
     self.player.money += self.amount 
 

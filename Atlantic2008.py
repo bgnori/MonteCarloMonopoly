@@ -209,7 +209,7 @@ CHANCE_CARDS = [
     #{This card may be kept until needed or sold - Get Out of Jail Free} 
     #{The first sentence is much smaller than the second}
     "Mr. M, in close-fitting one-piece prison stripes, is literally kicked out"),
-  Card(Retreat(3),
+  Card(Retreat(amount=3),
     "Go back 3 spaces",
     "Mr. M is hauled back by a cane hooked around his neck"
     # {Presumably an allusion to amateur nights at theaters}

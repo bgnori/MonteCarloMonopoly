@@ -186,19 +186,15 @@ class Player(object):
 
 
 class Place(object):
-  def __init__(self, name, pos):
+  def __init__(self, name, commadclass, pos, **kw):
     self.name = name
     self.pos = pos
-  def __str__(self):
-    return "<" + self.name + ">"
-
-
-class Property(Place):
-  def __init__(self, name, pos, **kw):
-    Place.__init__(self, name, pos)
+    self.command_class = commadclass
     for k, v in kw.items():
       assert k not in ('name', 'pos')
       setattr(self, k, v)
+  def __str__(self):
+    return "<" + self.name + ">"
 
 
 class Strategy:

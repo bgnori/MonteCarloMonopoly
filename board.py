@@ -3,9 +3,10 @@
 import model
 
 class Places:
-  def __init__(self):
+  def __init__(self, landon_commnad):
     self.xs = []
     self.count = 0
+    self.landon_commnad = landon_commnad
 
   def __len__(self):
     return len(self.xs)
@@ -19,12 +20,12 @@ class Places:
         return i, p
     return -1, None
 
-  def addPlace(self, name):
-    self.xs.append(model.Place(name, self.count))
+  def addPlace(self, name, commandclass):
+    self.xs.append(model.Place(name, commandclass, self.count))
     self.count += 1
 
   def addProperty(self, name, **kw):
-    self.xs.append(model.Property(name, self.count, **kw))
+    self.xs.append(model.Place(name, self.landon_commnad, self.count, **kw))
     self.count += 1
 
   @property

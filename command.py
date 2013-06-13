@@ -7,12 +7,12 @@ class AdvanceTo(model.Command):
     to_go = self.destination - self.player.pos 
 
 
-class Chance(model.Command):
+class DrawChance(model.Command):
   def __call__(self, game):
     print 'evoked', self
 
 
-class CommunityChest(model.Command):
+class DrawCommunityChest(model.Command):
   def __call__(self, game):
     print 'evoked', self
 
@@ -74,6 +74,29 @@ GOTOJAIL = 30
 INCOMETAX = 4
 LUXURYTAX = 38
 
+class LandOnProperty(model.Command):
+  def __call__(self, game):
+    theBoard = game.board
+    player = self.player
+    rolled = self.rolled
+    n = player.pos
+    p = theBoard.places[n]
+    if theBoard.is_sold(n):
+      if theBoard.ownerof[n] == player:
+        print 'you have it :)'
+        return None
+      else:
+        return game.push(PayRent(player=player, owner=theBoard.ownerof[n], amount=theBoard.calcRent(n, rolled)))
+    else:
+      """ replace this for bidding Strategy """
+      return game.push(BuyProperty(prop=p, player=player))
+
+
+class IncomeTax(model.Command):
+  def __call__(self, game):
+    return game.push(PayToBank(player=player, amount=200))
+
+
 class LandOn(model.Command):
   def __call__(self, game):
     theBoard = game.board
@@ -81,22 +104,11 @@ class LandOn(model.Command):
     rolled = self.rolled
     n = player.pos
     p = theBoard.places[n]
-    if isinstance(p, model.Property):
-      """ Property is SubClass of Place, must be this order """
-      """ pay or buy """
-      if theBoard.is_sold(n):
-        if theBoard.ownerof[n] == player:
-          print 'you have it :)'
-          return None
-        else:
-          return game.push(PayRent(player=player, owner=theBoard.ownerof[n], amount=theBoard.calcRent(n, rolled)))
-      else:
-        """ replace this for bidding Strategy """
-        return game.push(BuyProperty(prop=p, player=player))
-    elif isinstance(p, model.Place):
-      if p in theBoard.noactions:
-        return model.NullCommand()
-      if n == GOTOJAIL:
+
+    game.push(p.command_class(player=player, rolled=self.rolled, pos=player.pos))
+
+    """
+      if p.name == "Go to Jail":
         return game.push(GoToJail(player=player))
       if n == INCOMETAX:
         return game.push(PayToBank(player=player, amount=200))
@@ -106,10 +118,7 @@ class LandOn(model.Command):
         return game.push(CommunityChest(player=player, at=n))
       if p in theBoard.chances:
         return game.push(Chance(player=player, at=n))
-      assert False
-    else:
-      assert False
-    return None
+    """
 
 
 

@@ -114,6 +114,10 @@ class OnIncomeTax(model.Command):
   def __call__(self, game):
     return game.push(PayToBank(player=self.player, amount=200))
 
+class OnLuxuryTax(model.Command):
+  def __call__(self, game):
+    return game.push(PayToBank(player=self.player, amount=50))
+
 class OnChance(model.Command):
   def __call__(self, game):
     return game.push(DrawChance(player=self.player, pos=self.pos))

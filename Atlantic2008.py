@@ -84,9 +84,6 @@ myPlace.addPlace("Chance", OnChance)
 myPlace.addProperty("Park Place", facevalue=350,
     rent=[35, 175, 500, 1100, 1300, 1500], colorgroups="DarkBlue", cost=200)
 
-class OnLuxuryTax(model.Command):
-  def __call__(self, game):
-    return game.push(PayToBank(player=self.player, amount=50))
 myPlace.addPlace("Luxury Tax", OnLuxuryTax)
 myPlace.addProperty("Boardwalk", facevalue=400,
     rent=[50, 200, 600, 1400, 1700, 2000], colorgroups="DarkBlue", cost=200)

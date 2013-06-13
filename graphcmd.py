@@ -17,10 +17,18 @@ class CallGraphMaker(object):
       if isinstance(v, type) and issubclass(v, model.Command):
         self.knowns[k] = (v, set())
 
-  def scan_object(self, xs):
+  def scan_place(self, xs):
     v, ys = self.knowns['LandOn']
     for x in xs:
       ys.add(x.command_class.__name__)
+
+  def scan_card(self, name, xs):
+    v, ys = self.knowns[name]
+    for x in xs:
+      for k in x.fn.func_code.co_names:
+        if k in self.knowns:
+          ys.add(k)
+
      
   def build(self):
     for m in self.scanned:
@@ -43,7 +51,9 @@ cgm.scan_module(model)
 cgm.scan_module(command)
 cgm.scan_module(board)
 cgm.scan_module(Atlantic2008)
-cgm.scan_object(Atlantic2008.myPlace.xs)
+cgm.scan_place(Atlantic2008.myPlace.xs)
+cgm.scan_card('DrawChance', Atlantic2008.CHANCE_CARDS)
+cgm.scan_card('DrawCommunityChest', Atlantic2008.COMMUNITY_CHEST_CARDS)
 
 cgm.build()
 cgm.report()

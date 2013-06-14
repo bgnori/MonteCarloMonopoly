@@ -83,7 +83,6 @@ class Game(object):
     c = self.pop()
     print c, getattr(c, 'player', 'N/A')
     c(self)
-    return True
 
   def push(self, cmd):
     self.stack.append(cmd)
@@ -149,6 +148,8 @@ class Player(object):
     self.owns = set([])
     self.houses = {}
     self.hotels = {}
+    self.has_jail_free_chance = False
+    self.has_jail_free_chest = False
     self.name = name
     self.dead = False
     self.turns = 0
@@ -203,12 +204,23 @@ class Place(object):
   def __init__(self, name, commadclass, pos, **kw):
     self.name = name
     self.pos = pos
+    self.buildings = 0
     self.command_class = commadclass
     for k, v in kw.iteritems():
       assert k not in ('name', 'pos', 'command_class')
       setattr(self, k, v)
   def __str__(self):
     return "<" + self.name + ">"
+ 
+  def calcFix(self, house, hotel):
+    if self.buildings == 0:
+      return 0
+    elif 0 < self.buildings and self.buildings < 5:
+      return self.buildings * house
+    elif self.buildings == 5:
+      return hotel
+    else:
+      assert False
 
 
 class Strategy(object):

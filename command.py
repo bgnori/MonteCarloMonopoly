@@ -46,7 +46,6 @@ class StartTurn(model.Command):
     if p.dead:
       game.push(EndTurn()) 
       return
-
     p.turns += 1
     if not p.is_free:
       p.strategy.jail_action(game, p)
@@ -89,9 +88,6 @@ class MoveN(model.Command):
       game.push(GetFromBank(player=p, amount=200)) #FIXME order!!
     game.push(LandOn(player=p, n=self.n, by_dice=self.by_dice))
 
-GOTOJAIL = 30
-INCOMETAX = 4
-LUXURYTAX = 38
 
 class LandOnProperty(model.Command):
   defaults = dict(n=0, by_dice=True)
@@ -103,34 +99,40 @@ class LandOnProperty(model.Command):
       if theBoard.ownerof[player.pos] == player:
         print 'you have it :)'
       else:
-        game.push(PayRent(
-          player=player, 
-          owner=theBoard.ownerof[player.pos], 
+        game.push(XPayToY(
+          x=player, 
+          y=theBoard.ownerof[player.pos], 
           amount=theBoard.calcRent(player.pos, self.n, self.by_dice)))
     else:
       """ replace this for bidding Strategy """
       assert self.player.pos != 30
       game.push(BuyProperty(prop=p, player=player))
 
+
 class OnCommunityChest(model.Command):
   def __call__(self, game):
     return game.push(DrawCommunityChest(player=self.player, pos=self.pos))
+
 
 class OnIncomeTax(model.Command):
   def __call__(self, game):
     return game.push(PayToBank(player=self.player, amount=200))
 
+
 class OnLuxuryTax(model.Command):
   def __call__(self, game):
     return game.push(PayToBank(player=self.player, amount=50))
+
 
 class OnChance(model.Command):
   def __call__(self, game):
     return game.push(DrawChance(player=self.player, pos=self.pos))
 
+
 class OnGoToJail(model.Command):
   def __call__(self, game):
     return game.push(GoToJail(player=self.player))
+
 
 class LandOn(model.Command):
   defaults = dict(n=0, by_dice=True, player=None)
@@ -168,19 +170,44 @@ class GetFromBank(model.Command):
   def __call__(self, game):
     self.player.money += self.amount
 
+
 class GetJailFree(model.Command):
   defaults= dict(is_chance=None)
   def __call__(self, game):
-    pass
+    if self.is_chance:
+      print self.player, 'got chance jail free'
+      self.player.has_jail_free_chance = True
+    if not self.is_chance:
+      print self.player, 'got chest jail free'
+      self.player.has_jail_free_chest = True
+
+
+class XPayToY(model.Command):
+  def __call__(self, game):
+    self.x.money -= self.amount 
+    self.y.money += self.amount
+    print self.x.name, '==(', self.amount, ')=>', self.y.name
+
 
 class CollectFromAll(model.Command):
   def __call__(self, game):
-    self.player.money += self.amount 
+    cs = []
+    p = game.nextplayer(self.player)
+    while p != self.player:
+      if p.dead:
+        continue
+      cs.append(XPayToY(amount=self.amount, x=p, y=self.player))
+      p = game.nextplayer(p)
+
+    for c in reversed(cs):
+      game.push(c)
+
 
 class Repair(model.Command):
   defaults = dict(houst=0, hotel=0)
   def __call__(self, game):
-    pass
+    cost = sum([p.calcFix(self.house, self.hotel) for p in self.player.owns])
+    game.push(PayToBank(player=self.player, amount=cost))
 
 
 class PayToBank(model.Command):
@@ -190,7 +217,16 @@ class PayToBank(model.Command):
 
 class PayToAll(model.Command):
   def __call__(self, game):
-    self.player.money -= self.amount
+    cs = []
+    p = game.nextplayer(self.player)
+    while p != self.player:
+      if p.dead:
+        continue
+      cs.append(XPayToY(amount=self.amount, x=self.player, y=p))
+      p = game.nextplayer(p)
+
+    for c in reversed(cs):
+      game.push(c)
 
 
 class PayAndOut(model.Command):
@@ -198,14 +234,6 @@ class PayAndOut(model.Command):
     self.player.money -= 50
     self.player.is_free = True
 
-
-class PayRent(model.Command):
-  defaults = dict(owner=None, amount=0)
-  def __call__(self, game):
-    player = self.player
-    player.money -= self.amount
-    self.owner.money += self.amount
-    print player.name, '==(', self.amount, ')=>', self.owner.name
 
 class BuyProperty(model.Command):
   defaults = dict(player=None, prop=None)

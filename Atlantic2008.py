@@ -117,7 +117,7 @@ COMMUNITY_CHEST_CARDS = [
   Card(lambda player, card: GetFromBank(player=player, card=card, amount=50), 
     "From sale of stock you get $50", #{$45} 
     "Mr. M, happily entangled in the tape of a stock ticker, waves cash (with no $ sign this time)"),
-  Card(lambda player, card: GetJailFree(player=player, card=card),
+  Card(lambda player, card: GetJailFree(player=player, card=card, is_chance=False),
     """Get Out of Jail Free {Get out of Jail, Free} 
     - This card may be kept until needed or sold""",
     "A winged Mr. M flutters out of a bird cage>"),
@@ -216,7 +216,7 @@ CHANCE_CARDS = [
     "Bank pays you dividend of $50",
     """With his feet up on a telephone-bearing desk, 
     Mr. M leans back in an overstuffed chair, blowing cigar smoke rings"""),
-  Card(lambda player, card: GetJailFree(player=player, card=card),
+  Card(lambda player, card: GetJailFree(player=player, card=card, is_chance=True),
     """Get out of Jail Free - This card may be kept until needed, or traded/sold""",
     #{This card may be kept until needed or sold - Get Out of Jail Free} 
     #{The first sentence is much smaller than the second}

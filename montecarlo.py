@@ -43,6 +43,8 @@ class Experiment:
       print " as property"
       for i, prop in enumerate(p.owns):
         print i, prop
+      print 'has chance jail free:', ['No', 'Yes'][p.has_jail_free_chance]
+      print 'has chest jail free:', ['No', 'Yes'][p.has_jail_free_chest]
       print
 
 
@@ -54,7 +56,7 @@ class Experiment:
 
 
 ao = AlwaysOutStrategy()
-ex = Experiment(800, [ao, ao, ao, ao])
+ex = Experiment(8000, [ao, ao, ao, ao])
 
 ex.run()
 

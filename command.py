@@ -254,11 +254,22 @@ class BuyProperty(model.Command):
 
 class AdvanceToNearestRailroad(model.Command):
   def __call__(self, game):
-    pass
+    pos = self.player.pos
+    while getattr(game.board[pos], "colorgroups", "") != 'RailRoad':
+      pos = (pos + 1) % 40
+    travel = (40 + pos - self.player.pos) % 40
+
+    game.push(MoveN(player=self.player, n=travel, by_dice=False)) #FIXME double!
+
 
 class AdvanceToNearestUtility(model.Command):
   def __call__(self, game):
-    pass
+    pos = self.player.pos
+    while getattr(game.board[pos], "colorgroups", "") != 'Utilities':
+      pos = (pos + 1) % 40
+    travel = (40 + pos - self.player.pos) % 40
+
+    game.push(MoveN(player=self.player, n=travel, by_dice=False)) #FIXME fix rate
 
 
 class CashByMortgage(model.Command):

@@ -18,6 +18,8 @@ class DrawChance(model.Command):
     card = game.drawChance()
     cmd = card.fn(self.player, card)
     print card, cmd
+    if not isinstance(card, GetJailFree):
+      game.putBackChance(card)
     game.push(cmd)
 
 
@@ -26,12 +28,16 @@ class DrawCommunityChest(model.Command):
     card = game.drawCommunityChest()
     cmd = card.fn(self.player, card)
     print card.instruction, cmd
+    if not isinstance(card, GetJailFree):
+      game.putBackCommunityChest(card)
     game.push(cmd)
 
 
 class Retreat(model.Command):
   def __call__(self, game):
-    pass #to_go = self.dst - player.pos 
+    pos = (40 + self.player.pos - self.amount) % 40
+    self.player.pos = pos
+    game.push(LandOn(player=self.player, n=-self.amount, by_dice=False))
 
 
 class StartTurn(model.Command):

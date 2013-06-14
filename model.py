@@ -56,7 +56,7 @@ class Pile(object):
   def draw(self):
     return self.pile.pop(0)
 
-  def under(self, card):
+  def putBack(self, card):
     self.pile.append(card)
 
 
@@ -113,9 +113,15 @@ class Game(object):
 
   def drawChance(self):
     return self.chance.draw()
+    
+  def putBackChance(self, card):
+    self.chance.putBack(card)
 
   def drawCommunityChest(self):
     return self.chest.draw()
+
+  def putBackCommunityChest(self, card):
+    self.chest.putBack(card)
 
 
 class EndTurn(Command):

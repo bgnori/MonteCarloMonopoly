@@ -178,6 +178,14 @@ class Player(object):
       total += prop.facevalue
     return total + self.money
 
+  def estimateLiqudate(self):
+    total = 0
+    for prop in self.owns:
+      if prop.is_morgaged:
+        continue
+      total += (prop.facevalue/2 + prop.buildings * prop.cost/2)
+    return total + self.money
+
   def is_dying(self):
     pass
 
@@ -207,7 +215,7 @@ class Place(object):
     self.buildings = 0
     self.command_class = commadclass
     for k, v in kw.iteritems():
-      assert k not in ('name', 'pos', 'command_class')
+      assert k not in ('name', 'pos', 'command_class', 'buildings')
       setattr(self, k, v)
   def __str__(self):
     return "<" + self.name + ">"

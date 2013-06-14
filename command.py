@@ -18,7 +18,7 @@ class DrawChance(model.Command):
     card = game.drawChance()
     cmd = card.fn(self.player, card)
     print card, cmd
-    if not isinstance(card, GetJailFree):
+    if not isinstance(cmd, GetJailFree):
       game.putBackChance(card)
     game.push(cmd)
 
@@ -28,7 +28,7 @@ class DrawCommunityChest(model.Command):
     card = game.drawCommunityChest()
     cmd = card.fn(self.player, card)
     print card.instruction, cmd
-    if not isinstance(card, GetJailFree):
+    if not isinstance(cmd, GetJailFree):
       game.putBackCommunityChest(card)
     game.push(cmd)
 
@@ -153,8 +153,15 @@ class StayInJail(model.Command):
     else:
       p.jail_count += 1
       if p.jail_count > 2:
-        p.money -= 50 #FIXME forced, but there is an option for Jail Free Card
-        game.push(MoveN(player=p, n=n+m))
+        if p.money > 50:
+          p.money -= 50 #FIXME forced, but there is an option for Jail Free Card
+          game.push(MoveN(player=p, n=n+m))
+        elif p.estimateLiqudate() > 50:
+          game.push(MoveN(player=p, n=n+m))
+          game.push(CashByMortgage(player=p))
+        else:
+          pass
+          #CashByDeal
 
 
 class GoToJail(model.Command):
@@ -184,7 +191,7 @@ class GetJailFree(model.Command):
 
 class XPayToY(model.Command):
   def __call__(self, game):
-    self.x.money -= self.amount 
+    self.x.money -= self.amount  #FIXME
     self.y.money += self.amount
     print self.x.name, '==(', self.amount, ')=>', self.y.name
 
@@ -212,7 +219,7 @@ class Repair(model.Command):
 
 class PayToBank(model.Command):
   def __call__(self, game):
-    self.player.money -= self.amount
+    self.player.money -= self.amount #FIXME
 
 
 class PayToAll(model.Command):
@@ -231,7 +238,7 @@ class PayToAll(model.Command):
 
 class PayAndOut(model.Command):
   def __call__(self, game):
-    self.player.money -= 50
+    self.player.money -= 50 #FIXME
     self.player.is_free = True
 
 
@@ -240,7 +247,7 @@ class BuyProperty(model.Command):
   def __call__(self, game):
     assert isinstance(self.prop, model.Place)
     assert self.prop.pos != 30
-    self.player.money -= self.prop.facevalue
+    self.player.money -= self.prop.facevalue #FIXME short on cash, to buy. morgage
     self.player.add_property(self.prop)
     game.board.ownerof[self.prop.pos] = self.player
 
@@ -252,6 +259,17 @@ class AdvanceToNearestRailroad(model.Command):
 class AdvanceToNearestUtility(model.Command):
   def __call__(self, game):
     pass
+
+
+class CashByMortgage(model.Command):
+  def __call__(self, game):
+    pass
+
+
+class CashByDeal(model.Command):
+  def __call__(self, game):
+    pass
+    
 
 
 

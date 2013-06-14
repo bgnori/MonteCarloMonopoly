@@ -160,7 +160,7 @@ COMMUNITY_CHEST_CARDS = [
   Card(lambda player, card: GetFromBank(player=player, card=card, amount=10),
     """You have won second prize in a beauty contest - Collect $10""",
     """Mr. M preens with a sash and large bouquet"""),
-  Card(lambda player, card: GetFromBank(player=palyer, amount=100),
+  Card(lambda player, card: GetFromBank(player=player, card=card, amount=100),
     """You inherit $100""",
     """Mr M. holds his head as unseen people's hands offer brochures titled
     "Buy Yacht", "World Tour", and "Rolls Royce""")

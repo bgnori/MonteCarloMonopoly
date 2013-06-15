@@ -156,12 +156,14 @@ class StayInJail(model.Command):
         if p.money > 50:
           p.money -= 50 #FIXME forced, but there is an option for Jail Free Card
           game.push(MoveN(player=p, n=n+m))
-        elif p.estimateLiqudate() > 50:
-          game.push(MoveN(player=p, n=n+m))
-          game.push(CashByMortgage(player=p))
         else:
           pass
           #CashByDeal
+        """
+        elif p.estimateLiqudate() > 50:
+          game.push(MoveN(player=p, n=n+m))
+          game.push(CashByMortgage(player=p))
+        """
 
 
 class GoToJail(model.Command):
@@ -181,12 +183,7 @@ class GetFromBank(model.Command):
 class GetJailFree(model.Command):
   defaults= dict(is_chance=None)
   def __call__(self, game):
-    if self.is_chance:
-      print self.player, 'got chance jail free'
-      self.player.has_jail_free_chance = True
-    if not self.is_chance:
-      print self.player, 'got chest jail free'
-      self.player.has_jail_free_chest = True
+    self.player.cards.add(self.card)
 
 
 class XPayToY(model.Command):
@@ -241,6 +238,13 @@ class PayAndOut(model.Command):
     self.player.money -= 50 #FIXME
     self.player.is_free = True
 
+class FreeByCard(model.Command):
+  def __call__(self, game):
+    if isinstance(self.card, model.ChanceCard):
+      game.putBackChance(self.card)
+    elif isinstance(self.card, model.CommunityChestCard):
+      game.putBackCommunityChest(self.card)
+    self.player.is_free = True
 
 class BuyProperty(model.Command):
   defaults = dict(player=None, prop=None)
@@ -281,6 +285,5 @@ class CashByDeal(model.Command):
   def __call__(self, game):
     pass
     
-
 
 

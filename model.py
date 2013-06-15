@@ -45,8 +45,13 @@ class Card(object):
     self.art = art
     self.fn = fn # player => Command proc
 
+
+class ChanceCard(Card):pass
+class CommunityChestCard(Card):pass
+
 class Pile(object):
-  def __init__(self, *cards):
+  def __init__(self, t, *cards):
+    self.t = t
     self.cards = cards
     self.pile = list(self.cards)
 
@@ -57,6 +62,7 @@ class Pile(object):
     return self.pile.pop(0)
 
   def putBack(self, card):
+    assert isinstance(card, self.t)
     self.pile.append(card)
 
 
@@ -64,9 +70,9 @@ class Game(object):
   def __init__(self, start_command, board, chance, chest, strategies):
     self.stack= []
     self.players = []
-    self.chance = Pile(*chance)
+    self.chance = Pile(ChanceCard, *chance)
     self.chance.shuffle()
-    self.chest = Pile(*chest)
+    self.chest = Pile(CommunityChestCard, *chest)
     self.chest.shuffle()
     self.board = board
 
@@ -148,8 +154,7 @@ class Player(object):
     self.owns = set([])
     self.houses = {}
     self.hotels = {}
-    self.has_jail_free_chance = False
-    self.has_jail_free_chest = False
+    self.cards = set()
     self.name = name
     self.dead = False
     self.turns = 0

@@ -9,6 +9,26 @@ DEFAULT_NAMES = ["Alice", "Bob", "Charlie", "Deno", "Elen", "Ford", "George", "H
 def dice():
   return randint(1, 6), randint(1, 6)
 
+
+class StatWrapper(object):
+  def __init__(self, target, **args):
+    d = self.__dict__
+    d['target'] = target
+    d['procs'] = dict(**args)
+    d['values'] = dict()
+
+  def __getattr__(self, k):
+    return getattr(self.__dict__['target'], k)
+
+  def __setattr__(self, k, new):
+    proc = self.__dict__['procs'].get(k, None)
+    old = getattr(self.__dict__['target'], k)
+    data = self.__dict__['values'].get(k, None)
+    if proc is not None:
+        self.__dict__['k'] = proc(self, old, new, data)
+    setattr(self.__dict__['target'], k, new)
+
+
 class Command(object):
   defaults = {}
   def __new__(klass, **kwargs): #def __init__(self, **kwargs):
@@ -77,7 +97,7 @@ class Game(object):
     self.board = board
 
     for i, arg in enumerate(strategies):
-        self.add(Player(self, arg, DEFAULT_NAMES[i]))
+        self.add(StatWrapper(Player(self, arg, DEFAULT_NAMES[i])))
     self.start_command = start_command
 
   def ready(self):
@@ -142,15 +162,13 @@ class GameLoop(Command):
 
 
 class Player(object):
-  def __init__(self, game, strategy, name, pos=None):
+  def __init__(self, game, strategy, name, pos=None, stat=None):
     if pos is None:
       pos = 0
     self.pos = pos
     self.game = game 
     self._money = 1500
     self._is_free = True
-    self.jailed_count = 0 #stat
-    self.first_jail = None #stat
     self.jail_count = 0
     self.strategy = strategy
     self.owns = set([])
@@ -159,12 +177,16 @@ class Player(object):
     self.cards = set()
     self.name = name
     self.dead = False
+
+    self.stat = stat
     self.turns = 0 #stat
     self.go_count = 0 #stat
     self.outByJailFree = 0 #stat
-
     self.profit = [] #stat
     self.loss = [] #stat
+    self.jailed_count = 0 #stat
+    self.first_jail = None #stat
+
 
   @property
   def is_free(self):

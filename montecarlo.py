@@ -8,7 +8,7 @@ import Atlantic2008
 
 class AlwaysOutStrategy(model.Strategy):
   def jail_action(self, game, player):
-    assert isinstance(player, model.Player)
+    assert isinstance(player, (model.Player, model.StatWrapper))
     if player.cards:
       card = player.cards.pop()
       game.push(command.FreeByCard(player=player, card=card))
@@ -82,8 +82,6 @@ class Runner(object):
     self.bar = 40
     self.f = f
 
-
-
   def run(self):
     sys.stderr.write('>')
     for i in range(self.n):
@@ -107,8 +105,7 @@ class Runner(object):
       sys.stderr.flush()
 
 with file('result.txt', 'w') as f:
-  r = Runner(1000, f)
+  r = Runner(1, f)
   r.run()
-
 
 

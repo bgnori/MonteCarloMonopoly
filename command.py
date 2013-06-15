@@ -287,6 +287,5 @@ class CashByMortgage(model.Command):
 class CashByDeal(model.Command):
   def __call__(self, game):
     pass
-    
 
 

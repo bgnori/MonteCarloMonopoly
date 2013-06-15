@@ -43,6 +43,7 @@ class Experiment:
       print p.name
       print "played", p.turns
       print "passed go", p.go_count, 'time(s)'
+      print 'get jailed', p.jailed_count
       plus = sum(p.profit)
       minus = sum(p.loss)
       print "P/L:", plus, minus, plus - minus

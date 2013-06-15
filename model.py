@@ -148,7 +148,8 @@ class Player(object):
     self.pos = pos
     self.game = game 
     self._money = 1500
-    self.is_free = True
+    self._is_free = True
+    self.jailed_count = 0 #stat
     self.jail_count = 0
     self.strategy = strategy
     self.owns = set([])
@@ -157,11 +158,23 @@ class Player(object):
     self.cards = set()
     self.name = name
     self.dead = False
-    self.turns = 0
-    self.go_count = 0
+    self.turns = 0 #stat
+    self.go_count = 0 #stat
+    self.outByJailFree = 0 #stat
 
-    self.profit = []
-    self.loss = []
+    self.profit = [] #stat
+    self.loss = [] #stat
+
+  @property
+  def is_free(self):
+    return self._is_free
+
+  @is_free.setter
+  def is_free(self, v):
+    print 'is_free, setter'
+    if not v:
+      self.jailed_count += 1
+    self._is_free = v
 
   @property
   def money(self):

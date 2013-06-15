@@ -75,12 +75,14 @@ ex.report()
 import sys
 
 class Runner(object):
-  def __init__(self, n):
+  def __init__(self, n, f):
     self.n = n
     self.done = 0
     self.bar_drawn = 0
     self.bar = 40
-    self.result = [0, 0, 0, 0]
+    self.f = f
+
+
 
   def run(self):
     sys.stderr.write('>')
@@ -92,6 +94,8 @@ class Runner(object):
   def one(self):
     ex = Experiment(1000, [ao, ao, ao, ao])
     ex.run()
+    for p in ex.game.players:
+      self.f.write("%d %d %d %d\n"%(p.turns, p.go_count, p.jailed_count, p.first_jail or -1))
     self.done += 1
 
   def draw(self):
@@ -102,8 +106,9 @@ class Runner(object):
       sys.stderr.write('>')
       sys.stderr.flush()
 
-r = Runner(1000)
+with file('result.txt', 'w') as f:
+  r = Runner(1000, f)
+  r.run()
 
-r.run()
 
 

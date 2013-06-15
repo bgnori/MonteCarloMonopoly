@@ -53,7 +53,7 @@ class Experiment:
       for i, prop in enumerate(p.owns):
         print i, prop
       for c in p.cards:
-        print c
+        print c.instruction
       print
 
 

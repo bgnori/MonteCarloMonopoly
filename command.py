@@ -47,9 +47,9 @@ class StartTurn(model.Command):
       game.push(EndTurn()) 
       return
     p.turns += 1
+    game.push(AfterJailDecision(player=p))
     if not p.is_free:
       p.strategy.jail_action(game, p)
-    game.push(AfterJailDecision(player=p))
 
 
 class AfterJailDecision(model.Command):
@@ -153,15 +153,18 @@ class StayInJail(model.Command):
     else:
       p.jail_count += 1
       if p.jail_count > 2:
-        if p.money > 50:
-          p.money -= 50 #FIXME forced, but there is an option for Jail Free Card
+        if p.cards:
           game.push(MoveN(player=p, n=n+m))
+          card = p.cards.pop()
+          game.push(FreeByCard(player=player, card=card))
+        elif p.money > 50:
+          game.push(MoveN(player=p, n=n+m))
+          p.money -= 50 #FIXME forced, but there is an option for Jail Free Card
         else:
           pass
           #CashByDeal
         """
         elif p.estimateLiqudate() > 50:
-          game.push(MoveN(player=p, n=n+m))
           game.push(CashByMortgage(player=p))
         """
 

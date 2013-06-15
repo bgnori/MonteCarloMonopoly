@@ -27,13 +27,13 @@ class AlwaysStayStrategy(model.Strategy):
 
 
 class Experiment(object):
-  def __init__(self, count, strategies):
+  def __init__(self, count, *players):
     self.game = model.Game(
         start_command=command.StartTurn,
         board=board.Board(Atlantic2008.myPlace),
         chance=Atlantic2008.CHANCE_CARDS,
         chest=Atlantic2008.COMMUNITY_CHEST_CARDS,
-        strategies=strategies)
+        players=players)
     self.count = count
     assert Atlantic2008.myPlace[30].name == 'Go to Jail'
 
@@ -57,7 +57,6 @@ class Experiment(object):
         print c.instruction
       print
 
-
   def run(self):
     self.game.ready()
     #self.game.players[2].dead = True
@@ -67,12 +66,20 @@ class Experiment(object):
 
 ao = AlwaysOutStrategy()
 '''
-ex = Experiment(1000, [ao, ao, ao, ao])
-ex.run()
-ex.report()
 '''
 
-import sys
+
+def track_pos(wrapper, old, new, data):
+  if data is None:
+    data = []
+  data.append((old, new))
+  return data
+
+peekers = {
+    "pos": track_pos
+}
+
+
 
 class Runner(object):
   def __init__(self, n, f):
@@ -90,7 +97,9 @@ class Runner(object):
     sys.stderr.write('!')
 
   def one(self):
-    ex = Experiment(1000, [ao, ao, ao, ao])
+    
+    ex = Experiment(1000, 
+            *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0), **peekers) for i in range(4)])
     ex.run()
     for p in ex.game.players:
       self.f.write("%d %d %d %d\n"%(p.turns, p.go_count, p.jailed_count, p.first_jail or -1))
@@ -104,8 +113,16 @@ class Runner(object):
       sys.stderr.write('>')
       sys.stderr.flush()
 
-with file('result.txt', 'w') as f:
-  r = Runner(1, f)
-  r.run()
+if __name__ == '__main__':
+  import sys
+  ex = Experiment(1000, 
+    *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0), **peekers) 
+        for i in range(4)])
+  ex.run()
+  ex.report()
+  for p in ex.game.players:
+    print p.extract()
+
+
 
 

@@ -82,6 +82,8 @@ class MoveN(model.Command):
     p = self.player
     print p, 'moving', self.n
     assert p.pos != 30 # never from "Go To Jail"
+    assert isinstance(p.pos, int)
+    assert isinstance(self.n, int)
     d, p.pos = divmod(p.pos + self.n, 40)
     if d == 1:
       p.go_count += 1

@@ -25,8 +25,15 @@ class StatWrapper(object):
     old = getattr(self.__dict__['target'], k)
     data = self.__dict__['values'].get(k, None)
     if proc is not None:
-        self.__dict__['k'] = proc(self, old, new, data)
+      print k, old, new, data
+      self.__dict__['values'][k] = proc(self, old, new, data)
     setattr(self.__dict__['target'], k, new)
+
+  def extract(self):
+    return self.__dict__['values']
+  
+  def __str__(self):
+    return str(self.target)
 
 
 class Command(object):
@@ -87,17 +94,17 @@ class Pile(object):
 
 
 class Game(object):
-  def __init__(self, start_command, board, chance, chest, strategies):
+  def __init__(self, start_command, board, chance, chest, players):
     self.stack= []
-    self.players = []
+    self.players = players
+    for p in self.players:
+      p.bind(self)
     self.chance = Pile(ChanceCard, *chance)
     self.chance.shuffle()
     self.chest = Pile(CommunityChestCard, *chest)
     self.chest.shuffle()
     self.board = board
 
-    for i, arg in enumerate(strategies):
-        self.add(StatWrapper(Player(self, arg, DEFAULT_NAMES[i])))
     self.start_command = start_command
 
   def ready(self):
@@ -125,9 +132,6 @@ class Game(object):
 
   def hasCommand(self):
     return bool(self.stack)
-
-  def add(self, p):
-    self.players.append(p)
 
   def nextplayer(self, prev=None):
     if prev is None:
@@ -162,11 +166,11 @@ class GameLoop(Command):
 
 
 class Player(object):
-  def __init__(self, game, strategy, name, pos=None, stat=None):
+  def __init__(self, strategy, name, pos=None):
     if pos is None:
       pos = 0
     self.pos = pos
-    self.game = game 
+    self.game = None
     self._money = 1500
     self._is_free = True
     self.jail_count = 0
@@ -178,7 +182,6 @@ class Player(object):
     self.name = name
     self.dead = False
 
-    self.stat = stat
     self.turns = 0 #stat
     self.go_count = 0 #stat
     self.outByJailFree = 0 #stat
@@ -187,6 +190,8 @@ class Player(object):
     self.jailed_count = 0 #stat
     self.first_jail = None #stat
 
+  def bind(self, game):
+    self.game = game
 
   @property
   def is_free(self):

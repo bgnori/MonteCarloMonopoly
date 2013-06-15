@@ -150,6 +150,7 @@ class Player(object):
     self._money = 1500
     self._is_free = True
     self.jailed_count = 0 #stat
+    self.first_jail = None #stat
     self.jail_count = 0
     self.strategy = strategy
     self.owns = set([])
@@ -174,6 +175,8 @@ class Player(object):
     print 'is_free, setter'
     if not v:
       self.jailed_count += 1
+      if self.first_jail is None:
+        self.first_jail = self.turns
     self._is_free = v
 
   @property

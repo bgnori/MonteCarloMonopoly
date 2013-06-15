@@ -26,7 +26,7 @@ class AlwaysStayStrategy(model.Strategy):
 
 
 
-class Experiment:
+class Experiment(object):
   def __init__(self, count, strategies):
     self.game = model.Game(
         start_command=command.StartTurn,
@@ -66,9 +66,44 @@ class Experiment:
 
 
 ao = AlwaysOutStrategy()
-ex = Experiment(8000, [ao, ao, ao, ao])
-
+'''
+ex = Experiment(1000, [ao, ao, ao, ao])
 ex.run()
-
 ex.report()
+'''
+
+import sys
+
+class Runner(object):
+  def __init__(self, n):
+    self.n = n
+    self.done = 0
+    self.bar_drawn = 0
+    self.bar = 40
+    self.result = [0, 0, 0, 0]
+
+  def run(self):
+    sys.stderr.write('>')
+    for i in range(self.n):
+      self.one()
+      self.draw()
+    sys.stderr.write('!')
+
+  def one(self):
+    ex = Experiment(1000, [ao, ao, ao, ao])
+    ex.run()
+    self.done += 1
+
+  def draw(self):
+    if (self.bar * self.done / self.n) > self.bar_drawn:
+      self.bar_drawn += 1
+      sys.stderr.write('\b')
+      sys.stderr.write('=')
+      sys.stderr.write('>')
+      sys.stderr.flush()
+
+r = Runner(1000)
+
+r.run()
+
 

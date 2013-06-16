@@ -35,14 +35,15 @@ ao = AlwaysOutStrategy()
 def track_pos(wrapper, old, new, data):
   if data is None:
     data = []
-  data.append((old, new))
+  data.append((wrapper.turns, (old, new)))
   return data
 
 
 def track_jail(wrapper, old, new, data):
   if data is None:
     data = []
-  data.append(wrapper.turns)
+  if old and not new:
+    data.append(wrapper.turns)
   return  data
 
 

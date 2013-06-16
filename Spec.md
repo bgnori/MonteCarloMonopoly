@@ -10,6 +10,7 @@
  * Minimum Jail Strategy
  * multiple NPC
  * roll dependent Utilities Rent
+ * P/L, cash flow, asset tracking
 
 ## not yet
  * stat
@@ -17,7 +18,6 @@
    * duration for sold-out
    * ave chance of landing in color groups and/or properties
    * chance of self contained monopoly
- * P/L, cash flow, asset tracking
  * Chance and Community Chest Cards
  * interactive exec
  * logging / replay

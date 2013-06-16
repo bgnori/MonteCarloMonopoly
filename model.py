@@ -25,7 +25,6 @@ class StatWrapper(object):
     old = getattr(self.__dict__['target'], k)
     data = self.__dict__['values'].get(k, None)
     if proc is not None:
-      print k, old, new, data
       self.__dict__['values'][k] = proc(self, old, new, data)
     setattr(self.__dict__['target'], k, new)
 

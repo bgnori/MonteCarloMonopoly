@@ -31,6 +31,9 @@ class StatWrapper(object):
   def extract(self):
     return self.__dict__['values']
   
+  def stamp(self):
+    return self.game.tick, self.turns
+
   def __str__(self):
     return str(self.target)
 
@@ -103,6 +106,7 @@ class Game(object):
     self.chest = Pile(CommunityChestCard, *chest)
     self.chest.shuffle()
     self.board = board
+    self.tick = 0
 
     self.start_command = start_command
 
@@ -115,6 +119,7 @@ class Game(object):
     c = self.pop()
     print c, getattr(c, 'player', 'N/A')
     c(self)
+    self.tick += 1
 
   def push(self, cmd):
     self.stack.append(cmd)

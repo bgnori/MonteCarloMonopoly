@@ -26,24 +26,25 @@ class AlwaysStayStrategy(model.Strategy):
 
 
 
-
 ao = AlwaysOutStrategy()
-'''
-'''
 
+def track_turns(wrapper, old, new, data):
+  if data is None:
+    data = []
+  data.append((wrapper.stamp(), new))
+  return data
 
 def track_pos(wrapper, old, new, data):
   if data is None:
     data = []
-  data.append((wrapper.turns, (old, new)))
+  data.append((wrapper.stamp(), (old, new)))
   return data
-
 
 def track_jail(wrapper, old, new, data):
   if data is None:
     data = []
   if old and not new:
-    data.append(wrapper.turns)
+    data.append(wrapper.stamp())
   return  data
 
 
@@ -52,13 +53,14 @@ def track_money(wrapper, old, new, data):
     data = ([], [])
   chg = new - old 
   if chg > 0:
-    data[0].append((wrapper.turns, chg))
+    data[0].append((wrapper.stamp(), chg))
   if chg < 0:
-    data[1].append((wrapper.turns, -chg))
+    data[1].append((wrapper.stamp(), -chg))
   return data
 
 
 peekers = {
+    #"turns":track_turns,
     "pos": track_pos,
     "is_free" : track_jail,
     "money" : track_money,

@@ -26,6 +26,44 @@ class AlwaysStayStrategy(model.Strategy):
 
 
 
+
+ao = AlwaysOutStrategy()
+'''
+'''
+
+
+def track_pos(wrapper, old, new, data):
+  if data is None:
+    data = []
+  data.append((old, new))
+  return data
+
+
+def track_jail(wrapper, old, new, data):
+  if data is None:
+    data = []
+  data.append(wrapper.turns)
+  return  data
+
+
+def track_money(wrapper, old, new, data):
+  if data is None:
+    data = ([], [])
+  chg = new - old 
+  if chg > 0:
+    data[0].append((wrapper.turns, chg))
+  if chg < 0:
+    data[1].append((wrapper.turns, -chg))
+  return data
+
+
+peekers = {
+    "pos": track_pos,
+    "is_free" : track_jail,
+    "money" : track_money,
+}
+
+
 class Experiment(object):
   def __init__(self, count, *players):
     self.game = model.Game(
@@ -43,9 +81,13 @@ class Experiment(object):
       print p.name
       print "played", p.turns
       print "passed go", p.go_count, 'time(s)'
-      print 'get jailed', p.jailed_count
-      plus = sum(p.profit)
-      minus = sum(p.loss)
+      print 'by tracker'
+      d = p.extract()
+      print d
+      print 'get jailed', len(d.get('is_free', []))
+      print d.get('is_free', None)
+      plus = sum(map(lambda x: x[0][1], d['money']))
+      minus = sum(map(lambda x: x[1][1], d['money']))
       print "P/L:", plus, minus, plus - minus
       print 'cash:', p.money
       print 'asset', p.asset()
@@ -62,23 +104,6 @@ class Experiment(object):
     #self.game.players[2].dead = True
     for i in xrange(self.count):
       self.game.progress()
-
-
-ao = AlwaysOutStrategy()
-'''
-'''
-
-
-def track_pos(wrapper, old, new, data):
-  if data is None:
-    data = []
-  data.append((old, new))
-  return data
-
-peekers = {
-    "pos": track_pos
-}
-
 
 
 class Runner(object):
@@ -102,7 +127,8 @@ class Runner(object):
             *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0), **peekers) for i in range(4)])
     ex.run()
     for p in ex.game.players:
-      self.f.write("%d %d %d %d\n"%(p.turns, p.go_count, p.jailed_count, p.first_jail or -1))
+      d = p.extract()
+      self.f.write("%d %d %d %d\n"%(p.turns, p.go_count, d['is_free']))
     self.done += 1
 
   def draw(self):
@@ -120,8 +146,8 @@ if __name__ == '__main__':
         for i in range(4)])
   ex.run()
   ex.report()
-  for p in ex.game.players:
-    print p.extract()
+  #for p in ex.game.players:
+  #  print p.extract()
 
 
 

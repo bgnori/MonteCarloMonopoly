@@ -171,8 +171,8 @@ class Player(object):
       pos = 0
     self.pos = pos
     self.game = None
-    self._money = 1500
-    self._is_free = True
+    self.money = 1500
+    self.is_free = True
     self.jail_count = 0
     self.strategy = strategy
     self.owns = set([])
@@ -182,43 +182,13 @@ class Player(object):
     self.name = name
     self.dead = False
 
-    self.turns = 0 #stat
-    self.go_count = 0 #stat
-    self.outByJailFree = 0 #stat
-    self.profit = [] #stat
-    self.loss = [] #stat
-    self.jailed_count = 0 #stat
-    self.first_jail = None #stat
+    ''' these must be highly useful for strategy impl.'''
+    self.turns = 0 
+    self.go_count = 0 
 
   def bind(self, game):
     self.game = game
 
-  @property
-  def is_free(self):
-    return self._is_free
-
-  @is_free.setter
-  def is_free(self, v):
-    print 'is_free, setter'
-    if not v:
-      self.jailed_count += 1
-      if self.first_jail is None:
-        self.first_jail = self.turns
-    self._is_free = v
-
-  @property
-  def money(self):
-    return self._money
-
-  @money.setter
-  def money(self, v):
-    chg = v - self._money
-    print 'set_money', chg
-    if chg > 0:
-      self.profit.append(chg)
-    if chg < 0:
-      self.loss.append(-chg)
-    self._money = v
 
   def asset(self):
     total = 0

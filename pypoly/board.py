@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import model
+from pypoly import models
 
 class Places:
   def __init__(self, landon_command):
@@ -21,11 +21,11 @@ class Places:
     return None
 
   def addPlace(self, name, landon_command):
-    self.xs.append(model.Place(name, landon_command, self.count))
+    self.xs.append(models.Place(name, landon_command, self.count))
     self.count += 1
 
   def addProperty(self, name, **kw):
-    self.xs.append(model.Place(name, self.landon_command, self.count, **kw))
+    self.xs.append(models.Place(name, self.landon_command, self.count, **kw))
     self.count += 1
 
   @property

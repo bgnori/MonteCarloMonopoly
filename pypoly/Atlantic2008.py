@@ -1,10 +1,10 @@
 # set of subclass and data
 
 
-from board import Places
-from model import ChanceCard, CommunityChestCard, NullCommand
-import model
-from command import *
+from pypoly.board import Places
+from pypoly.models import ChanceCard, CommunityChestCard, NullCommand
+from pypoly import models
+from pypoly.commands import *
 
 
 myPlace = Places(LandOnProperty)

@@ -1,26 +1,28 @@
 #!/usr/bin/env python
 
-import model
-import command
-import board
+from pypoly import models
+from pypoly import commands
+from pypoly import board
 
-import Atlantic2008
+from pypoly import Atlantic2008
 
-class AlwaysOutStrategy(model.Strategy):
+import sys
+
+class AlwaysOutStrategy(models.Strategy):
   def jail_action(self, game, player):
-    assert isinstance(player, (model.Player, model.StatWrapper))
+    assert isinstance(player, (models.Player, models.StatWrapper))
     if player.cards:
       card = player.cards.pop()
-      game.push(command.FreeByCard(player=player, card=card))
+      game.push(commands.FreeByCard(player=player, card=card))
     elif player.money > 50:
-      game.push(command.PayAndOut(player=player))
+      game.push(commands.PayAndOut(player=player))
       return
     else:
       pass
     ''' no money to get out '''
 
 
-class AlwaysStayStrategy(model.Strategy):
+class AlwaysStayStrategy(models.Strategy):
   def jail_action(self, game, player):
     pass
 
@@ -82,8 +84,8 @@ peekers = {
 
 class Experiment(object):
   def __init__(self, count, *players):
-    self.game = model.Game(
-        start_command=command.StartTurn,
+    self.game = models.Game(
+        start_command=commands.StartTurn,
         board=board.Board(Atlantic2008.myPlace),
         chance=Atlantic2008.CHANCE_CARDS,
         chest=Atlantic2008.COMMUNITY_CHEST_CARDS,
@@ -147,7 +149,7 @@ class Runner(object):
   def one(self):
     
     ex = Experiment(1000, 
-            *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0),
+            *[models.StatWrapper(models.Player(ao, models.DEFAULT_NAMES[i], pos=0),
                 on_method={'add_property':track_owns},
                 on_setter=peekers) for i in range(4)])
     ex.run()
@@ -167,7 +169,7 @@ class Runner(object):
 if __name__ == '__main__':
   import sys
   ex = Experiment(1000, 
-    *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0),
+    *[models.StatWrapper(models.Player(ao, models.DEFAULT_NAMES[i], pos=0),
         on_method={'add_property':track_owns},
         on_setter=peekers) 
         for i in range(4)])

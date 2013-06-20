@@ -2,12 +2,12 @@
 
 import sys
 
+import pypoly.montecarlo
 
 
 
-
-t = int(sys.args[1])
+t = int(sys.argv[1])
 
 with file('result.txt', 'w') as f:
-  r = Runner(1, t)
+  r = pypoly.montecarlo.Runner(1, f)
   r.run()

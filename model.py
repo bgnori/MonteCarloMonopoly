@@ -11,21 +11,26 @@ def dice():
 
 
 class StatWrapper(object):
-  def __init__(self, target, **args):
+  def __init__(self, target, on_method, on_setter):
     d = self.__dict__
     d['target'] = target
-    d['procs'] = dict(**args)
+    d['on_method'] = dict(on_method)
+    d['on_setter'] = dict(on_setter)
     d['values'] = dict()
 
   def __getattr__(self, k):
-    return getattr(self.__dict__['target'], k)
+    x = getattr(self.__dict__['target'], k)
+    m = self.__dict__['on_method']
+    if callable(x) and k in m:
+      x = m[k](self, x)
+    return x
 
   def __setattr__(self, k, new):
-    proc = self.__dict__['procs'].get(k, None)
+    hook = self.__dict__['on_setter'].get(k, None)
     old = getattr(self.__dict__['target'], k)
     data = self.__dict__['values'].get(k, None)
-    if proc is not None:
-      self.__dict__['values'][k] = proc(self, old, new, data)
+    if hook is not None:
+      self.__dict__['values'][k] = hook(self, old, new, data)
     setattr(self.__dict__['target'], k, new)
 
   def extract(self):

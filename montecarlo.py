@@ -58,6 +58,19 @@ def track_money(wrapper, old, new, data):
     data[1].append((wrapper.stamp(), -chg))
   return data
 
+def track_owns(wrapper, method):
+  def foo(*args, **kw):
+    print 'track_owns', method
+    print args, kw
+    d = wrapper.__dict__['values']
+    v = d.get('owns', None)
+    if v is None:
+      v = []
+    v.append((wrapper.stamp(), args[0]))
+    d['owns'] = v
+    return method(*args, **kw)
+  return foo
+
 
 peekers = {
     #"turns":track_turns,
@@ -97,7 +110,14 @@ class Experiment(object):
       print "has ", sum([o.facevalue for o in p.owns]),
       print " as property"
       for i, prop in enumerate(p.owns):
-        print i, prop
+        x = d.get('owns', None)
+        if x is not None:
+          for found in x:
+            if found[1] == prop:
+              break
+          print i, prop, found[0]
+        else:
+          print i, prop, '???'
       for c in p.cards:
         print c.instruction
       print
@@ -127,7 +147,9 @@ class Runner(object):
   def one(self):
     
     ex = Experiment(1000, 
-            *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0), **peekers) for i in range(4)])
+            *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0),
+                on_method={'add_property':track_owns},
+                on_setter=peekers) for i in range(4)])
     ex.run()
     for p in ex.game.players:
       d = p.extract()
@@ -145,7 +167,9 @@ class Runner(object):
 if __name__ == '__main__':
   import sys
   ex = Experiment(1000, 
-    *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0), **peekers) 
+    *[model.StatWrapper(model.Player(ao, model.DEFAULT_NAMES[i], pos=0),
+        on_method={'add_property':track_owns},
+        on_setter=peekers) 
         for i in range(4)])
   ex.run()
   ex.report()

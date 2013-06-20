@@ -122,7 +122,7 @@ class Game(object):
     if len(self.players) < 2:
       return False
     c = self.pop()
-    print c, getattr(c, 'player', 'N/A')
+    #print c, getattr(c, 'player', 'N/A')
     c(self)
     self.tick += 1
 

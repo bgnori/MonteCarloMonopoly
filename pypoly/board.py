@@ -54,9 +54,9 @@ class Board:
     self.ownerof = [None for i in range(c)]
     self.chests = places.chests
     self.chances = places.chances
-    print self.chances
+    #print self.chances
     self.noactions = places.noactions
-    print self.noactions
+    #print self.noactions
 
   def __getitem__(self, n):
     return self.places[n]

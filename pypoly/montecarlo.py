@@ -62,8 +62,8 @@ def track_money(wrapper, old, new, data):
 
 def track_owns(wrapper, method):
   def foo(*args, **kw):
-    print 'track_owns', method
-    print args, kw
+    #print 'track_owns', method
+    #print args, kw
     d = wrapper.__dict__['values']
     v = d.get('owns', None)
     if v is None:
@@ -132,8 +132,9 @@ class Experiment(object):
 
 
 class Runner(object):
-  def __init__(self, n, f):
-    self.n = n
+  def __init__(self, count, num_player, f):
+    self.count = count
+    self.num_player = num_player
     self.done = 0
     self.bar_drawn = 0
     self.bar = 40
@@ -141,43 +142,28 @@ class Runner(object):
 
   def run(self):
     sys.stderr.write('>')
-    for i in range(self.n):
-      self.one()
+    for i in range(self.count):
+      self.one(i)
       self.draw()
     sys.stderr.write('!')
 
-  def one(self):
-    
+  def one(self, nth):
     ex = Experiment(1000, 
             *[models.StatWrapper(models.Player(ao, models.DEFAULT_NAMES[i], pos=0),
                 on_method={'add_property':track_owns},
-                on_setter=peekers) for i in range(4)])
+                on_setter=peekers) for i in range(self.num_player)])
     ex.run()
-    for p in ex.game.players:
-      d = p.extract()
-      self.f.write("%d %d %d %d\n"%(p.turns, p.go_count, d['is_free']))
+    self.report(ex, nth)
     self.done += 1
 
+  def report(self, ex, nth): pass
+
   def draw(self):
-    if (self.bar * self.done / self.n) > self.bar_drawn:
+    if (self.bar * self.done / self.count) > self.bar_drawn:
       self.bar_drawn += 1
       sys.stderr.write('\b')
       sys.stderr.write('=')
       sys.stderr.write('>')
       sys.stderr.flush()
-
-if __name__ == '__main__':
-  import sys
-  ex = Experiment(1000, 
-    *[models.StatWrapper(models.Player(ao, models.DEFAULT_NAMES[i], pos=0),
-        on_method={'add_property':track_owns},
-        on_setter=peekers) 
-        for i in range(4)])
-  ex.run()
-  ex.report()
-  #for p in ex.game.players:
-  #  print p.extract()
-
-
 
 

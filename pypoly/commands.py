@@ -6,7 +6,6 @@ class AdvanceTo(models.Command):
   defaults = {"destination":None}
   def __call__(self, game):
     if self.destination is None:
-      print self
       assert False
     to_go = (40 + self.destination.pos - self.player.pos) % 40
     assert to_go > 0
@@ -17,7 +16,7 @@ class DrawChance(models.Command):
   def __call__(self, game):
     card = game.drawChance()
     cmd = card.fn(self.player, card)
-    print card, cmd
+    #print card, cmd
     if not isinstance(cmd, GetJailFree):
       game.putBackChance(card)
     game.push(cmd)
@@ -27,7 +26,7 @@ class DrawCommunityChest(models.Command):
   def __call__(self, game):
     card = game.drawCommunityChest()
     cmd = card.fn(self.player, card)
-    print card.instruction, cmd
+    #print card.instruction, cmd
     if not isinstance(cmd, GetJailFree):
       game.putBackCommunityChest(card)
     game.push(cmd)
@@ -80,7 +79,7 @@ class MoveN(models.Command):
   defaults = dict(n=0, by_dice=True)
   def __call__(self, game):
     p = self.player
-    print p, 'moving', self.n
+    #print p, 'moving', self.n
     assert p.pos != 30 # never from "Go To Jail"
     assert isinstance(p.pos, int)
     assert isinstance(self.n, int)
@@ -99,7 +98,8 @@ class LandOnProperty(models.Command):
     p = theBoard.places[player.pos]
     if theBoard.is_sold(player.pos):
       if theBoard.ownerof[player.pos] == player:
-        print 'you have it :)'
+        pass
+        #print 'you have it :)'
       else:
         game.push(XPayToY(
           x=player, 
@@ -142,7 +142,7 @@ class LandOn(models.Command):
     p = game.board.places[self.player.pos]
     assert self.player.pos == p.pos
     assert self.player.pos != 30 or p.command_class == OnGoToJail
-    print "LandOn", p.command_class
+    #print "LandOn", p.command_class
     game.push(p.command_class(player=self.player, n=self.n, pos=self.player.pos))
 
 
@@ -195,7 +195,7 @@ class XPayToY(models.Command):
   def __call__(self, game):
     self.x.money -= self.amount  #FIXME
     self.y.money += self.amount
-    print self.x.name, '==(', self.amount, ')=>', self.y.name
+    #print self.x.name, '==(', self.amount, ')=>', self.y.name
 
 
 class CollectFromAll(models.Command):

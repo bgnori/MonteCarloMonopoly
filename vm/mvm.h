@@ -39,18 +39,38 @@ typedef struct {
 
 enum {
     op_nop = 0x00,
+    op_iadd,
+    op_die = 0xff
+};
+
+enum {
+    reg_zero = 0x00,
+    reg_player0_money,
+    reg_player1_money,
+    reg_player2_money,
+    reg_player3_money,
+    reg_player4_money,
+    reg_player5_money,
+    reg_player6_money,
+    reg_player7_money,
+    reg_player0_pos,
+    reg_player1_pos,
+    reg_player2_pos,
+    reg_player3_pos,
+    reg_player4_pos,
+    reg_player5_pos,
+    reg_player6_pos,
+    reg_player7_pos,
+    reg_max
 };
 
 typedef struct {
-    mvm_int fRegister[8];
+    mvm_int fRegister[reg_max];
 } TVM;
 
 TVM* VM_New(void);
 void TVM_Delete(TVM* self);
 
 void TVM_Exec(TVM* self, TInst inst);
-
-
-int add(int x, int y);
 
 #endif

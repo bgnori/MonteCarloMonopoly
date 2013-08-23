@@ -19,10 +19,10 @@ void
 TVM_Exec(TVM* self, TInst inst)
 {
     switch(inst.fOp) {
-        case 0x00:
+        case op_nop:
             break;
-        case 0x01:
-            self->fMR[inst.fReg] += inst.fValue;
+        case op_iadd:
+            self->fRegister[inst.fData.uIH.fIdx] += inst.fData.uIH.fValue;
             break;
 
         default:

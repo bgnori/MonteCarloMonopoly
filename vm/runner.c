@@ -3,22 +3,25 @@
 
 #include "mvm.h"
 
-TInst test_adding = {0x01, 0x00, 0x0001};
 
 static const char*
-test_add(TVM* vm)
+test_iadd(TVM* vm)
 {
+    TInst test_adding;
+    test_adding.fOp = op_iadd;
+    test_adding.fData.uIH.fIdx = 0x00;
+    test_adding.fData.uIH.fValue = 0x0001;
 
-    vm->fMR[0] = 0;
+    vm->fRegister[0] = 0;
     TVM_Exec(vm, test_adding);
-    if (vm->fMR[0] != 1)
+    if (vm->fRegister[0] != 1)
         return __func__;
     return NULL;
 }
 
 typedef const char* const_char_p;
 typedef const_char_p (*test_vm_case)(TVM* vm);
-test_vm_case cases[] = {test_add, };
+test_vm_case cases[] = {test_iadd, };
 
 
 int

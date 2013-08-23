@@ -16,7 +16,7 @@ runner.o : mvm.h runner.c
 libmvm.so: mvm.o
 	gcc -shared -Wl,-soname,libmvm.so -o libmvm.so mvm.o
 
-libmvm.o: mvm.h mvm.c
-	gcc -std=c99 -Wall -fPIC -c mvm.c
+mvm.o: mvm.h mvm.c
+	gcc -fPIC -std=c99 -Wall -c mvm.c
 
 

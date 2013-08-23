@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 typedef char mvm_char;
-typedef int16_t mvm_int;
+typedef int32_t mvm_int;
 
 typedef struct {
     mvm_int fStub; // place holder
@@ -17,12 +17,13 @@ typedef struct {
 } TInst;
 
 typedef struct {
-    mvm_int fMR[8]; //money register
     TAsset* fAR[8]; //asset register
-    mvm_char fSrcR; //source Register
-    mvm_char fDstR; //destination Register
+    mvm_int fMR[8]; //money register
+    mvm_int fSrcR; //source Register
+    mvm_int fDstR; //destination Register
     mvm_char fDicR[2]; //Dice Register
     mvm_int fAmount; //Amount R
+    mvm_int fActive;
 } TVM;
 
 TVM* VM_New(void);

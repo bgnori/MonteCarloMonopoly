@@ -19,6 +19,8 @@ void
 TVM_Exec(TVM* self, TInst inst)
 {
     switch(inst.fOp) {
+        case 0x00:
+            break;
         case 0x01:
             self->fMR[inst.fReg] += inst.fValue;
             break;
@@ -27,11 +29,4 @@ TVM_Exec(TVM* self, TInst inst)
             break;
     }
 }
-
-int
-add(int x, int y)
-{
-    return x+y;
-}
-
 

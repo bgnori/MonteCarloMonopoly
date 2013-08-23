@@ -21,9 +21,8 @@ typedef const_char_p (*test_vm_case)(TVM* vm);
 test_vm_case cases[] = {test_add, };
 
 
-
 int
-main(int argc, char** argv)
+main(int argc, const char** argv)
 {
     TVM* vm;
     int i, len;

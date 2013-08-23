@@ -1,11 +1,32 @@
-//#include <stdlib.h>
+#include <stdlib.h>
 #include "mvm.h"
 
-int
-add(int x, int y)
+TVM* 
+VM_New(void)
 {
-    return x+y;
+    TVM* p;
+    p = malloc(sizeof(TVM));
+    return p;
 }
 
+void
+TVM_Delete(TVM* self)
+{
+    free(self);
+}
 
+void
+TVM_Exec(TVM* self, TInst inst)
+{
+    switch(inst.fOp) {
+        case op_nop:
+            break;
+        case op_iadd:
+            self->fRegister[inst.fData.uIH.fIdx] += inst.fData.uIH.fValue;
+            break;
+
+        default:
+            break;
+    }
+}
 

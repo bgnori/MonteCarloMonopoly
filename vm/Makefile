@@ -1,7 +1,8 @@
 
-
 all: libmvm.so runner
-	
+
+run: runner
+	LD_LIBRARY_PATH=. ./runner
 
 clean:
 	rm libmvm.so; rm runner; rm mvm.o

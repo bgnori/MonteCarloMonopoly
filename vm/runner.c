@@ -75,6 +75,41 @@ test_next4(TVM* vm)
     return NULL;
 }
 
+static const char*
+test_move_n_1(TVM* vm)
+{
+    TInst test_move_n;
+    test_move_n.fOp = op_move_n;
+
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_pos] = 0;
+    vm->fRegister[reg_dieA] = 1;
+    vm->fRegister[reg_dieB] = 2;
+    TVM_Exec(vm, test_move_n);
+    if (vm->fRegister[reg_player0_pos] != 3)
+        return __func__;
+    return NULL;
+}
+
+static const char*
+test_move_n_2(TVM* vm)
+{
+    TInst test_move_n;
+    test_move_n.fOp = op_move_n;
+
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_pos] = 39;
+    vm->fRegister[reg_dieA] = 1;
+    vm->fRegister[reg_dieB] = 2;
+    vm->fRegister[reg_player0_money] = 100;
+    TVM_Exec(vm, test_move_n);
+    if (vm->fRegister[reg_player0_money] != 300)
+        return __func__;
+    return NULL;
+}
+
+
+
 typedef const char* const_char_p;
 typedef const_char_p (*test_vm_case)(TVM* vm);
 test_vm_case cases[] = {test_iadd, test_next1, test_next2, test_next3, test_next4};

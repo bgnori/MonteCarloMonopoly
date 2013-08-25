@@ -19,9 +19,65 @@ test_iadd(TVM* vm)
     return NULL;
 }
 
+static const char*
+test_next1(TVM* vm)
+{
+    TInst test_next;
+    test_next.fOp = op_next;
+
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_active_mask] = 1+2+4+8;
+    TVM_Exec(vm, test_next);
+    if (vm->fRegister[reg_current_player_idx] != 1)
+        return __func__;
+    return NULL;
+}
+
+static const char*
+test_next2(TVM* vm)
+{
+    TInst test_next;
+    test_next.fOp = op_next;
+
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_active_mask] = 1+4+8;
+    TVM_Exec(vm, test_next);
+    if (vm->fRegister[reg_current_player_idx] != 2)
+        return __func__;
+    return NULL;
+}
+
+static const char*
+test_next3(TVM* vm)
+{
+    TInst test_next;
+    test_next.fOp = op_next;
+
+    vm->fRegister[reg_current_player_idx] = 3;
+    vm->fRegister[reg_active_mask] = 1+2+4+8;
+    TVM_Exec(vm, test_next);
+    if (vm->fRegister[reg_current_player_idx] != 0)
+        return __func__;
+    return NULL;
+}
+
+static const char*
+test_next4(TVM* vm)
+{
+    TInst test_next;
+    test_next.fOp = op_next;
+
+    vm->fRegister[reg_current_player_idx] = 3;
+    vm->fRegister[reg_active_mask] = 2+4+8;
+    TVM_Exec(vm, test_next);
+    if (vm->fRegister[reg_current_player_idx] != 1)
+        return __func__;
+    return NULL;
+}
+
 typedef const char* const_char_p;
 typedef const_char_p (*test_vm_case)(TVM* vm);
-test_vm_case cases[] = {test_iadd, };
+test_vm_case cases[] = {test_iadd, test_next1, test_next2, test_next3, test_next4};
 
 
 int

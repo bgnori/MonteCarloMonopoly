@@ -2,6 +2,9 @@
 #define __MVM_H__
 
 #include <stdint.h>
+#include <stdbool.h>
+
+#define MAXPLAYER 8
 
 typedef unsigned char mvm_byte;
 typedef mvm_byte mvm_idx;
@@ -38,9 +41,18 @@ typedef struct {
 } TInst;
 
 enum {
-    op_nop = 0x00,
+    op_die = 0x00,
     op_iadd,
-    op_die = 0xff
+    op_isub,
+    op_sub,
+    op_doubles,
+    op_roll,
+    op_turnend,
+    op_move,
+    op_bunkrupt,
+    op_get_debt,
+    op_next,
+    op_nop = 0xff,
 };
 
 enum {
@@ -53,15 +65,18 @@ enum {
     reg_player5_money,
     reg_player6_money,
     reg_player7_money,
-    reg_player0_pos,
-    reg_player1_pos,
-    reg_player2_pos,
-    reg_player3_pos,
-    reg_player4_pos,
-    reg_player5_pos,
-    reg_player6_pos,
-    reg_player7_pos,
-    reg_max
+    reg_player0_pos_state,
+    reg_player1_pos_state,
+    reg_player2_pos_state,
+    reg_player3_pos_state,
+    reg_player4_pos_state,
+    reg_player5_pos_state,
+    reg_player6_pos_state,
+    reg_player7_pos_state,
+    reg_active_mask,
+    reg_current_player_idx,
+    reg_dice,
+    reg_max,
 };
 
 typedef struct {

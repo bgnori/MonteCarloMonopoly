@@ -8,7 +8,7 @@ clean:
 	rm libmvm.so; rm runner; rm mvm.o; rm libqueue.so; rm libqueue.o
 
 runner: runner.o libmvm.so libqueue.so
-	gcc runner.o -L. -lmvm -o runner
+	gcc runner.o -L. -lmvm -lqueue -o runner
 
 runner.o : mvm.h runner.c libqueue.so
 	gcc -std=c99 -Wall -c runner.c

@@ -1,10 +1,8 @@
 #include "queue.h"
 
 void
-TQueue_Init(TQueue* self, int capacity, int elemsize)
+TQueue_Init(TQueue* self)
 {
-    self->fCapasity = capacity;
-    self->fSizeOfElem = elemsize;
     self->fHead = 0;
     self->fTail = 0;
 }
@@ -13,14 +11,14 @@ static
 int
 TQueue_Next(TQueue * self, int n)
 {
-    return (n + 1) % self->fCapasity;
+    return (n + 1) % QSIZE;
 }
 
 static
 int
 TQueue_Count(TQueue* self)
 {
-    return (self->fHead + self->fCapasity - self->fHead) % self->fCapasity;
+    return (self->fHead + QSIZE- self->fHead) % QSIZE;
 }
 
 int
@@ -42,7 +40,7 @@ TQueue_Pop(TQueue* self, int* v)
         return false; // it's empty
     *v = self->fValues[self->fHead];
     self->fHead = TQueue_Next(self, self->fHead);
+    return true;
 }
-
 
 

@@ -119,6 +119,5 @@ void TVM_Delete(TVM* self);
 void TVM_Progress(TVM* self);
 void TVM_Exec(TVM* self, TInst inst);
 
-
 #endif
 

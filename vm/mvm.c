@@ -2,12 +2,12 @@
 #include "mvm.h"
 
 
-
 TVM* 
 VM_New(void)
 {
     TVM* p;
     p = malloc(sizeof(TVM));
+    TQueue_Init(&(p->fQueue));
     return p;
 }
 
@@ -43,8 +43,9 @@ void
 TVM_Progress(TVM* self)
 {
     TInst inst;
-    TVM_Exec(self, inst);
-
+    if(TQueue_Pop(&(self->fQueue), (int32_t*)&inst)){
+        TVM_Exec(self, inst);
+    }
 }
 
 void

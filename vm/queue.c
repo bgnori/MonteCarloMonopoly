@@ -38,7 +38,7 @@ TQueue_Push(TQueue* self, int v)
 bool
 TQueue_Pop(TQueue* self, int* v)
 {
-    if( self->fTail == self->fTail)
+    if( self->fHead== self->fTail)
         return false; // it's empty
     *v = self->fValues[self->fHead];
     self->fHead = TQueue_Next(self, self->fHead);

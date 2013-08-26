@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "queue.h"
 
 #define MAXPLAYER 8
 
@@ -39,6 +40,8 @@ typedef struct {
         } uIII;
     } fData;
 } TInst;
+
+
 
 enum {
     op_die = 0x00,
@@ -107,11 +110,15 @@ enum {
 
 typedef struct {
     mvm_int fRegister[reg_max];
+    TQueue fQueue;
 } TVM;
 
 TVM* VM_New(void);
 void TVM_Delete(TVM* self);
 
+void TVM_Progress(TVM* self);
 void TVM_Exec(TVM* self, TInst inst);
 
+
 #endif
+

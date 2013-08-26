@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "mvm.h"
 
+
+
 TVM* 
 VM_New(void)
 {
@@ -37,7 +39,13 @@ and_byte_2_reg(int* reg, mvm_byte mask, int at)
     *((mvm_byte*)reg + at) &= mask;
 }
 
+void
+TVM_Progress(TVM* self)
+{
+    TInst inst;
+    TVM_Exec(self, inst);
 
+}
 
 void
 TVM_Exec(TVM* self, TInst inst)
@@ -71,7 +79,6 @@ TVM_Exec(TVM* self, TInst inst)
                 self->fRegister[reg_player0_pos+i] = pos;
                 // land on 
                 // doubles, 
-                // jail jail jail!
             }
             break;
         case op_land_on:
@@ -80,6 +87,10 @@ TVM_Exec(TVM* self, TInst inst)
                 int i;
                 i = self->fRegister[reg_current_player_idx];
                 pos = self->fRegister[reg_player0_pos+i];
+                if (pos == 30){ // go to jail
+                    self->fRegister[reg_player0_pos+i] = 10; //jail
+                    self->fRegister[reg_player0_state+i] = 1; //jailed
+                }
                 // fire land event, card, go to jail, property and so on.
             }
             break;

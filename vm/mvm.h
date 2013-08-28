@@ -50,6 +50,7 @@ enum {
     op_sub,
     op_jump,
     op_jump_on_doubles,
+    op_jump_on_3rd,
     op_roll,
     op_turnend,
     op_move_n,

@@ -138,9 +138,38 @@ test_jump_on_double_2(TVM* vm)
     if (vm->fRegister[reg_pc] != 300)
         return __func__;
     return NULL;
+}
 
+static const char*
+test_jump_on_3rd_1(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_jump_on_3rd;
+    inst.fData.uIH.fValue = 300;
+    vm->fRegister[reg_pc] = 0;
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_state] = 0;
+    TVM_Exec(vm, inst);
+    if (vm->fRegister[reg_pc] != 0)
+        return __func__;
     return NULL;
 }
+
+static const char*
+test_jump_on_3rd_2(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_jump_on_3rd;
+    inst.fData.uIH.fValue = 300;
+    vm->fRegister[reg_pc] = 0;
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_state] = 3;
+    TVM_Exec(vm, inst);
+    if (vm->fRegister[reg_pc] != 300)
+        return __func__;
+    return NULL;
+}
+
 
 
 typedef const char* const_char_p;
@@ -155,6 +184,8 @@ test_vm_case cases[] = {
     test_move_n_2,
     test_jump_on_double_1,
     test_jump_on_double_2,
+    test_jump_on_3rd_1,
+    test_jump_on_3rd_2,
 };
 
 

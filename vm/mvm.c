@@ -93,6 +93,11 @@ TVM_Exec(TVM* self, TInst inst)
                 self->fRegister[reg_pc] = inst.fData.uIH.fValue;
             }
             break;
+        case op_jump_on_3rd:
+            if (self->fRegister[reg_player0_state + self->fRegister[reg_current_player_idx]] == 3){
+                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            }
+            break;
         case op_next:
             {
                 int p, mask, bits;

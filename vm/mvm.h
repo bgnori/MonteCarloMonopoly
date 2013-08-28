@@ -48,7 +48,8 @@ enum {
     op_iadd,
     op_isub,
     op_sub,
-    op_doubles,
+    op_jump,
+    op_jump_on_doubles,
     op_roll,
     op_turnend,
     op_move_n,
@@ -60,14 +61,8 @@ enum {
 };
 
 enum {
-    byte_pos = 0x00,
-    byte_jail_count,
-    byte_go_count,
-    byte_not_in_use,
-};
-
-enum {
     reg_zero = 0x00,
+    reg_pc,
     reg_player0_money,
     reg_player1_money,
     reg_player2_money,
@@ -110,12 +105,14 @@ enum {
 
 typedef struct {
     mvm_int fRegister[reg_max];
-    TQueue fQueue;
+    TInst* fCode;
+    int fCodeLen;
 } TVM;
 
 TVM* VM_New(void);
 void TVM_Delete(TVM* self);
 
+void TVM_Load(TVM* self, TInst* code, int len);
 void TVM_Progress(TVM* self);
 void TVM_Exec(TVM* self, TInst inst);
 

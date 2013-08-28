@@ -7,7 +7,6 @@ VM_New(void)
 {
     TVM* p;
     p = malloc(sizeof(TVM));
-    TQueue_Init(&(p->fQueue));
     return p;
 }
 
@@ -27,25 +26,21 @@ die(void)
 }
 
 
-void
-add_byte_2_reg(int* reg, mvm_byte add, int at)
-{
-    *((mvm_byte*)reg + at) = add;
-}
 
-void
-and_byte_2_reg(int* reg, mvm_byte mask, int at)
-{
-    *((mvm_byte*)reg + at) &= mask;
-}
-
-void
-TVM_Progress(TVM* self)
+void TVM_Run(TVM* self)
 {
     TInst inst;
-    if(TQueue_Pop(&(self->fQueue), (int32_t*)&inst)){
+    while(self->fRegister[reg_pc] < self->fCodeLen){
+        inst = *(TInst*)(&(self->fRegister[reg_pc]));
         TVM_Exec(self, inst);
     }
+}
+
+void
+TVM_Load(TVM* self, TInst* code, int len)
+{
+    self->fCode = code;
+    self->fCodeLen = len;
 }
 
 void
@@ -78,8 +73,6 @@ TVM_Exec(TVM* self, TInst inst)
                     self->fRegister[reg_player0_money + i] += 200; // do this with instruction?
                 }
                 self->fRegister[reg_player0_pos+i] = pos;
-                // land on 
-                // doubles, 
             }
             break;
         case op_land_on:
@@ -93,6 +86,11 @@ TVM_Exec(TVM* self, TInst inst)
                     self->fRegister[reg_player0_state+i] = 1; //jailed
                 }
                 // fire land event, card, go to jail, property and so on.
+            }
+            break;
+        case op_jump_on_doubles:
+            if (self->fRegister[reg_dieB] == self->fRegister[reg_dieA]){
+                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
             }
             break;
         case op_next:

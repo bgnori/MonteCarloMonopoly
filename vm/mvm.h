@@ -129,6 +129,7 @@ void TVM_Deadbeaf(TVM* self);
 void TVM_Load(TVM* self, TInst* code, int len);
 void TVM_Progress(TVM* self);
 void TVM_Exec(TVM* self, TInst inst);
+void TVM_DumpRegs(TVM* self);
 
 #endif
 

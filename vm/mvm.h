@@ -51,7 +51,10 @@ enum {
     op_jump,
     op_jump_on_doubles,
     op_jump_on_3rd,
-    op_jump_ltz,
+    op_jump_on_zero,
+    op_jump_on_positive,
+    op_jump_on_negative,
+    op_cmp,
     op_roll,
     op_turnend,
     op_move_n,
@@ -65,6 +68,14 @@ enum {
 enum {
     reg_zero = 0x00,
     reg_pc,
+    reg_r0,
+    reg_r1,
+    reg_r2,
+    reg_r3,
+    reg_r4,
+    reg_r5,
+    reg_r6,
+    reg_r7,
     reg_player0_money,
     reg_player1_money,
     reg_player2_money,
@@ -113,6 +124,7 @@ typedef struct {
 
 TVM* VM_New(void);
 void TVM_Delete(TVM* self);
+void TVM_Deadbeaf(TVM* self);
 
 void TVM_Load(TVM* self, TInst* code, int len);
 void TVM_Progress(TVM* self);

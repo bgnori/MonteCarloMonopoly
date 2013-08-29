@@ -1,6 +1,9 @@
 
 all: libmvm.so runner libqueue.so
 
+val : runner
+	LD_LIBRARY_PATH=. valgrind ./runner
+
 run: runner
 	LD_LIBRARY_PATH=. ./runner
 

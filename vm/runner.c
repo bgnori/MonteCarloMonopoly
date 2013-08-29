@@ -171,38 +171,54 @@ test_jump_on_3rd_2(TVM* vm)
 }
 
 static const char*
-test_jump_ltz_1(TVM* vm)
+test_cmp_eq(TVM* vm)
 {
     TInst inst;
-    inst.fOp = op_jump_ltz;
-    inst.fData.uIH.fIdx = 4;
-    inst.fData.uIH.fValue = 300;
-    vm->fRegister[reg_pc] = 0;
-    vm->fRegister[reg_current_player_idx] = 0;
-    vm->fRegister[reg_player0_money] = 4000;
-    vm->fRegister[reg_zero+4] = 1000;
+    inst.fOp = op_cmp;
+    inst.fData.uIII.fFirst = reg_r0;
+    inst.fData.uIII.fSecond = reg_r1;
+    inst.fData.uIII.fThird = reg_r2;
+    vm->fRegister[reg_r0] = 0;
+    vm->fRegister[reg_r1] = 0;
     TVM_Exec(vm, inst);
-    if (vm->fRegister[reg_pc] != 0)
+    if (vm->fRegister[reg_r2] != 0)
         return __func__;
     return NULL;
 }
 
 static const char*
-test_jump_ltz_2(TVM* vm)
+test_cmp_lt(TVM* vm)
 {
     TInst inst;
-    inst.fOp = op_jump_ltz;
-    inst.fData.uIH.fIdx = 4;
-    inst.fData.uIH.fValue = 300;
-    vm->fRegister[reg_pc] = 0;
-    vm->fRegister[reg_current_player_idx] = 0;
-    vm->fRegister[reg_player0_money] = 4000;
-    vm->fRegister[reg_zero+4] = 5000;
+    inst.fOp = op_cmp;
+    inst.fData.uIII.fFirst = reg_r0;
+    inst.fData.uIII.fSecond = reg_r1;
+    inst.fData.uIII.fThird = reg_r2;
+    vm->fRegister[reg_r0] = 0;
+    vm->fRegister[reg_r1] = 2;
     TVM_Exec(vm, inst);
-    if (vm->fRegister[reg_pc] != 300)
+    if (vm->fRegister[reg_r2] != -1)
         return __func__;
     return NULL;
 }
+
+static const char*
+test_cmp_gt(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_cmp;
+    inst.fData.uIII.fFirst = reg_r0;
+    inst.fData.uIII.fSecond = reg_r1;
+    inst.fData.uIII.fThird = reg_r2;
+    vm->fRegister[reg_r0] = 0;
+    vm->fRegister[reg_r1] = -2;
+    TVM_Exec(vm, inst);
+    if (vm->fRegister[reg_r2] != 1)
+        return __func__;
+    return NULL;
+}
+
+
 
 typedef const char* const_char_p;
 typedef const_char_p (*test_vm_case)(TVM* vm);
@@ -218,8 +234,9 @@ test_vm_case cases[] = {
     test_jump_on_double_2,
     test_jump_on_3rd_1,
     test_jump_on_3rd_2,
-    test_jump_ltz_1,
-    test_jump_ltz_2,
+    test_cmp_eq,
+    test_cmp_lt,
+    test_cmp_gt,
 };
 
 
@@ -235,6 +252,7 @@ main(int argc, const char** argv)
     len = sizeof(cases)/sizeof(test_vm_case);
 
     for(i = 0; i < len; i++){
+        TVM_Deadbeaf(vm);
         t = cases[i];
         name = t(vm);
         if(name){

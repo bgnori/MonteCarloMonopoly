@@ -16,6 +16,15 @@ TVM_Delete(TVM* self)
     free(self);
 }
 
+void
+TVM_Deadbeaf(TVM* self)
+{
+    int i;
+
+    for(i=0; i< reg_max; i++)
+        self->fRegister[i] = 0xdeadbeaf;
+}
+
 static
 int
 die(void)
@@ -98,7 +107,32 @@ TVM_Exec(TVM* self, TInst inst)
                 self->fRegister[reg_pc] = inst.fData.uIH.fValue;
             }
             break;
-        case op_jump_ltz:
+        case op_cmp:
+            {
+                int x, y, dst;
+                x = self->fRegister[inst.fData.uIII.fFirst];
+                y = self->fRegister[inst.fData.uIII.fSecond];
+                dst = inst.fData.uIII.fThird;
+
+                if ( x == y)
+                    self->fRegister[dst] = 0;
+                if ( x > y)
+                    self->fRegister[dst] = 1;
+                if ( x < y)
+                    self->fRegister[dst] = -1;
+            }
+            break;
+        case op_jump_on_zero:
+            if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] == 0){
+                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            }
+            break;
+        case op_jump_on_positive:
+            if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] > 0){
+                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            }
+            break;
+        case op_jump_on_negative:
             if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] < 0){
                 self->fRegister[reg_pc] = inst.fData.uIH.fValue;
             }

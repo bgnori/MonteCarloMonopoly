@@ -98,6 +98,11 @@ TVM_Exec(TVM* self, TInst inst)
                 self->fRegister[reg_pc] = inst.fData.uIH.fValue;
             }
             break;
+        case op_jump_ltz:
+            if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] < 0){
+                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            }
+            break;
         case op_next:
             {
                 int p, mask, bits;

@@ -170,7 +170,39 @@ test_jump_on_3rd_2(TVM* vm)
     return NULL;
 }
 
+static const char*
+test_jump_ltz_1(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_jump_ltz;
+    inst.fData.uIH.fIdx = 4;
+    inst.fData.uIH.fValue = 300;
+    vm->fRegister[reg_pc] = 0;
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_money] = 4000;
+    vm->fRegister[reg_zero+4] = 1000;
+    TVM_Exec(vm, inst);
+    if (vm->fRegister[reg_pc] != 0)
+        return __func__;
+    return NULL;
+}
 
+static const char*
+test_jump_ltz_2(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_jump_ltz;
+    inst.fData.uIH.fIdx = 4;
+    inst.fData.uIH.fValue = 300;
+    vm->fRegister[reg_pc] = 0;
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_money] = 4000;
+    vm->fRegister[reg_zero+4] = 5000;
+    TVM_Exec(vm, inst);
+    if (vm->fRegister[reg_pc] != 300)
+        return __func__;
+    return NULL;
+}
 
 typedef const char* const_char_p;
 typedef const_char_p (*test_vm_case)(TVM* vm);
@@ -186,6 +218,8 @@ test_vm_case cases[] = {
     test_jump_on_double_2,
     test_jump_on_3rd_1,
     test_jump_on_3rd_2,
+    test_jump_ltz_1,
+    test_jump_ltz_2,
 };
 
 

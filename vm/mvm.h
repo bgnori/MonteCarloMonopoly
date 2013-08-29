@@ -51,6 +51,7 @@ enum {
     op_jump,
     op_jump_on_doubles,
     op_jump_on_3rd,
+    op_jump_ltz,
     op_roll,
     op_turnend,
     op_move_n,

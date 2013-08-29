@@ -1,20 +1,20 @@
 
-all: libmvm.so runner libqueue.so
+all: libmvm.so unittest libqueue.so
 
-val : runner
-	LD_LIBRARY_PATH=. valgrind ./runner
+val: unittest
+	LD_LIBRARY_PATH=. valgrind ./unittest
 
-run: runner
-	LD_LIBRARY_PATH=. ./runner
+test: unittest
+	LD_LIBRARY_PATH=. ./unittest
 
 clean:
-	rm libmvm.so; rm runner; rm mvm.o; rm libqueue.so; rm libqueue.o
+	rm libmvm.so; rm unittest; rm mvm.o; rm libqueue.so; rm libqueue.o
 
-runner: runner.o libmvm.so libqueue.so
-	gcc runner.o -L. -lmvm -lqueue -o runner
+unittest: unittest.o libmvm.so libqueue.so
+	gcc unittest.o -L. -lmvm -lqueue -o unittest
 
-runner.o : mvm.h runner.c libqueue.so
-	gcc -std=c99 -Wall -c runner.c
+unittest.o : mvm.h unittest.c libqueue.so
+	gcc -std=c99 -Wall -c unittest.c
 
 libmvm.so: mvm.o
 	gcc -shared -Wl,-soname,libmvm.so -o libmvm.so mvm.o

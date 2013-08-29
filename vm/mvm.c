@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "mvm.h"
 
 
@@ -23,6 +24,17 @@ TVM_Deadbeaf(TVM* self)
 
     for(i=0; i< reg_max; i++)
         self->fRegister[i] = 0xdeadbeaf;
+}
+
+void
+TVM_DumpRegs(TVM* self)
+{
+    int i, v;
+
+    for(i=0; i< reg_max; i++){
+        v = self->fRegister[i];
+        printf("%d: %x %d\n", i, v, v);
+    }
 }
 
 static
@@ -92,7 +104,7 @@ TVM_Exec(TVM* self, TInst inst)
                 pos = self->fRegister[reg_player0_pos+i];
                 if (pos == 30){ // go to jail
                     self->fRegister[reg_player0_pos+i] = 10; //jail
-                    self->fRegister[reg_player0_state+i] = 1; //jailed
+                    self->fRegister[reg_player0_state+i] = 1; //jailed, jail count 1, about to have first time
                 }
                 // fire land event, card, go to jail, property and so on.
             }

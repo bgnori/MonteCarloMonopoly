@@ -218,6 +218,19 @@ test_cmp_gt(TVM* vm)
     return NULL;
 }
 
+static const char*
+test_land_on_gtj(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_land_on;
+    vm->fRegister[reg_current_player_idx] = 0;
+    vm->fRegister[reg_player0_pos] = 30;
+    TVM_Exec(vm, inst);
+    if ((vm->fRegister[reg_player0_pos] != 10) ||
+            (vm->fRegister[reg_player0_state] != 1))
+        return __func__;
+    return NULL;
+}
 
 
 typedef const char* const_char_p;
@@ -237,6 +250,7 @@ test_vm_case cases[] = {
     test_cmp_eq,
     test_cmp_lt,
     test_cmp_gt,
+    test_land_on_gtj,
 };
 
 
@@ -258,6 +272,7 @@ main(int argc, const char** argv)
         if(name){
             printf("!\n");
             printf("fail, %s\n", name);
+            TVM_DumpRegs(vm);
         }else{
             printf(".");
         }

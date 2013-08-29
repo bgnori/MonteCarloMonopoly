@@ -67,6 +67,7 @@ TVM_Load(TVM* self, TInst* code, int len)
 void
 TVM_Exec(TVM* self, TInst inst)
 {
+    self->fRegister[reg_pc]++;
     switch(inst.fOp) {
         case op_nop:
             break;

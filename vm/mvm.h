@@ -45,6 +45,8 @@ typedef struct {
 
 enum {
     op_die = 0x00,
+    op_dump,
+    op_iset,
     op_iadd,
     op_isub,
     op_sub,
@@ -127,8 +129,8 @@ void TVM_Delete(TVM* self);
 void TVM_Deadbeaf(TVM* self);
 
 void TVM_Load(TVM* self, TInst* code, int len);
-void TVM_Progress(TVM* self);
 void TVM_Exec(TVM* self, TInst inst);
+void TVM_Run(TVM* self);
 void TVM_DumpRegs(TVM* self);
 
 #endif

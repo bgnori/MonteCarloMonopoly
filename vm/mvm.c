@@ -46,13 +46,21 @@ die(void)
     return r;
 }
 
+static void
+TVM_Fetch(TVM* self, TInst* inst, int pc)
+{
+    *inst = *((TInst*)(&(self->fCode[pc])));
+}
 
 
-void TVM_Run(TVM* self)
+void
+TVM_Run(TVM* self)
 {
     TInst inst;
     while(self->fRegister[reg_pc] < self->fCodeLen){
-        inst = *(TInst*)(&(self->fRegister[reg_pc]));
+        TVM_Fetch(self, &inst, self->fRegister[reg_pc]);
+        printf("%d %x\n", self->fRegister[reg_pc], inst);
+        self->fRegister[reg_pc]+=1;
         TVM_Exec(self, inst);
     }
 }
@@ -67,9 +75,17 @@ TVM_Load(TVM* self, TInst* code, int len)
 void
 TVM_Exec(TVM* self, TInst inst)
 {
-    self->fRegister[reg_pc]++;
     switch(inst.fOp) {
+        case op_die:
+            exit(0);
+            break;
+        case op_dump:
+            TVM_DumpRegs(self);
+            break;
         case op_nop:
+            break;
+        case op_iset:
+            self->fRegister[inst.fData.uIH.fIdx] = inst.fData.uIH.fValue;
             break;
         case op_iadd:
             self->fRegister[inst.fData.uIH.fIdx] += inst.fData.uIH.fValue;

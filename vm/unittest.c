@@ -3,18 +3,32 @@
 
 #include "mvm.h"
 
+static const char*
+test_iset(TVM* vm)
+{
+    TInst inst;
+    inst.fOp = op_iset;
+    inst.fData.uIH.fIdx = reg_r0;
+    inst.fData.uIH.fValue = 0x0001;
+    vm->fRegister[reg_r0] = 0;
+    TVM_Exec(vm, inst);
+    if (vm->fRegister[reg_r0] != 1)
+        return __func__;
+    return NULL;
+};
+
 
 static const char*
 test_iadd(TVM* vm)
 {
     TInst inst;
     inst.fOp = op_iadd;
-    inst.fData.uIH.fIdx = 0x00;
+    inst.fData.uIH.fIdx = reg_r0;
     inst.fData.uIH.fValue = 0x0001;
 
-    vm->fRegister[0] = 0;
+    vm->fRegister[reg_r0] = 0;
     TVM_Exec(vm, inst);
-    if (vm->fRegister[0] != 1)
+    if (vm->fRegister[reg_r0] != 1)
         return __func__;
     return NULL;
 }
@@ -114,7 +128,6 @@ test_jump_on_double_1(TVM* vm)
     TInst inst;
     inst.fOp = op_jump_on_doubles;
     inst.fData.uIH.fValue = 300;
-
     vm->fRegister[reg_pc] = 0;
     vm->fRegister[reg_dieA] = 1;
     vm->fRegister[reg_dieB] = 2;
@@ -236,6 +249,7 @@ test_land_on_gtj(TVM* vm)
 typedef const char* const_char_p;
 typedef const_char_p (*test_vm_case)(TVM* vm);
 test_vm_case cases[] = {
+    test_iset, 
     test_iadd, 
     test_next1, 
     test_next2, 

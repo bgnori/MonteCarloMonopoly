@@ -118,57 +118,7 @@ enum {
     reg_max,
 };
 
-
-char* registernames[] = {
-    "reg_zero",
-    "reg_pc",
-    "reg_r0",
-    "reg_r1",
-    "reg_r2",
-    "reg_r3",
-    "reg_r4",
-    "reg_r5",
-    "reg_r6",
-    "reg_r7",
-    "reg_player0_money",
-    "reg_player1_money",
-    "reg_player2_money",
-    "reg_player3_money",
-    "reg_player4_money",
-    "reg_player5_money",
-    "reg_player6_money",
-    "reg_player7_money",
-    "reg_player0_pos",
-    "reg_player1_pos",
-    "reg_player2_pos",
-    "reg_player3_pos",
-    "reg_player4_pos",
-    "reg_player5_pos",
-    "reg_player6_pos",
-    "reg_player7_pos",
-    "reg_player0_state",
-    "reg_player1_state",
-    "reg_player2_state",
-    "reg_player3_state",
-    "reg_player4_state",
-    "reg_player5_state",
-    "reg_player6_state",
-    "reg_player7_state",
-    "reg_player0_go_count",
-    "reg_player1_go_count",
-    "reg_player2_go_count",
-    "reg_player3_go_count",
-    "reg_player4_go_count",
-    "reg_player5_go_count",
-    "reg_player6_go_count",
-    "reg_player7_go_count",
-    "reg_active_mask",
-    "reg_current_player_idx",
-    "reg_dieA",
-    "reg_dieB",
-    "reg_doubles",
-    "reg_max",
-};
+extern const char* registernames[];
 
 
 typedef struct {
@@ -185,6 +135,16 @@ void TVM_Load(TVM* self, TInst* code, int len);
 void TVM_Exec(TVM* self, TInst inst);
 void TVM_Run(TVM* self);
 void TVM_Dump(TVM* self);
+
+typedef struct {
+    FILE* fStream;
+    TInst* fCode;
+    int fCodeLen;
+} TLoader;
+
+TLoader* Loader_New(const char* filename);
+void TLoader_Delete(TLoader* self);
+
 
 #endif
 

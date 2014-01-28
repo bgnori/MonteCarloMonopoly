@@ -19,16 +19,17 @@ int
 main(int argc, const char** argv)
 {
     TVM* vm;
-    int sz;
+    TLoader* loader;
+
 
     vm = VM_New();
-    sz = sizeof(theCode)/sizeof(theCode[0]);
-
-    printf("%d\n", sz);
-    TVM_Load(vm, theCode, sz);
-    TVM_Run(vm);
-
-    TVM_Delete(vm);
+    loader = Loader_New(argv[1]);
+    if (loader!= NULL) {
+        TVM_Load(vm, loader->fCode, loader->fCodeLen);
+        TVM_Run(vm);
+        TVM_Delete(vm);
+    }
+    TLoader_Delete(loader);
     return 0;
 }
 

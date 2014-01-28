@@ -16,7 +16,7 @@ test_mvm: unittest_mvm
 	LD_LIBRARY_PATH=. ./unittest_mvm
 
 clean:
-	rm *.so; rm unittest_mvm; rm unittest_load; rm *.o; rm libqueue.so
+	rm *.so; rm unittest_mvm; rm unittest_loader; rm *.o; rm libqueue.so
 
 runner: runner.o libmvm.so libqueue.so
 	gcc runner.o -L. -lmvm -lqueue -o runner

@@ -41,7 +41,7 @@ TVM_Dump(TVM* self)
     printf("code: \n");
     for (i = 0 ; i < self->fCodeLen; i ++ ){
         inst = self->fCode[i];
-        printf("%4d: %i %i %i %i\n", i, 
+        printf("%4d: %04x %04x %04x %04x\n", i, 
                 inst.fOp, 
                 inst.fData.uIII.fFirst,
                 inst.fData.uIII.fSecond,

@@ -286,7 +286,7 @@ main(int argc, const char** argv)
         if(name){
             printf("!\n");
             printf("fail, %s\n", name);
-            TVM_DumpRegs(vm);
+            TVM_Dump(vm);
         }else{
             printf(".");
         }

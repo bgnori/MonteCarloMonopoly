@@ -26,14 +26,26 @@ TVM_Deadbeaf(TVM* self)
         self->fRegister[i] = 0xdeadbeaf;
 }
 
-void
-TVM_DumpRegs(TVM* self)
-{
-    int i, v;
 
-    for(i=0; i< reg_max; i++){
-        v = self->fRegister[i];
-        printf("%d: %x %d\n", i, v, v);
+void
+TVM_Dump(TVM* self)
+{
+    int i;
+    TInst inst;
+
+    printf("Registers: \n");
+    for (i = 0 ; i < reg_max; i++){
+        printf("%30s: %08x\n", registernames[i], self->fRegister[i]);
+    }
+
+    printf("code: \n");
+    for (i = 0 ; i < self->fCodeLen; i ++ ){
+        inst = self->fCode[i];
+        printf("%4d: %i %i %i %i\n", i, 
+                inst.fOp, 
+                inst.fData.uIII.fFirst,
+                inst.fData.uIII.fSecond,
+                inst.fData.uIII.fThird);
     }
 }
 
@@ -80,7 +92,7 @@ TVM_Exec(TVM* self, TInst inst)
             exit(0);
             break;
         case op_dump:
-            TVM_DumpRegs(self);
+            TVM_Dump(self);
             break;
         case op_nop:
             break;

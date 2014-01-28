@@ -7,6 +7,8 @@ run: runner
 val: unittest
 	LD_LIBRARY_PATH=. valgrind ./unittest
 
+test_all: test_mvm test_loader
+
 test_loader: unittest_loader
 	LD_LIBRARY_PATH=. ./unittest_loader
 

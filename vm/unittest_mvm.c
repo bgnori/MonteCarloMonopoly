@@ -5,7 +5,7 @@
 #include "unittest.h"
 
 typedef struct {
-    TTestContext* fBase;
+    TTestContext fBase;
     TVM* fVM;
 } TTestMVM;
 
@@ -281,12 +281,12 @@ main(int argc, const char** argv)
     TInst inst;
     int len;
 
-    TTestContext_Init(&ctx);
+    TTestContext_Init(&(ctx.fBase));
     ctx.fVM = VM_New();
     len = sizeof(cases)/sizeof(TestCase);
     test_runner((TTestContext*)&ctx, cases, len);
     TVM_Delete(ctx.fVM);
-    TTestContext_Clean(&ctx);
+    TTestContext_Clean(&(ctx.fBase));
     return 0;
 }
 

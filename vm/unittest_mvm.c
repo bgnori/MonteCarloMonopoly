@@ -280,14 +280,6 @@ main(int argc, const char** argv)
     TTestMVM ctx;
     TInst inst;
     int len;
-    
-    printf("mvm_byte: %lu\n", sizeof(mvm_byte));
-    printf("mvm_idx: %lu\n", sizeof(mvm_idx));
-    printf("mvm_int: %lu\n", sizeof(mvm_int));
-    printf("mvm_half: %lu\n", sizeof(mvm_half));
-    printf("TInst: %lu\n", sizeof(TInst));
-    printf("TInst.uNull: %lu\n", sizeof(inst.uNull));
-    printf("TInst.uIH: %lu\n", sizeof(inst.uIH));
 
     TTestContext_Init(&ctx);
     ctx.fVM = VM_New();

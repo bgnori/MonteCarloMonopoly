@@ -15,11 +15,20 @@ test_loader: unittest_loader
 test_mvm: unittest_mvm
 	LD_LIBRARY_PATH=. ./unittest_mvm
 
+test_inst: unittest_inst
+	LD_LIBRARY_PATH=. ./unittest_inst
+
 clean:
 	rm *.so; rm unittest_mvm; rm unittest_loader; rm *.o; rm libqueue.so
 
 runner: runner.o libmvm.so libqueue.so
 	gcc runner.o -L. -lmvm -lqueue -o runner
+
+unittest_inst: unittest_inst.o libmvm.so libqueue.so libunittest.so 
+	gcc unittest_inst.o -L. -lmvm -lqueue -lunittest -o unittest_inst
+
+unittest_inst.o : mvm.h unittest_inst.c libqueue.so
+	gcc -std=c99 -Wall -c unittest_inst.c
 
 unittest_mvm: unittest_mvm.o libmvm.so libqueue.so libunittest.so 
 	gcc unittest_mvm.o -L. -lmvm -lqueue -lunittest -o unittest_mvm

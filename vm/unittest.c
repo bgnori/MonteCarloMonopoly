@@ -75,9 +75,11 @@ TTestContext_AddMessage(TTestContext* ctx, const char* msg)
         ctx->fAlloced *= 2;
         ctx->fMessages = realloc(ctx->fMessages, ctx->fAlloced); //FIXME
     }
+    /*
     printf("TTestContext_AddMessage fMessages %p \n", ctx->fMessages);
     printf("TTestContext_AddMessage fAlloced%i \n", ctx->fAlloced);
     printf("TTestContext_AddMessage fUsed%i \n", ctx->fUsed);
+    */
     ctx->fMessages[ctx->fUsed] = msg;
     ctx->fUsed +=1;
 }

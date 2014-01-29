@@ -16,30 +16,31 @@ typedef struct {
     mvm_int fStub; // place holder
 } TAsset;
 
-typedef struct {
-    mvm_byte fOp;
-    union {
-        struct {
-            mvm_byte fNotUsed[3];
-        } uNull;
-        struct {
-            mvm_idx fFirst;
-        } uI;
-        struct {
-            mvm_idx fFirst;
-            mvm_idx fSecond;
-        } uII;
-        struct {
-            mvm_idx fIdx;
-            mvm_half fValue;
-            //mvm_idx fValue;
-        } uIH;
-        struct {
-            mvm_idx fFirst;
-            mvm_idx fSecond;
-            mvm_idx fThird;
-        } uIII;
-    } fData;
+typedef union {
+    struct {
+        mvm_byte fOp;
+        mvm_byte fNotUsed[3];
+    } uNull;
+    struct {
+        mvm_byte fOp;
+        mvm_idx fFirst;
+    } uI;
+    struct {
+        mvm_byte fOp;
+        mvm_idx fFirst;
+        mvm_idx fSecond;
+    } uII;
+    struct {
+        mvm_byte fOp;
+        mvm_idx fFirst;
+        mvm_idx fSecond;
+        mvm_idx fThird;
+    } uIII;
+    struct {
+        mvm_byte fOp;
+        mvm_idx fIdx;
+        mvm_half fValue;
+    } uIH;
 } TInst;
 
 

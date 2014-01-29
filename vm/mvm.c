@@ -92,10 +92,10 @@ TVM_Dump(TVM* self)
     for (i = 0 ; i < self->fCodeLen; i ++ ){
         inst = self->fCode[i];
         printf("%4d: %04x %04x %04x %04x\n", i, 
-                inst.fOp, 
-                inst.fData.uIII.fFirst,
-                inst.fData.uIII.fSecond,
-                inst.fData.uIII.fThird);
+                inst.uIII.fOp, 
+                inst.uIII.fFirst,
+                inst.uIII.fSecond,
+                inst.uIII.fThird);
     }
 }
 
@@ -137,7 +137,7 @@ TVM_Load(TVM* self, TInst* code, int len)
 void
 TVM_Exec(TVM* self, TInst inst)
 {
-    switch(inst.fOp) {
+    switch(inst.uNull.fOp) {
         case op_die:
             exit(0);
             break;
@@ -147,10 +147,10 @@ TVM_Exec(TVM* self, TInst inst)
         case op_nop:
             break;
         case op_iset:
-            self->fRegister[inst.fData.uIH.fIdx] = inst.fData.uIH.fValue;
+            self->fRegister[inst.uIH.fIdx] = inst.uIH.fValue;
             break;
         case op_iadd:
-            self->fRegister[inst.fData.uIH.fIdx] += inst.fData.uIH.fValue;
+            self->fRegister[inst.uIH.fIdx] += inst.uIH.fValue;
             break;
         case op_roll:
             self->fRegister[reg_dieA] = die();
@@ -190,20 +190,20 @@ TVM_Exec(TVM* self, TInst inst)
             break;
         case op_jump_on_doubles:
             if (self->fRegister[reg_dieB] == self->fRegister[reg_dieA]){
-                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+                self->fRegister[reg_pc] = inst.uIH.fValue;
             }
             break;
         case op_jump_on_3rd:
             if (self->fRegister[reg_player0_state + self->fRegister[reg_current_player_idx]] == 3){
-                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+                self->fRegister[reg_pc] = inst.uIH.fValue;
             }
             break;
         case op_cmp:
             {
                 int x, y, dst;
-                x = self->fRegister[inst.fData.uIII.fFirst];
-                y = self->fRegister[inst.fData.uIII.fSecond];
-                dst = inst.fData.uIII.fThird;
+                x = self->fRegister[inst.uIII.fFirst];
+                y = self->fRegister[inst.uIII.fSecond];
+                dst = inst.uIII.fThird;
 
                 if ( x == y)
                     self->fRegister[dst] = 0;
@@ -214,18 +214,18 @@ TVM_Exec(TVM* self, TInst inst)
             }
             break;
         case op_jump_on_zero:
-            if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] == 0){
-                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            if (self->fRegister[self->fRegister[inst.uIH.fIdx]] == 0){
+                self->fRegister[reg_pc] = inst.uIH.fValue;
             }
             break;
         case op_jump_on_positive:
-            if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] > 0){
-                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            if (self->fRegister[self->fRegister[inst.uIH.fIdx]] > 0){
+                self->fRegister[reg_pc] = inst.uIH.fValue;
             }
             break;
         case op_jump_on_negative:
-            if (self->fRegister[self->fRegister[inst.fData.uIH.fIdx]] < 0){
-                self->fRegister[reg_pc] = inst.fData.uIH.fValue;
+            if (self->fRegister[self->fRegister[inst.uIH.fIdx]] < 0){
+                self->fRegister[reg_pc] = inst.uIH.fValue;
             }
             break;
         case op_next:

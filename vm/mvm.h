@@ -32,6 +32,7 @@ typedef struct {
         struct {
             mvm_idx fIdx;
             mvm_half fValue;
+            //mvm_idx fValue;
         } uIH;
         struct {
             mvm_idx fFirst;
@@ -135,16 +136,6 @@ void TVM_Load(TVM* self, TInst* code, int len);
 void TVM_Exec(TVM* self, TInst inst);
 void TVM_Run(TVM* self);
 void TVM_Dump(TVM* self);
-
-typedef struct {
-    FILE* fStream;
-    TInst* fCode;
-    int fCodeLen;
-} TLoader;
-
-TLoader* Loader_New(const char* filename);
-void TLoader_Delete(TLoader* self);
-
 
 #endif
 

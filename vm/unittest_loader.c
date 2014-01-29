@@ -5,34 +5,50 @@
 #include "loader.h"
 
 
-typedef struct {
-    TTestContext* fBase;
-    TLoader* fLoader;
-} TTestLoader;
 
-
-static const char*
+static bool
 test_null(TTestContext* ctx)
 {
-    return NULL;
+    TLoader* loader;
+    FILE* stream;
+    loader = Loader_New("nullprog");
+    stream = loader->fStream;
+    if (!assertNull(loader->fCode, ctx, "Unexpected data, not null fCode")) return false;
+    if (!assertEqualInt(0, loader->fCodeLen, ctx, "Unexpected data, not 0 fCodeLen")) return false;
+    if (!assertNotEqualInt(EOF, ftell(stream), ctx, "Bad Stream state")) return false;
+    TLoader_Delete(loader);
+    if (!assertEqualInt(EOF, ftell(stream), ctx, "Bad Stream state, post close")) return false;
+    return true;
 };
+
+static bool
+test_oneOp(TTestContext* ctx)
+{
+    TLoader* loader;
+    FILE* stream;
+    loader = Loader_New("oneOp");
+    stream = loader->fStream;
+    if (!assertNotNull(loader->fCode, ctx, "Unexpected data, not null fCode")) return false;
+    if (!assertEqualInt(1, loader->fCodeLen, ctx, "Unexpected data, not 0 fCodeLen")) return false;
+    if (!assertNotEqualInt(EOF, ftell(stream), ctx, "Bad Stream state")) return false;
+    TLoader_Delete(loader);
+    if (!assertEqualInt(EOF, ftell(stream), ctx, "Bad Stream state, post close")) return false;
+    return true;
+};
+
 
 TestCase cases[] = {
     test_null,
+    test_oneOp,
 };
 
 int
 main(int argc, const char** argv)
 {
-    TTestLoader ctx;
-    int len;
-
-    ctx.fLoader = Loader_New("nullprog");
-    len = sizeof(cases)/sizeof(TestCase);
-
-    test_runner((TTestContext*)&ctx, cases, len);
-
-    TLoader_Delete(ctx.fLoader);
+    TTestContext ctx;
+    TTestContext_Init(&ctx);
+    test_runner(&ctx, cases, sizeof(cases)/sizeof(TestCase));
+    TTestContext_Clean(&ctx);
     return 0;
 }
 

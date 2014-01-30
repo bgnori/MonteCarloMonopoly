@@ -110,6 +110,7 @@ test_runner(TTestContext* ctx, const TestCase* cases, int count)
             printf("!\n");
             for(j = 0; j < ctx->fUsed; j ++){
                 printf("%s\n", ctx->fMessages[j]);
+                fflush(stdout);
             }
             if (ctx->fOnFail){
                 ctx->fOnFail(ctx);
@@ -117,6 +118,7 @@ test_runner(TTestContext* ctx, const TestCase* cases, int count)
             break;
         }else{
             printf(".");
+            fflush(stdout);
         }
     }
     printf("\n");

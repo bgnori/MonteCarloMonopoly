@@ -51,6 +51,20 @@ _assertNotNull(void* ptr, TTestContext* ctx, const char* msg, const int line, co
     return true;
 }
 
+
+bool
+_assertEqualstr(const char * expected, char* actual, TTestContext* ctx, const char* msg, const int line, const char* func, const char* filename)
+{
+    if(strcmp(expected, actual)!=0){
+        TTestContext_AddMessage(ctx, msg);
+        TTestContext_AddMessage(ctx, func);
+        TTestContext_AddMessage(ctx, filename);
+        return false;
+    }
+    return true;
+}
+
+
 bool 
 TTestContext_Init(TTestContext* self)
 {
@@ -105,5 +119,6 @@ test_runner(TTestContext* ctx, const TestCase* cases, int count)
             printf(".");
         }
     }
+    printf("\n");
     return i;
 }

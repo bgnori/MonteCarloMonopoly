@@ -6,9 +6,17 @@
 
 
 
+static bool
+test_addmessage(TTestContext* ctx)
+{
+    TTestContext_AddMessage(ctx, "foo");
+    return assertEqualStr("foo", ctx->fMessages[0], ctx, "foo == foo");
+}
 
+TestCase cases[] = {
+    test_addmessage,
+};
 
-TestCase cases[] = {};
 int
 main(int argc, const char** argv)
 {

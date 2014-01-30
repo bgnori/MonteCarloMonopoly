@@ -20,6 +20,8 @@ bool _assertNotEqualInt(int expected, int actual, TTestContext* ctx, const char*
 bool _assertNull(void* ptr, TTestContext* ctx, const char* msg, const int line, const char* func, const char* filename);
 bool _assertNotNull(void* ptr, TTestContext* ctx, const char* msg, const int line, const char* func, const char* filename);
 
+bool _assertEqualstr(const char * expected, char* actual, TTestContext* ctx, const char* msg, const int line, const char* func, const char* filename);
+
 enum {
     default_message_count = 4,
 };
@@ -37,6 +39,7 @@ struct TestContext {
 #define assertNotNull(ptr, c, m) _assertNotNull((ptr), (c), (m), __LINE__, __func__, __FILE__)
 #define assertEqualInt(a, b, c, m) _assertEqualInt((a), (b), (c), (m), __LINE__, __func__, __FILE__)
 #define assertNotEqualInt(a, b, c, m) _assertNotEqualInt((a), (b), (c), (m), __LINE__, __func__, __FILE__)
+#define assertEqualStr(a, b, c, m) _assertEqualstr((a), (b), (c), (m), __LINE__, __func__, __FILE__)
 
 #endif
 

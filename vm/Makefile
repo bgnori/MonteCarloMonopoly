@@ -12,6 +12,9 @@ test_all: test_mvm test_loader test_inst
 test_loader: unittest_loader
 	LD_LIBRARY_PATH=. ./unittest_loader
 
+test_unittest: unittest_unittest
+	LD_LIBRARY_PATH=. ./unittest_unittest
+
 test_mvm: unittest_mvm
 	LD_LIBRARY_PATH=. ./unittest_mvm
 
@@ -27,19 +30,25 @@ runner: runner.o libmvm.so libqueue.so
 unittest_inst: unittest_inst.o libmvm.so libqueue.so libunittest.so 
 	gcc unittest_inst.o -L. -lmvm -lqueue -lunittest -o unittest_inst
 
-unittest_inst.o : mvm.h unittest_inst.c libqueue.so
+unittest_inst.o : mvm.h unittest.h unittest_inst.c libqueue.so
 	gcc -std=c99 -Wall -c unittest_inst.c
+
+unittest_unittest: unittest_unittest.o libunittest.so 
+	gcc unittest_unittest.o -L. -lunittest -o unittest_unittest
+
+unittest_unittest.o : unittest.h unittest_unittest.c
+	gcc -std=c99 -Wall -c unittest_unittest.c
 
 unittest_mvm: unittest_mvm.o libmvm.so libqueue.so libunittest.so 
 	gcc unittest_mvm.o -L. -lmvm -lqueue -lunittest -o unittest_mvm
 
-unittest_mvm.o : mvm.h unittest_mvm.c libqueue.so
+unittest_mvm.o : mvm.h unittest.h unittest_mvm.c libqueue.so
 	gcc -std=c99 -Wall -c unittest_mvm.c
 
 unittest_loader: unittest_loader.o libmvm.so libqueue.so libunittest.so
 	gcc unittest_loader.o -L. -lmvm -lqueue -lunittest -o unittest_loader
 
-unittest_loader.o : mvm.h unittest_loader.c libqueue.so loader.h
+unittest_loader.o : mvm.h unittest.h unittest_loader.c libqueue.so loader.h
 	gcc -std=c99 -Wall -c unittest_loader.c
 
 

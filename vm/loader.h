@@ -13,7 +13,8 @@ struct Loader {
     int fCodeLen;
 };
 
-TLoader* Loader_New(const char* filename);
+TLoader* Loader_New(void);
+int TLoader_Load(TLoader* self, const char* filename);
 void TLoader_Delete(TLoader* self);
 
 

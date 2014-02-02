@@ -62,6 +62,7 @@ enum {
     op_roll,
     op_turnend,
     op_move_n,
+    op_goto_jail,
     op_bunkrupt,
     op_get_debt,
     op_next,

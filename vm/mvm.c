@@ -186,6 +186,21 @@ TVM_Exec(TVM* self, TInst inst)
                     self->fRegister[reg_player0_state+i] = 1; //jailed, jail count 1, about to have first time
                 }
                 // fire land event, card, go to jail, property and so on.
+                // get sallary.
+            }
+            break;
+        case op_goto_jail:
+            {
+                int pos;
+                int i;
+                i = self->fRegister[reg_current_player_idx];
+                pos = self->fRegister[reg_player0_pos+i];
+                self->fRegister[reg_player0_pos+i] = 10; //jail
+                self->fRegister[reg_player0_state+i] = 1; //jailed, jail count 1, about to have first time
+            }
+        case op_jump:
+            {
+                self->fRegister[reg_pc] = inst.uIH.fValue;
             }
             break;
         case op_jump_on_doubles:

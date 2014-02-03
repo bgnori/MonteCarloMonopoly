@@ -1,39 +1,6 @@
+#!/usr/bin/python
+# -*- coding=utf8 -*-
 
-
-
-"""
-def is3rdRoll(player, _then, _else):
-    pass
-
-def nextPlayer(player):
-    pass
-
-def then(label, code, addr2ret):
-    pos = startseg()
-    print label
-    print code
-    print "op_jump", addr2ret
-    endseg()
-    return pos
-
-def JumpOn3rd(addr2ret):
-    print "op_jump_on_3rd", then("place content here", code, addr2ret)
-
-def LandOn():
-    "big switch"
-    print "op_goto_jail" #etc
-
-def RollAndMove():
-    #reg_current_player_idx 
-    print "op_roll"
-    JumpOn3rd(next_pc())
-    print "op_move_n"
-    LandOn()
-
-
-def whileloop(regname):
-    pass
-"""
 
 class Op(object):
     pass
@@ -71,7 +38,8 @@ class OpJumpOn3rd(uIH):
 
 
 class Block(object):
-    def __init__(self, seq=None):
+    def __init__(self, label=None, seq=None):
+        self.label = label
         if seq is None:
             seq = []
         else:
@@ -79,6 +47,9 @@ class Block(object):
             assert any(map(lambda x: isinstance(x, Op), seq))
         self.seq = seq
         self.abspos = None
+
+    def __repr__(self):
+        return "<Block object %s, %d, %d>"%(self.label, self.abspos, len(self))
 
     def __len__(self):
         return len(self.seq)
@@ -122,13 +93,17 @@ class Program(object):
         self.pos += len(b)
 
 
-getting_jailed = Block()
-land_on = Block()
-all = Block([OpRoll(), OpJumpOn3rd(getting_jailed), OpMoveN(), OpJump(land_on)])
+getting_jailed = Block(label='getting_jailed')
+land_on = Block(label='land_on')
+all = Block('main',[
+    OpRoll(), 
+    OpJumpOn3rd(getting_jailed), 
+    OpMoveN(), 
+    OpJump(land_on)])
 
 p = Program(all)
 p.layout()
 for b in p.blocks:
-    print b.abspos, b.seq
+    print b, b.seq
 
 

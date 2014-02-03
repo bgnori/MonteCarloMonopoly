@@ -1,40 +1,74 @@
 #!/usr/bin/python
 # -*- coding=utf8 -*-
 
+from struct import pack
+
+
+_op_enum = -1
+
+def op_enum():
+    global _op_enum
+    _op_enum += 1
+    return _op_enum
+
 
 class Op(object):
-    pass
+    __name__ = None
+
+    def assemble(self):
+        pass
+
+    def __init__(self, first=None, second=None, third=None, idx=None, value=None):
+        self.fFirst = first
+        self.fSecond = second
+        self.fThird= third
+        self.fIdx = idx
+        self.fValue = value
+
+
 
 class uNull(Op):
-    pass
+    fmt = 'Bxxx' # must match with union uNull in mvm.h
+    def assemble(self):
+        return pack(self.fmt, self.__byte__)
+
+class OpNop(uNull):
+    __byte__ = op_enum()
 
 class OpRoll(uNull):
-    pass
+    __byte__ = op_enum()
 
 class OpMoveN(uNull):
+    __byte__ = op_enum()
     pass
 
 class uI(Op):
-    pass
+    fmt = 'BBxx'
+    def assemble(self):
+        return pack(self.fmt, self.__byte__, self.fFirst)
 
 class uII(Op):
-    pass
+    fmt = 'BBBx'
+    def assemble(self):
+        return pack(self.fmt, self.__byte__, self.fFirst, self.fSecond)
 
 class uIII(Op):
-    pass
+    fmt = 'BBBB'
+    def assemble(self):
+        return pack(self.fmt, self.__byte__, self.fFirst, self.fSecond, self.fThird)
 
 class uIH(Op):
-    def __init__(self, I, H):
-        self.fValue = H
-        self.fIdx = I
+    fmt = 'BBH'
+    def assemble(self):
+        return pack(self.fmt, self.__byte__, self.fIdx, self.fValue)
 
 class OpJump(uIH):
-    def __init__(self, H):
-        self.fValue = H
+    __byte__ = op_enum()
+    __name__ = "op_jump"
 
 class OpJumpOn3rd(uIH):
-    def __init__(self, H):
-        self.fValue = H
+    __byte__ = op_enum()
+    __name__ = "op_jump_on_3rd"
 
 
 class Block(object):
@@ -92,18 +126,5 @@ class Program(object):
         self.blocks.append(b)
         self.pos += len(b)
 
-
-getting_jailed = Block(label='getting_jailed')
-land_on = Block(label='land_on')
-all = Block('main',[
-    OpRoll(), 
-    OpJumpOn3rd(getting_jailed), 
-    OpMoveN(), 
-    OpJump(land_on)])
-
-p = Program(all)
-p.layout()
-for b in p.blocks:
-    print b, b.seq
 
 

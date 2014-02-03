@@ -13,8 +13,6 @@ def op_enum():
 
 
 class Op(object):
-    __name__ = None
-
     def assemble(self):
         pass
 
@@ -32,15 +30,26 @@ class uNull(Op):
     def assemble(self):
         return pack(self.fmt, self.__byte__)
 
-class OpNop(uNull):
+class op_die(uNull):
     __byte__ = op_enum()
 
-class OpRoll(uNull):
+class op_nop(uNull):
     __byte__ = op_enum()
 
-class OpMoveN(uNull):
+class op_dump(uNull):
     __byte__ = op_enum()
-    pass
+
+class op_roll(uNull):
+    __byte__ = op_enum()
+
+class op_move_n(uNull):
+    __byte__ = op_enum()
+
+class op_goto_jail(uNull):
+    __byte__ = op_enum()
+
+class op_next(uNull):
+    __byte__ = op_enum()
 
 class uI(Op):
     fmt = 'BBxx'
@@ -52,23 +61,53 @@ class uII(Op):
     def assemble(self):
         return pack(self.fmt, self.__byte__, self.fFirst, self.fSecond)
 
+
+
+
+
 class uIII(Op):
     fmt = 'BBBB'
     def assemble(self):
         return pack(self.fmt, self.__byte__, self.fFirst, self.fSecond, self.fThird)
+
+class op_cmp(uIII):
+    __byte__ = op_enum()
+
 
 class uIH(Op):
     fmt = 'BBH'
     def assemble(self):
         return pack(self.fmt, self.__byte__, self.fIdx, self.fValue)
 
-class OpJump(uIH):
+class op_iset(uIH):
     __byte__ = op_enum()
-    __name__ = "op_jump"
 
-class OpJumpOn3rd(uIH):
+class op_iadd(uIH):
     __byte__ = op_enum()
-    __name__ = "op_jump_on_3rd"
+
+class op_isub(uIH):
+    __byte__ = op_enum()
+
+class op_jump(uIH):
+    __byte__ = op_enum()
+
+class op_jump_on_doubles(uIH):
+    __byte__ = op_enum()
+
+class op_jump_on_3rd(uIH):
+    __byte__ = op_enum()
+
+class op_jump_on_zero(uIH):
+    __byte__ = op_enum()
+
+class op_jump_on_positive(uIH):
+    __byte__ = op_enum()
+
+class op_jump_on_negative(uIH):
+    __byte__ = op_enum()
+
+class op_jump_on_pos(uIH):
+    __byte__ = op_enum()
 
 
 class Block(object):
@@ -126,5 +165,18 @@ class Program(object):
         self.blocks.append(b)
         self.pos += len(b)
 
+
+
+if __name__ == "__main__":
+    """generate opnum.h"""
+
+    print "#ifndef __OPNUM_H__"
+    print "#define __OPNUM_H__"
+    print "enum {"
+    d = dict(locals())
+    for y in sorted((op for op in d.values() if hasattr(op, "__byte__")), key=lambda x:x.__byte__):
+        print "    %s = %d, "%(y.__name__ , y.__byte__)
+    print "};"
+    print "#endif"
 
 

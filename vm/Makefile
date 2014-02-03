@@ -67,6 +67,8 @@ unittest.o: unittest.h unittest.c
 mvm.o: mvm.h mvm.c
 	gcc -fPIC -std=c99 -Wall -c mvm.c
 
+mvm.h: opnum.h
+
 loader.o: mvm.h loader.c loader.h
 	gcc -fPIC -std=c99 -Wall -c loader.c
 
@@ -75,3 +77,8 @@ libqueue.so: queue.o
 
 queue.o: queue.h queue.c
 	gcc -fPIC -std=c99 -Wall -c queue.c
+
+opnum.h: mvmasm.py
+	python mvmasm.py > opnum.h
+
+

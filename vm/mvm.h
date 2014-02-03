@@ -44,31 +44,7 @@ typedef union {
 } TInst;
 
 
-
-enum {
-    op_die = 0x00,
-    op_dump,
-    op_iset,
-    op_iadd,
-    op_isub,
-    op_sub,
-    op_jump,
-    op_jump_on_doubles,
-    op_jump_on_3rd,
-    op_jump_on_zero,
-    op_jump_on_positive,
-    op_jump_on_negative,
-    op_cmp,
-    op_roll,
-    op_turnend,
-    op_move_n,
-    op_goto_jail,
-    op_bunkrupt,
-    op_get_debt,
-    op_next,
-    op_land_on,
-    op_nop = 0xff,
-};
+#include "opnum.h"
 
 enum {
     reg_zero = 0x00,

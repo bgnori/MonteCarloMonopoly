@@ -17,11 +17,11 @@ class Op(object):
         pass
 
     def __init__(self, first=None, second=None, third=None, idx=None, value=None):
-        self.fFirst = first
-        self.fSecond = second
-        self.fThird= third
-        self.fIdx = idx
-        self.fValue = value
+        self.fFirst = first or 0
+        self.fSecond = second or 0
+        self.fThird= third or 0
+        self.fIdx = idx or 0
+        self.fValue = value or 0
 
 
 
@@ -147,6 +147,10 @@ class Block(object):
     def place(self, pos):
         self.abspos = pos
 
+    def assemble(self):
+        assert self.positioned()
+        return ''.join(op.assemble() for op in self.seq)
+
 
 class Program(object):
     def __init__(self, root):
@@ -165,7 +169,16 @@ class Program(object):
         self.blocks.append(b)
         self.pos += len(b)
 
+    def assemble(self):
+        assert self.blocks
+        return ''.join(b.assemble() for b in self.blocks)
 
+
+_d = dict(locals())
+
+ops = [y for y in sorted((op for op in _d.values() if hasattr(op, "__byte__")), key=lambda x:x.__byte__)]
+
+del _d
 
 if __name__ == "__main__":
     """generate opnum.h"""
@@ -173,9 +186,8 @@ if __name__ == "__main__":
     print "#ifndef __OPNUM_H__"
     print "#define __OPNUM_H__"
     print "enum {"
-    d = dict(locals())
-    for y in sorted((op for op in d.values() if hasattr(op, "__byte__")), key=lambda x:x.__byte__):
-        print "    %s = %d, "%(y.__name__ , y.__byte__)
+    for op in ops:
+        print "    %s = %d, "%(op.__name__ , op.__byte__)
     print "};"
     print "#endif"
 

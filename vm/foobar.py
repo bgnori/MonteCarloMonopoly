@@ -19,3 +19,5 @@ for b in p.blocks:
     print b, b.seq
 
 print repr(op_roll().assemble())
+print repr(p.assemble())
+
